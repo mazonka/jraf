@@ -1,10 +1,10 @@
 jw login a@b.c http://server/ -> JRAF_FAIL no users
 jw md 0 /.jraf.sys/users -> OK /.jraf.sys/users
 
-[N/I] phmail: Sending to [a@b.c] au [http://127.0.0.1:16000/jraf?5315348a14b10534]
+[N/I] jrmail: Sending to [a@b.c] au [http://127.0.0.1:16000/jraf?5315348a14b10534]
 jw login a@b.c * -> OK http://127.0.0.1:16000/jraf?
 
-[N/I] phmail: Sending to [admin@server.com] au [http://127.0.0.1:16000/jraf?bc93b862b523b520]
+[N/I] jrmail: Sending to [admin@server.com] au [http://127.0.0.1:16000/jraf?bc93b862b523b520]
 jw login admin@server.com * -> OK http://127.0.0.1:16000/jraf?
 
 jw logout 0 -> OK
