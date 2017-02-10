@@ -1,0 +1,55 @@
+set date "20170123"
+set time "123456"
+
+cmd = [ jw md 0 /.jraf.sys/users ]
+print { cmd "->" tcp self cmd }
+print [ ]
+
+cmd = [ jw login admin@server.com * ]
+print { cmd "->" tcp self cmd }
+cmd = [ jw login admim@server.com * ]
+print { cmd "->" tcp self cmd }
+print [ ]
+
+cmd = [ jr read 0419742eed414745 /.jraf.sys/users ]
+print { cmd "->" tcp self cmd }
+cmd = [ jr read 0419742eed414745 /.jraf.sys/users/admin@server.com ]
+print { cmd "->" tcp self cmd }
+print [ ]
+
+cmd = [ jr read 0419742eed414745 /.jraf.sys/users/admin@server.com/access ]
+print { cmd "->" tcp self cmd }
+cmd = [ jr read 0419742eed414745 /.jraf.sys/users/admin@server.com/counter ]
+print { cmd "->" tcp self cmd }
+cmd = [ jr read 0419742eed414745 /.jraf.sys/users/admin@server.com/quota ]
+print { cmd "->" tcp self cmd }
+cmd = [ jr read 0419742eed414745 /.jraf.sys/users/admin@server.com/uname ]
+print { cmd "->" tcp self cmd }
+cmd = [ jr read acdcf29e3200b4c6 /.jraf.sys/users/admim@server.com/uname ]
+print { cmd "->" tcp self cmd }
+print [ ]
+
+print [ -- su creates file and nosu reads ]
+cmd = [ jw put 0419742eed414745 /z 0 1 Kg== ]
+print { cmd "->" tcp self cmd }
+cmd = [ jr read acdcf29e3200b4c6 /z ]
+print { cmd "->" tcp self cmd }
+print [ ]
+
+print [ -- write/read file outside ]
+cmd = [ jw put acdcf29e3200b4c6 /x 0 1 Kg== ]
+print { cmd "->" tcp self cmd }
+cmd = [ jr read acdcf29e3200b4c6 /x ]
+print { cmd "->" tcp self cmd }
+cmd = [ jw put acdcf29e3200b4c6 /x1234567890x1234567890 0 1 Kg== ]
+print { cmd "->" tcp self cmd }
+print [ ]
+
+print [ -- write/read file inside ]
+cmd = [ jw put acdcf29e3200b4c6 /home/885118cdd900767c/y 0 1 Kg== ]
+print { cmd "->" tcp self cmd }
+cmd = [ jr read acdcf29e3200b4c6 /home/885118cdd900767c/y ]
+print { cmd "->" tcp self cmd }
+print [ ]
+
+quit

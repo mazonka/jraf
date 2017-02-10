@@ -1,0 +1,10 @@
+-- md /aaa/ -- OK /aaa/
+OK /aaa
+-- save /aaa/bbb -- OK
+OK 10
+-- mv /aaa/bbb /aaa/ccc --
+OK /aaa/ccc
+-- read /aaa/ccc --
+OK 1 10 MTIzNDU2Nzg5MA==
+-- get /aaa/bbb --
+JRAF_ERR bad path /aaa/bbb

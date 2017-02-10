@@ -1,0 +1,1 @@
+command=jw md 0 / : save 0 /c1 0 : put 0 /c2 0 0 : read 0 /c1 : read 0 /c2 : read 0 /

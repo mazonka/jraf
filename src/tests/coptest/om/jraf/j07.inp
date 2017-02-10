@@ -1,0 +1,11 @@
+
+print [ -- ]
+print tcp self [ jw md 0 / ]
+print { [ save 1 ..... ] tcp self [ jw save 0 /c1 0 ] }
+print { [ put 2 ...... ] tcp self [ jw put 0 /c2 0 0 ] }
+print { [ read 1 ..... ] tcp self [ jr read 0 /c1 ] }
+print { [ read 2 ..... ] tcp self [ jr read 0 /c2 ] }
+print { [ root ....... ] tcp self [ jr read 0 / ] }
+
+quit
+

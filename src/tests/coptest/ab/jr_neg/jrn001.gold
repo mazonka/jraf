@@ -1,0 +1,4 @@
+jr login admin@server.com * -> JRAF_ERR bad command [login]
+
+
+==========

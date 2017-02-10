@@ -1,0 +1,1 @@
+command=jw md 0 /.jraf.sys/a : put 0 /.jraf.sys/b 0 1 Kg== : read 0 /.jraf.sys/a : read 0 /.jraf.sys/b

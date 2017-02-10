@@ -1,0 +1,18 @@
+
+print [ -- md /aaa/ -- OK /aaa/ ]
+print tcp self [ jw md 0 /aaa/ ]
+
+print [ -- save /aaa/bbb -- OK  ]
+print tcp self [ jw save 0 /aaa/bbb 10 MTIzNDU2Nzg5MA== ]
+
+print [ -- mv /aaa/bbb /aaa/ccc -- ]
+print tcp self [ jw mv 0 /aaa/bbb /aaa/ccc ]
+
+print [ -- read /aaa/ccc -- ]
+print tcp self [ jr read 0 /aaa/ccc ]
+
+print [ -- get /aaa/bbb -- ]
+print tcp self [ jr get 0 /aaa/bbb ]
+
+quit
+

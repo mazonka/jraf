@@ -1,0 +1,10 @@
+--
+md /a .. OK /a
+a ver .. JRAF_FAIL system path
+read / . OK 1 -1 1 1 -1 a
+put f .. JRAF_FAIL system path
+get f .. JRAF_FAIL system path
+md f ... JRAF_FAIL system path
+get f .. JRAF_FAIL system path
+
+==========

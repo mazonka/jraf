@@ -1,0 +1,29 @@
+set date "20170123"
+set time "123456"
+
+cmd = [ jr profile 270646381a5bbdc1 ]
+print { cmd "->" tcp self cmd }
+print [ ]
+
+cmd = [ jw md 0 /.jraf.sys/users ]
+print { cmd "->" tcp self cmd }
+cmd = [ jr profile 270646381a5bbdc1 ]
+print { cmd "->" tcp self cmd }
+print [ ]
+
+cmd = [ jw login a@b.c http://server/ ]
+print { cmd "->" tcp self cmd }
+cmd = [ jr profile 270646381a5bbdc1 ]
+print { cmd "->" tcp self cmd }
+print [ ]
+
+cmd = [ jw login admin@server.com http://server/ ]
+print { cmd "->" tcp self cmd }
+cmd = [ jr profile 1a3a5a7bf9251824 ]
+print { cmd "->" tcp self cmd }
+print [ ]
+
+cmd = [ jr profile 0 ]
+print { cmd "->" tcp self cmd }
+
+quit

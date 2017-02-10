@@ -1,0 +1,5 @@
+print tcp self [ jr ping : ping ]
+print tcp self [ jr version backend ]
+print tcp self [ jr version client ]
+print tcp self [ jr version blah ]
+quit

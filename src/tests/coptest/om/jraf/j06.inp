@@ -1,0 +1,23 @@
+
+print [ -- ]
+print tcp self [ jw md 0 /aaa/bbb ]
+print { [ root ver ... ] tcp self [ jr get 0 / ] }
+print { [ save file .. ] tcp self [ jw save 0 /aaa/bbb 10 MTIzNDU2Nzg5MA== ] }
+print { [ root ver ... ] tcp self [ jr get 0 / ] }
+print { [ save file .. ] tcp self [ jw save 0 /aaa/c1 10 MTIzNDU2Nzg5MA== ] }
+print { [ root ver ... ] tcp self [ jr get 0 / ] }
+print { [ put file ... ] tcp self [ jw put 0 /aaa/c2 0 10 MTIzNDU2Nzg5MA== ] }
+print { [ root ver ... ] tcp self [ jr get 0 / ] }
+print { [ put file ... ] tcp self [ jw put 0 /aaa/c2 10 10 MTIzNDU2Nzg5MA== ] }
+print { [ root ver ... ] tcp self [ jr get 0 / ] }
+print { [ read ....... ] tcp self [ jr read 0 /aaa ] }
+print { [ root ver ... ] tcp self [ jr get 0 / ] }
+print { [ rm c1 ...... ] tcp self [ jw rm 0 /aaa/c1 ] }
+print { [ root ver ... ] tcp self [ jr get 0 / ] }
+print { [ mv c2 c3 ... ] tcp self [ jw mv 0 /aaa/c2 /aaa/c3 ] }
+print { [ root ver ... ] tcp self [ jr get 0 / ] }
+print { [ read ....... ] tcp self [ jr read 0 /aaa ] }
+print { [ root ver ... ] tcp self [ jr get 0 / ] }
+
+quit
+

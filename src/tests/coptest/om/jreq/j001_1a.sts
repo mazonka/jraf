@@ -1,0 +1,17 @@
+#!/bin/sh
+
+in=$(basename $0)
+in=${in%.*} 
+
+cwd=`pwd`
+test -f /usr/bin/cygpath && cwd=`cygpath -m $cwd`
+
+cd $1
+./jrafd -cqln dwkr=0 s=$cwd/$in.inp jraf_root=jroot
+rm -f test.db
+
+echo ""
+echo "=========="
+
+rm -rf jroot jroot.fcl
+

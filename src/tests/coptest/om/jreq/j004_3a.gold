@@ -1,0 +1,4 @@
+md a ... OK /.jraf.sys/a
+put b .. OK 1
+read a . OK 0 -1 0
+read b . OK 0 1 Kg==

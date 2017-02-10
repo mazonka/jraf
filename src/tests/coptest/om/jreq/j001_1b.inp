@@ -1,0 +1,3 @@
+print tcp self [ jw md 0 /a : read 0 / : read 0 /.jraf.ver/ ]
+quit
+

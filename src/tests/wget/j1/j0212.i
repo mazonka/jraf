@@ -1,0 +1,1 @@
+command=jw md 0 /aaa/ : put 0 /aaa/bbb 0 10 MTIzNDU2Nzg5MA== : put 0 /aaa/bbb 10 10 MTIzNDU2Nzg5MA== : read 0 /aaa/bbb

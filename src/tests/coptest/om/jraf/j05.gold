@@ -1,0 +1,9 @@
+-- /aaa/bbb /aaa/ccc
+OK /aaa/bbb
+OK /aaa/ccc
+
+==========
+jroot/.jraf.ver/.jraf.ver 2
+jroot/.jraf.ver/aaa.jraf.ver 2
+jroot/.jraf.ver/aaa/bbb.jraf.ver 1
+jroot/.jraf.ver/aaa/ccc.jraf.ver 1

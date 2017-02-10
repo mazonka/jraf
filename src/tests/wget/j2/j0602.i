@@ -1,0 +1,1 @@
+command=jw md 0 /aaa : save 0 /aaa/c1 10 MTIzNDU2Nzg5MA== : rm 0 /aaa/c1 : get 0 /

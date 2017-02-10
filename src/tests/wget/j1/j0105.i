@@ -1,0 +1,1 @@
+command=jr ping : version backend : version client : version blah

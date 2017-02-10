@@ -1,0 +1,8 @@
+set date "20170123"
+set time "123456"
+
+cmd = [ reseed ]
+print { cmd "->" tcp self cmd }
+print [ ]
+
+quit

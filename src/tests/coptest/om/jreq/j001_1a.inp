@@ -1,0 +1,8 @@
+
+print [ -- ]
+print tcp self [ jw md 0 /aaa ]
+print { [ root ... ] tcp self [ jr read 0 / ] }
+print { [ ver .... ] tcp self [ jr read 0 /.jraf.ver/ ] }
+
+quit
+

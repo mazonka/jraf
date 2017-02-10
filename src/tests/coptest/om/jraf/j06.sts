@@ -1,0 +1,38 @@
+#!/bin/sh
+# test versions: rm save put mv
+
+in=$(basename $0)
+in=${in%.*} 
+
+cwd=`pwd`
+test -f /usr/bin/cygpath && cwd=`cygpath -m $cwd`
+
+cd $1
+./jrafd -cqln dwkr=0 s=$cwd/$in.inp jraf_root=jroot
+rm -f test.db
+
+echo ""
+echo "=========="
+
+prn()
+{
+p=jroot/.jraf.ver/$1
+echo -n "$p : "
+if test -f $p; then
+cat $p 2> /dev/null
+else
+echo "no"
+fi
+}
+
+prn .jraf.ver
+prn aaa.jraf.ver
+prn aaa/c1.jraf.ver
+prn aaa/c2.jraf.ver
+prn aaa/c3.jraf.ver
+
+#echo ""
+#echo "=========="
+#ls -1aR jroot
+rm -rf jroot
+

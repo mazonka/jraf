@@ -1,0 +1,1 @@
+command=jw md 0 /a : md 0 /.jraf.sys/b

@@ -1,0 +1,19 @@
+jw md 0 /.jraf.sys/users -> OK /.jraf.sys/users
+
+[N/I] phmail: Sending to [admin@server.com] au [http://127.0.0.1:16000/jraf?4b9a87f859f956e8]
+jw login admin@server.com * -> OK http://127.0.0.1:16000/jraf?
+
+jr md 4b9a87f859f956e8 /a -> JRAF_ERR bad command [md]
+
+jr put 4b9a87f859f956e8 /a 0 1 Kg== -> JRAF_ERR bad command [put]
+
+jr save 4b9a87f859f956e8 /a 0 1 Kg== -> JRAF_ERR bad command [save]
+
+jw save 4b9a87f859f956e8 /a 1 Kg== -> OK 1
+
+jr rm 4b9a87f859f956e8 /a -> JRAF_ERR bad command [rm]
+
+jr mv 4b9a87f859f956e8 /a /b -> JRAF_ERR bad command [mv]
+
+
+==========

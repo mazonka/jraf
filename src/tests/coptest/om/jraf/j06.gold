@@ -1,0 +1,26 @@
+--
+OK /aaa/bbb
+root ver ... OK 1 -1
+save file .. JRAF_FAIL cannot create /aaa/bbb
+root ver ... OK 1 -1
+save file .. OK 10
+root ver ... OK 2 -1
+put file ... OK 10
+root ver ... OK 3 -1
+put file ... OK 20
+root ver ... OK 4 -1
+read ....... OK 4 -1 3 1 -1 bbb 1 10 c1 2 20 c2
+root ver ... OK 4 -1
+rm c1 ...... OK /aaa/c1
+root ver ... OK 5 -1
+mv c2 c3 ... OK /aaa/c3
+root ver ... OK 7 -1
+read ....... OK 7 -1 2 1 -1 bbb 1 20 c3
+root ver ... OK 7 -1
+
+==========
+jroot/.jraf.ver/.jraf.ver : 7
+jroot/.jraf.ver/aaa.jraf.ver : 7
+jroot/.jraf.ver/aaa/c1.jraf.ver : 2
+jroot/.jraf.ver/aaa/c2.jraf.ver : 3
+jroot/.jraf.ver/aaa/c3.jraf.ver : 1

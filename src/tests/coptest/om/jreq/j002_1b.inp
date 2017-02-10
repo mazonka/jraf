@@ -1,0 +1,12 @@
+
+print [ -- ]
+print { [ md /a .. ] tcp self [ jw md 0 /a ] }
+print { [ a ver .. ] tcp self [ jr get 0 /.jraf.ver/a.jraf.ver ] }
+print { [ read / . ] tcp self [ jr read 0 / ] }
+print { [ put f .. ] tcp self [ jw put 0 /.jraf.ver/f 0 1 Kg== ] }
+print { [ get f .. ] tcp self [ jr get 0 /.jraf.ver/f ] }
+print { [ md f ... ] tcp self [ jw md 0 /.jraf.ver/d ] }
+print { [ get f .. ] tcp self [ jr get 0 /.jraf.ver/d ] }
+
+quit
+

@@ -1,0 +1,1 @@
+command=jw md 0 /a : read 0 / : put 0 /.jraf.ver/f 0 1 Kg==

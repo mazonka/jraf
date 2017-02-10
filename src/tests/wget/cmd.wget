@@ -1,0 +1,1 @@
+wget http://localhost:16001?test=test -o wget.log -O wget.out

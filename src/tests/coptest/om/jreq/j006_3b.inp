@@ -1,0 +1,31 @@
+set date "20170123"
+set time "123456"
+
+print { [ users .. ] tcp self [ jw md 0 /.jraf.sys/users ] }
+print [ ]
+
+cmd = [ jw login admin@server.com * ]
+print { cmd "->" tcp self cmd }
+print [ ]
+
+id = [ 0419742eed414745 ]
+read = { [ jr read ] id }
+
+c = { [ jw md ] id [ /.jraf.sys/a ] }
+print { c "->" tcp self c }
+print [ ]
+
+c = { [ jw put ] id [ /.jraf.sys/b 0 1 Kg== ] }
+print { c "->" tcp self c }
+print [ ]
+
+c = { read [ /.jraf.sys/a ] }
+print { c "->" tcp self c }
+print [ ]
+
+c = { read [ /.jraf.sys/b ] }
+print { c "->" tcp self c }
+print [ ]
+
+
+quit

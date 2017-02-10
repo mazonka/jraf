@@ -1,0 +1,12 @@
+--
+md /a .. OK /a
+md .b .. OK /.jraf.sys/b
+s ver .. JRAF_FAIL system path
+b ver .. JRAF_FAIL system path
+
+==========
+jroot/.jraf.ver:
+a.jraf.ver
+
+==========
+jroot/.jraf.ver/.jraf.ver

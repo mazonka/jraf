@@ -1,0 +1,9 @@
+set date "20170123"
+set time "123456"
+
+cmd = [ jr login admin@server.com * ]
+print { cmd "->" tcp self cmd }
+print [ ]
+
+quit
+

@@ -1,0 +1,1 @@
+command=jw md 0 / : save 0 /b 1 Kg== : get 0 /b : read 0 /b

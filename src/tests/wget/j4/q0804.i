@@ -1,0 +1,1 @@
+command=jw md 0 /.jraf.sys/users : login a@b.cd * : read f82d3bb17612458c /home : put f82d3bb17612458c /home/204f03b4efdc5397/y 0 1 Kg== : read f82d3bb17612458c /home/204f03b4efdc5397/y

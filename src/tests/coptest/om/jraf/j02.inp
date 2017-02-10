@@ -1,0 +1,32 @@
+print [ -- JRAF_ERR session id ]
+print tcp self [ jw md ]
+
+print [ -- JRAF_ERR command ]
+print tcp self [ jw xx ]
+
+print [ -- JRAF_ERR path ]
+print tcp self [ jw md 0 ]
+
+print [ -- JRAF_ERR .. ]
+print tcp self [ jw md 0 /../ ]
+
+print [ -- md /// -- OK / ]
+print tcp self [ jw md 0 /// ]
+
+#print [ -- JRAF_FAIL /* ]
+#print tcp self [ jw md 0 ///* ]
+
+print [ -- md /aaa/bbb/ccc -- OK /aaa/bbb/ccc ]
+print tcp self [ jw md 0 /aaa/bbb/ccc ]
+
+print [ -- rm /aaa -- OK /aaa ]
+print tcp self [ jw rm 0 /aaa ]
+
+print [ -- read /aaa -- JRAF_ERR bad path /aaa ]
+print tcp self [ jr read 0 /aaa ]
+
+print [ -- + read /aaa -- OK 0 -1 1 0 -1 bbb ]
+print tcp self [ jw md 0 /aaa/bbb/ccc : read 0 /aaa ]
+
+quit
+

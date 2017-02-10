@@ -1,0 +1,7 @@
+
+print [ -- /aaa/bbb /aaa/ccc ]
+print tcp self [ jw md 0 /aaa/bbb ]
+print tcp self [ jw md 0 /aaa/ccc ]
+
+quit
+

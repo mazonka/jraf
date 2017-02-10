@@ -1,0 +1,1 @@
+command=jw md 0 /.jraf.sys/users : login admin@server.com * : login admim@server.com * : put f82d3bb17612458c /z 0 1 Kg== : read 5aeb1f6c5cd9c44a /z

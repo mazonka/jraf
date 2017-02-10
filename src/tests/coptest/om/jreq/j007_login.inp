@@ -1,0 +1,41 @@
+set date "20170123"
+set time "123456"
+
+cmd = [ jw login a@b.c http://server/ ]
+print { cmd "->" tcp self cmd }
+
+cmd = [ jw md 0 /.jraf.sys/users ]
+print { cmd "->" tcp self cmd }
+print [ ]
+
+cmd = [ jw login a@b.c * ]
+print { cmd "->" tcp self cmd }
+print [ ]
+
+cmd = [ jw login admin@server.com * ]
+print { cmd "->" tcp self cmd }
+print [ ]
+
+#cmd = [ jr read 0 /.jraf.sys/login ]
+#print { cmd "->" tcp self cmd }
+
+cmd = [ jw logout 0 ]
+print { cmd "->" tcp self cmd }
+print [ ]
+
+cmd = [ jw logout 5315348a14b10534 ]
+print { cmd "->" tcp self cmd }
+print [ ]
+
+cmd = [ jr read 0 /.jraf.sys/login ]
+#print { cmd "->" tcp self cmd }
+print [ ]
+
+cmd = [ jw login admin/server.com * ]
+print { cmd "->" tcp self cmd }
+cmd = [ jw login admin=server.com * ]
+print { cmd "->" tcp self cmd }
+cmd = [ jw login -dmin@server.com * ]
+print { cmd "->" tcp self cmd }
+
+quit

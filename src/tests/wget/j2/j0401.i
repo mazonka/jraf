@@ -1,0 +1,1 @@
+command=jw md 0 /aaa/ : save 0 /aaa/bbb 10 MTIzNDU2Nzg5MA== : mv 0 /aaa/bbb /aaa/ccc : read 0 /aaa/ccc : get 0 /aaa/bbb

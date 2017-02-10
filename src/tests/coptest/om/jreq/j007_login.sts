@@ -1,0 +1,25 @@
+#!/bin/sh
+
+in=$(basename $0)
+in=${in%.*} 
+
+cwd=`pwd`
+test -f /usr/bin/cygpath && cwd=`cygpath -m $cwd`
+
+cd $1
+./jrafd -cqln dwkr=0 skcseed=1 s=$cwd/$in.inp jraf_root=jroot
+
+echo ""
+echo "=========="
+ls -1R jroot/.jraf.sys/
+
+echo ""
+echo "========== 5315348a14b10534"
+#cat jroot/.jraf.sys/login/5315348a14b10534
+
+echo ""
+echo "========== bc93b862b523b520"
+cat jroot/.jraf.sys/login/bc93b862b523b520
+
+rm -rf jroot
+

@@ -1,0 +1,7 @@
+--
+OK 
+save 1 ..... OK 0
+put 2 ...... OK 0
+read 1 ..... OK 1 0 
+read 2 ..... OK 1 0 
+root ....... OK 3 -1 2 1 0 c1 1 0 c2

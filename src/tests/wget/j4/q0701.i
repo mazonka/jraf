@@ -1,0 +1,1 @@
+command=jw login a@b.c http://server/
