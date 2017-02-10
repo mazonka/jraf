@@ -11,14 +11,14 @@ xpwo=
 while :
 do
 #echo "AAA cheking `pwd`"
-if [[ -f "$execdir/phenod" || -f "$execdir/phenod.exe" ]]; then
+if [[ -f "$execdir/jrafd" || -f "$execdir/jrafd.exe" ]]; then
    hpwd=`pwd`
    break
 fi
 cd ..
 xpwd=`pwd`
 if [ "$xpwd" = "$xpwo" ]; then
-   die "Cannot find phenod"
+   die "Cannot find jrafd"
 fi
 #echo "[$xpwd] = [$xpwo]"
 xpwo=$xpwd
