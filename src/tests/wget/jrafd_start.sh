@@ -16,7 +16,7 @@ echo "jrafd found at $xpwd"
 cd $xpwd
 
 rm -rf wroot
-opt1="phdb=wget.db jraf_root=wroot tcp_port=16001 skcseed=1"
+opt1="jrdb=wget.db jraf_root=wroot tcp_port=16001 skcseed=1"
 opt2="s=$cwd/date.inp let=reseed"
 comm="./jrafd -cqx dwkr=1 quit=1 $opt1 $opt2"
 echo $comm

@@ -8,7 +8,7 @@ cwd=`pwd`
 test -f /usr/bin/cygpath && cwd=`cygpath -m $cwd`
 
 cd $1
-./jrafd -cqln dwkr=0 phdb=test.db s=$cwd/$in.inp jraf_root=jroot
+./jrafd -cqln dwkr=0 jrdb=test.db s=$cwd/$in.inp jraf_root=jroot
 rm -f test.db
 rm -rf jroot
 
