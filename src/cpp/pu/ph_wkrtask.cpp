@@ -180,10 +180,10 @@ string Worker2::ph_aucmd()
                 result += dataset(aa, ao);
 
             else if ( cmd == "admin" )
-                result += phadmin(aa, ao);
+                result += jradmin(aa, ao);
 
             else if ( cmd == "keywords" )
-                result += er::Code(er::OK).str() + ' ' + aa.phdb.keywords();
+                result += er::Code(er::OK).str() + ' ' + aa.jrdb.keywords();
 
             else if ( cmd == "cat" )
                 result += categ(aa, ao);
@@ -219,7 +219,7 @@ string Worker2::dataset(AutArea & aa, const AutObject & ao)
 
     else if ( cmd == "create" )
     {
-        aa.phdb.dataset_new(ao.profile.prid);
+        aa.jrdb.dataset_new(ao.profile.prid);
         return er::Code(er::OK);
     }
 
@@ -227,7 +227,7 @@ string Worker2::dataset(AutArea & aa, const AutObject & ao)
     {
         gl::vstr ids, tis;
         std::map<string, gl::vstr> fnames;
-        int sz = aa.phdb.dataset_list(ao.profile.prid, ids, tis, fnames);
+        int sz = aa.jrdb.dataset_list(ao.profile.prid, ids, tis, fnames);
 
         string s_ids; for ( auto s : ids ) s_ids += ' ' + s;
         string s_tis; for ( auto s : tis ) s_tis += ' ' + s;
@@ -242,7 +242,7 @@ string Worker2::dataset(AutArea & aa, const AutObject & ao)
     {
         if ( !tok.next() ) return er::Code(er::REQ_MSG_BAD);
         string daid = tok.sub();
-        aa.phdb.dataset_del(ao.profile.prid, daid);
+        aa.jrdb.dataset_del(ao.profile.prid, daid);
         return er::Code(er::OK);
     }
 
@@ -257,7 +257,7 @@ string Worker2::dataset(AutArea & aa, const AutObject & ao)
         if ( !tok.next() ) return er::Code(er::REQ_MSG_BAD);
         string val = tok.sub();
 
-        aa.phdb.dataset_upd(ao.profile.prid, daid, field, val);
+        aa.jrdb.dataset_upd(ao.profile.prid, daid, field, val);
         return er::Code(er::OK);
     }
 
@@ -266,7 +266,7 @@ string Worker2::dataset(AutArea & aa, const AutObject & ao)
         if ( !tok.next() ) return er::Code(er::REQ_MSG_BAD);
         string daid = tok.sub();
 
-        string r = aa.phdb.dataset_get(ao.profile.prid, daid);
+        string r = aa.jrdb.dataset_get(ao.profile.prid, daid);
 
         if ( r.empty() ) return er::Code(er::REQ_MSG_BAD);
 
@@ -281,7 +281,7 @@ string Worker2::dataset(AutArea & aa, const AutObject & ao)
         if ( !tok.next() ) return er::Code(er::REQ_MSG_BAD);
         string kname = tok.sub();
 
-        aa.phdb.dataset_addkw(ao.profile.prid, daid, kname);
+        aa.jrdb.dataset_addkw(ao.profile.prid, daid, kname);
 
         return er::Code(er::OK).str();
     }
@@ -294,7 +294,7 @@ string Worker2::dataset(AutArea & aa, const AutObject & ao)
         if ( !tok.next() ) return er::Code(er::REQ_MSG_BAD);
         string kname = tok.sub();
 
-        aa.phdb.dataset_delkw(ao.profile.prid, daid, kname);
+        aa.jrdb.dataset_delkw(ao.profile.prid, daid, kname);
 
         return er::Code(er::OK).str();
     }
@@ -307,7 +307,7 @@ string Worker2::dataset(AutArea & aa, const AutObject & ao)
         if ( !tok.next() ) return er::Code(er::REQ_MSG_BAD);
         string daid = tok.sub();
 
-        string r = aa.phdb.dataset_cols(daid);
+        string r = aa.jrdb.dataset_cols(daid);
         return er::Code(er::OK).str() + ' ' + r;
     }
 
@@ -321,11 +321,11 @@ string Worker2::dataset(AutArea & aa, const AutObject & ao)
 
         int num = gl::toi(snum);
 
-        std::vector<Phdb::ColDesc> v;
+        std::vector<Jrdb::ColDesc> v;
 
         for ( int j = 0; j < num; j++ )
         {
-            Phdb::ColDesc c;
+            Jrdb::ColDesc c;
             if ( !tok.next() ) return er::Code(er::REQ_MSG_BAD);
             c.n = tok.sub();
             if ( !tok.next() ) return er::Code(er::REQ_MSG_BAD);
@@ -339,21 +339,21 @@ string Worker2::dataset(AutArea & aa, const AutObject & ao)
             v.push_back(c);
         }
 
-        if ( !aa.phdb.auth(ao.profile.prid, daid) )
+        if ( !aa.jrdb.auth(ao.profile.prid, daid) )
             return er::Code(er::REQ_MSG_BAD);
 
-        aa.phdb.dataset_setc(daid, v);
+        aa.jrdb.dataset_setc(daid, v);
         return er::Code(er::OK);
     }
 
     return er::Code(er::REQ_MSG_BAD);
 }
 
-string Worker2::phadmin(AutArea & aa, const AutObject & ao)
+string Worker2::jradmin(AutArea & aa, const AutObject & ao)
 {
     if ( !jraf::matchConf("admin", ao.profile.mail) )
     {
-        os::Cout() << "Worker2::phadmin: unathorized access ["
+        os::Cout() << "Worker2::jradmin: unathorized access ["
                    << tok.c_str() << "]" << os::endl;
 
         return er::Code(er::AUTH);
@@ -369,7 +369,7 @@ string Worker2::phadmin(AutArea & aa, const AutObject & ao)
         if ( !tok.next() ) return er::Code(er::REQ_MSG_BAD);
         string kw = tok.sub();
 
-        aa.phdb.keyw_new(kw);
+        aa.jrdb.keyw_new(kw);
         return er::Code(er::OK);
     }
 
@@ -380,7 +380,7 @@ string Worker2::phadmin(AutArea & aa, const AutObject & ao)
         if ( !tok.next() ) return er::Code(er::REQ_MSG_BAD);
         string kwn = tok.sub();
 
-        aa.phdb.keyw_ch(kwo, kwn);
+        aa.jrdb.keyw_ch(kwo, kwn);
         return er::Code(er::OK);
     }
 
@@ -394,7 +394,7 @@ string Worker2::phadmin(AutArea & aa, const AutObject & ao)
         if ( !tok.next() ) return er::Code(er::REQ_MSG_BAD).str() + " 258";
         string par = tok.sub();
 
-        aa.phdb.cat_new(cat, par);
+        aa.jrdb.cat_new(cat, par);
         return er::Code(er::OK);
     }
 
@@ -406,7 +406,7 @@ string Worker2::phadmin(AutArea & aa, const AutObject & ao)
         if ( !tok.next() ) return er::Code(er::REQ_MSG_BAD).str() + " 258";
         string newname = tok.sub();
 
-        aa.phdb.cat_ch(catid, newname);
+        aa.jrdb.cat_ch(catid, newname);
         return er::Code(er::OK);
     }
 
@@ -424,7 +424,7 @@ string Worker2::categ(AutArea & aa, const AutObject & ao)
     {
         if ( !tok.next() ) return er::Code(er::REQ_MSG_BAD);
         string parid = tok.sub();
-        return er::Code(er::OK).str() + " " + aa.phdb.cat_kids(parid);
+        return er::Code(er::OK).str() + " " + aa.jrdb.cat_kids(parid);
     }
 
     return er::Code(er::REQ_MSG_BAD).str() + " [" + cmd + "]";
@@ -442,13 +442,13 @@ string Worker2::dataset_file(AutArea & aa, const AutObject & ao)
 
     else if ( cmd == "list" )
     {
-        string r = ds_file_list(aa.phdb, daid, "");
+        string r = ds_file_list(aa.jrdb, daid, "");
         return er::Code(er::OK).str() + ' ' + r;
     }
 
     else if ( cmd == "new" )
     {
-        string r = aa.phdb.ds_file_new(ao.profile.prid, daid);
+        string r = aa.jrdb.ds_file_new(ao.profile.prid, daid);
         return er::Code(er::OK).str() + ' ' + r;
     }
 
@@ -463,10 +463,10 @@ string Worker2::dataset_file(AutArea & aa, const AutObject & ao)
         if ( !tok.next() ) return er::Code(er::REQ_MSG_BAD);
         string s64 = tok.sub();
 
-        if ( !aa.phdb.auth(ao.profile.prid, daid) )
+        if ( !aa.jrdb.auth(ao.profile.prid, daid) )
             return er::Code(er::REQ_MSG_BAD);
 
-        if ( ds_file_list(aa.phdb, daid, fiid) == "0" )
+        if ( ds_file_list(aa.jrdb, daid, fiid) == "0" )
             return er::Code(er::REQ_MSG_BAD);
 
         if ( !gl::isb64(s64) )
@@ -487,7 +487,7 @@ string Worker2::dataset_file(AutArea & aa, const AutObject & ao)
         if ( !tok.next() ) return er::Code(er::REQ_MSG_BAD);
         string fiid = tok.sub();
 
-        aa.phdb.ds_file_del(ao.profile.prid, daid, fiid);
+        aa.jrdb.ds_file_del(ao.profile.prid, daid, fiid);
 
         ds_file_del(daid, fiid);
 
@@ -502,10 +502,10 @@ string Worker2::dataset_file(AutArea & aa, const AutObject & ao)
         if ( !tok.next() ) return er::Code(er::REQ_MSG_BAD);
         string descr = tok.sub();
 
-        if ( !aa.phdb.auth(ao.profile.prid, daid) )
+        if ( !aa.jrdb.auth(ao.profile.prid, daid) )
             return er::Code(er::REQ_MSG_BAD);
 
-        aa.phdb.ds_file_descr(daid, fiid, descr);
+        aa.jrdb.ds_file_descr(daid, fiid, descr);
         return er::Code(er::OK);
     }
 
@@ -515,7 +515,7 @@ string Worker2::dataset_file(AutArea & aa, const AutObject & ao)
         string fiid = tok.sub();
 
         return er::Code(er::OK).str()
-               + ' ' + aa.phdb.ds_file_descr(daid, fiid);
+               + ' ' + aa.jrdb.ds_file_descr(daid, fiid);
     }
 
     return er::Code(er::REQ_MSG_BAD);

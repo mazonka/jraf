@@ -59,7 +59,7 @@ struct Worker2
                              gl::intint n, bool first, db::Record * record);
 
         string dataset(AutArea & aa, const AutObject & ao);
-        string phadmin(AutArea & aa, const AutObject & ao);
+        string jradmin(AutArea & aa, const AutObject & ao);
         string categ(AutArea & aa, const AutObject & ao);
         string dataset_file(AutArea & aa, const AutObject & ao);
 

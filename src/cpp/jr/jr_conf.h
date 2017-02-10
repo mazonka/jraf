@@ -9,7 +9,7 @@ using std::string;
 
 namespace jraf
 {
-extern string ph_conf;
+extern string jr_conf;
 void testConf();
 string loadConf(string name);
 bool matchConf(string name, string val);

@@ -72,10 +72,10 @@ gl::intint calc_usage(std::map<string, gl::vstr> & fnames)
     return us;
 }
 
-string ds_file_list(Phdb & phdb, string daid, string fiid)
+string ds_file_list(Jrdb & jrdb, string daid, string fiid)
 {
     gl::vstr ids, des;
-    int sz = phdb.ds_file_list(daid, fiid, ids, des);
+    int sz = jrdb.ds_file_list(daid, fiid, ids, des);
     string r;
     r += gl::tos(sz);
 

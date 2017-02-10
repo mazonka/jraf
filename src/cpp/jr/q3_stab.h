@@ -20,7 +20,7 @@ struct Profile
     string dump() const { return ""; }
 };
 
-class Phdb
+class Jrdb
 {
         void schema() {}
         static void args(string & ss, string s1, string s2 = "",
@@ -28,7 +28,7 @@ class Phdb
                          string s5 = "", string s6 = "") {}
 
     public:
-        Phdb(string dbf) {}
+        Jrdb(string dbf) {}
 
         bool auth(string prid, string daid) { return false; }
 

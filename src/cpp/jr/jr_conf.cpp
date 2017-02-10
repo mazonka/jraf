@@ -10,18 +10,18 @@
 
 #include "jr_conf.h"
 
-string jraf::ph_conf = "conf.phd";
+string jraf::jr_conf = "conf.jrd";
 
 void jraf::testConf()
 {
-    string a = gl::file2str(ph_conf);
-    if ( a.empty() ) throw gl::ex("Cannot open: " + ph_conf);
+    string a = gl::file2str(jr_conf);
+    if ( a.empty() ) throw gl::ex("Cannot open: " + jr_conf);
 }
 
 
 string jraf::loadConf(string name)
 {
-    std::ifstream in(ph_conf.c_str());
+    std::ifstream in(jr_conf.c_str());
     while (in)
     {
         string k, v;
@@ -34,7 +34,7 @@ string jraf::loadConf(string name)
 
 bool jraf::matchConf(string name, string val)
 {
-    std::ifstream in(ph_conf.c_str());
+    std::ifstream in(jr_conf.c_str());
     while (in)
     {
         string k, v;

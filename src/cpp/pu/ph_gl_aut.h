@@ -33,21 +33,21 @@ class AutQueue
 
         void remove_by_seid(string seid) { aos.erase(seid); }
         void remove_by_mail(string);
-        void refresh(Phdb & db, const AutObject & ao);
+        void refresh(Jrdb & db, const AutObject & ao);
 
         string dump() const;
 };
 
 struct AutArea
 {
-    Phdb phdb;
+    Jrdb jrdb;
     Jraf jraf;
 
     os::Semaphore access2autArea;
     AutQueue que;
 
     AutArea(int sz, string dbfile, string jroot)
-        : phdb(dbfile), jraf(jroot), access2autArea(1), que(sz)
+        : jrdb(dbfile), jraf(jroot), access2autArea(1), que(sz)
     { jraf::testConf(); }
 
     AutObject newAob_email(string id, string email);

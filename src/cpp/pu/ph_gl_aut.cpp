@@ -23,12 +23,12 @@ AutObject AutArea::newAob_email(string ses_id, string email)
     que.remove_by_mail(email); // 1
     Profile pr;
 
-    if ( !phdb.get_by_email(email, pr) )
-        phdb.new_email(email);
+    if ( !jrdb.get_by_email(email, pr) )
+        jrdb.new_email(email);
 
-    phdb.access(email);
+    jrdb.access(email);
 
-    if ( !phdb.get_by_email(email, pr) )
+    if ( !jrdb.get_by_email(email, pr) )
         throw gl::ex("ph database corrupted or not accessible");
 
     AutObject ao(ses_id, pr);
@@ -101,17 +101,17 @@ AutObject AutQueue::getAob_seid(string seid) const
 
 void AutArea::update_name(const AutObject & ao, string newname)
 {
-    if ( !phdb.update_name(ao.profile, newname) )
+    if ( !jrdb.update_name(ao.profile, newname) )
     {
         os::Cout() << "AutArea::update_name error while updating name\n";
         return;
     }
 
-    que.refresh(phdb, ao);
+    que.refresh(jrdb, ao);
 }
 
 
-void AutQueue::refresh(Phdb & db, const AutObject & ao)
+void AutQueue::refresh(Jrdb & db, const AutObject & ao)
 {
     db.get_by_email(ao.profile.mail, aos[ao.seid].profile);
 }

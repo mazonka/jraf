@@ -43,7 +43,7 @@ Config::Config(int ac, const char * av[], const char * cfgfile)
 
     , quiet(false)
     , listDir(true)
-    , webRoot("phclnt")
+    , webRoot("jrclnt")
 
     , logSize(100)
     , console(true)
@@ -395,8 +395,8 @@ void Config::processOptionKeyVal(const string & k, const string & v)
     else if ( k == "jraf_root" )
         jraf_root = v;
 
-    else if ( k == "phdb" )
-        phdbfile = v;
+    else if ( k == "jrdb" )
+        jrdbfile = v;
 
     else
         throw gl::ex("Bad key [$1]", k);
