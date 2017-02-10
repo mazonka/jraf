@@ -6,7 +6,7 @@ else
 	PLAT=unx
 endif
 
-BIN=../_bin_$(PLAT)/jraf
+BIN=../_bin_$(PLAT)/jrafcli
 
 all: $(BIN) $(BIN)/jraf.php
 
