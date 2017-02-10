@@ -63,8 +63,8 @@ string Worker2::ph_login()
 
     url += gl::tos(ao.seid);
 
-    string cmd = jraf::loadConf("phmail");
-    if ( cmd.empty() ) cmd = "phmail";
+    string cmd = jraf::loadConf("jrmail");
+    if ( cmd.empty() ) cmd = "jrmail";
 
     cmd += " login " + em + " " + url;
 

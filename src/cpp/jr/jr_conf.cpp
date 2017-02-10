@@ -65,8 +65,8 @@ void jraf::sendmail(string & url, string sid, string em)
 
     string furl = url + gl::tos(sid);
 
-    string cmd = jraf::loadConf("phmail");
-    if ( cmd.empty() ) cmd = "phmail";
+    string cmd = jraf::loadConf("jrmail");
+    if ( cmd.empty() ) cmd = "jrmail";
 
     cmd += " login " + em + " " + furl;
 

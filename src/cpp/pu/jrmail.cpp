@@ -21,7 +21,7 @@ void send_au(string, string);
 
 int main(int ac, const char * av[]) try
 {
-    if ( ac < 3 ) throw gl::ex("Usage: phmain cmd + args");
+    if ( ac < 3 ) throw gl::ex("Usage: jrmail cmd + args");
 
     string cmd = av[1];
 
@@ -33,19 +33,19 @@ int main(int ac, const char * av[]) try
 }
 catch (gl::Exception e)
 {
-    std::cout << "Error (phmail): " << e.str() << '\n';
+    std::cout << "Error (jrmail): " << e.str() << '\n';
 
     return 0;
 }
 catch (string s)
 {
-    std::cout << "Error (phmail): " << s << '\n';
+    std::cout << "Error (jrmail): " << s << '\n';
     return 0;
 }
 
 
 void send_au(string email, string url)
 {
-    os::Cout() << "[N/I] phmail: Sending to [" + email + "] au [" + url + "]\n";
+    os::Cout() << "[N/I] jrmail: Sending to [" + email + "] au [" + url + "]\n";
 }
 
