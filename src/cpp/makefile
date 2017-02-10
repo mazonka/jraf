@@ -13,17 +13,17 @@ SG=sg
 VI=vi
 Q3=q3
 
-all: ../$(TRG) ../$(TRG)/phenod$(EEXT) ../$(TRG)/phmail$(EEXT) 
+all: ../$(TRG) ../$(TRG)/jrafd$(EEXT) ../$(TRG)/jrmail$(EEXT) 
 
 ../$(TRG):
 	@echo "Usage: make PLAT={msc,unx} [MEMORY=1] [GCOV=1]"
-	@echo "removing ../$(TRG)/phenod$(EEXT)"
-	rm -f ../$(TRG)/phenod$(EEXT)
+	@echo "removing ../$(TRG)/jrafd$(EEXT)"
+	rm -f ../$(TRG)/jrafd$(EEXT)
 	@mkdir -p ../$(TRG)
 
-../$(TRG)/phenod$(EEXT): $(PU)/$(TRG)/phenod$(EEXT)
-	@echo "updating ../$(TRG)/phenod$(EEXT)"
-	rm -f ../$(TRG)/phenod$(EEXT)
+../$(TRG)/jrafd$(EEXT): $(PU)/$(TRG)/jrafd$(EEXT)
+	@echo "updating ../$(TRG)/jrafd$(EEXT)"
+	rm -f ../$(TRG)/jrafd$(EEXT)
 	cp $< $@
 
 ../$(TRG)/phmail$(EEXT): $(PU)/$(TRG)/phmail$(EEXT)
@@ -31,7 +31,7 @@ all: ../$(TRG) ../$(TRG)/phenod$(EEXT) ../$(TRG)/phmail$(EEXT)
 	rm -f ../$(TRG)/phmail$(EEXT)
 	cp $< $@
 
-$(PU)/$(TRG)/phenod$(EEXT): $(PU)/*.cpp $(PU)/*.h $(OS)/*.cpp $(OS)/*.h \
+$(PU)/$(TRG)/jrafd$(EEXT): $(PU)/*.cpp $(PU)/*.h $(OS)/*.cpp $(OS)/*.h \
 	$(GL)/*.cpp $(GL)/*.h $(OS)/*/*.cpp $(Q3)/*.cpp $(Q3)/*.h
 	cd $(PU) && make PLAT=$(PLAT)
 
