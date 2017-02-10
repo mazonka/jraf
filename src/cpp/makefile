@@ -11,7 +11,6 @@ OS=os
 PU=pu
 SG=sg
 VI=vi
-Q3=q3
 
 all: ../$(TRG) ../$(TRG)/jrafd$(EEXT) ../$(TRG)/jrmail$(EEXT) 
 
@@ -26,13 +25,13 @@ all: ../$(TRG) ../$(TRG)/jrafd$(EEXT) ../$(TRG)/jrmail$(EEXT)
 	rm -f ../$(TRG)/jrafd$(EEXT)
 	cp $< $@
 
-../$(TRG)/phmail$(EEXT): $(PU)/$(TRG)/phmail$(EEXT)
-	@echo "updating ../$(TRG)/phmail$(EEXT)"
-	rm -f ../$(TRG)/phmail$(EEXT)
+../$(TRG)/jrmail$(EEXT): $(PU)/$(TRG)/jrmail$(EEXT)
+	@echo "updating ../$(TRG)/jrmail$(EEXT)"
+	rm -f ../$(TRG)/jrmail$(EEXT)
 	cp $< $@
 
 $(PU)/$(TRG)/jrafd$(EEXT): $(PU)/*.cpp $(PU)/*.h $(OS)/*.cpp $(OS)/*.h \
-	$(GL)/*.cpp $(GL)/*.h $(OS)/*/*.cpp $(Q3)/*.cpp $(Q3)/*.h
+	$(GL)/*.cpp $(GL)/*.h $(OS)/*/*.cpp
 	cd $(PU) && make PLAT=$(PLAT)
 
 
@@ -71,7 +70,6 @@ clean:
 	cd $(OS) && make clean
 	cd $(PU) && make clean
 	cd $(MA) && make clean
-	cd $(Q3) && make clean
 
 install:
 	mkdir -p ~/bin

@@ -27,10 +27,6 @@ SGDIR=../sg
 INC := $(INC) -I$(SGDIR)
 SGLIB=$(SGDIR)/$O/htsglib$(LEXT)
 
-#Q3DIR=../q3
-#INC := $(INC) -I$(Q3DIR)
-#Q3LIB=$(Q3DIR)/$O/q3lib$(LEXT)
-
 JRDIR=../jr
 INC := $(INC) -I$(JRDIR)
 JRLIB=$(JRDIR)/$O/jrlib$(LEXT)
@@ -56,9 +52,9 @@ $O:
 	mkdir -p $O
 
 $(trg): $O/%$(EEXT):%.cpp $O/$(MYLIB)$(LEXT) $(DBLIB) $(SGLIB) \
-	$(OSLIB) $(MALIB) $(GLLIB) $(Q3LIB) $(JRLIB)
+	$(OSLIB) $(MALIB) $(GLLIB) $(JRLIB)
 	$(COMPILER) $(OPT) $(INC) $< $O/$(MYLIB)$(LEXT) $(DBLIB) \
-	$(SGLIB) $(Q3LIB) $(JRLIB) $(OSLIB) $(MALIB) $(GLLIB) $(LDF) $(EOUT)$@
+	$(SGLIB) $(JRLIB) $(OSLIB) $(MALIB) $(GLLIB) $(LDF) $(EOUT)$@
 	@rm -f $O/%$(OEXT):%.cpp
 
 $(obj): $O/%$(OEXT):%.cpp *.h
@@ -88,9 +84,6 @@ $(MALIB):
 
 $(SGLIB):
 	cd $(SGDIR) && make PLAT=$(PLAT)
-
-$(Q3LIB):
-	cd $(Q3DIR) && make PLAT=$(PLAT)
 
 $(JRLIB):
 	cd $(JRDIR) && make PLAT=$(PLAT)
