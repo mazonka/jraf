@@ -13,7 +13,7 @@ SRC_JS=../../js
 SRC_CONF=../../conf
 SRC_PHP=../../php
 
-all: jr_mkdir jr_cp conf.jrd cli_cp done
+all: jr_mkdir jr_cp conf.jrd php_cp cli_cp done
 
 jr_mkdir:
 	@echo [ Create folders tree ]
