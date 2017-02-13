@@ -3,7 +3,7 @@
 #ifndef _PH_GL_AUT
 #define _PH_GL_AUT
 
-#include "ph_db.h"
+#include "jr_db.h"
 #include "jraf.h"
 #include "jr_conf.h"
 
