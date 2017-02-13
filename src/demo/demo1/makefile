@@ -12,6 +12,8 @@ BIN_JRAF=$(BIN)/jraf
 SRC_JS=../../js
 SRC_CONF=../../conf
 SRC_PHP=../../php
+DEMO_CLI=cli
+DEMO_JRAF=jraf
 
 all: jr_mkdir jr_cp conf.jrd php_cp cli_cp done
 
@@ -35,10 +37,10 @@ php_cp: $(SRC_PHP)/jraf.php $(SRC_PHP)/index.php
 	cp $(SRC_PHP)/index.php $(BIN_CLI)
 	@echo [ OK ]
 	
-cli_cp: jraf/sys/*.js jrafcli/jraf/*.js
+cli_cp: $(DEMO_JRAF)/sys/*.js $(DEMO_CLI)/jraf/*.js
 	@echo [ Copy CLI files ]
-	cp -puv jraf/sys/*.js $(BIN_JRAF)/sys/
-	cp -puv jrafcli/jraf/sys.js $(BIN_CLI)/jraf/
+	cp -puv $(DEMO_JRAF)/sys/*.js $(BIN_JRAF)/sys/
+	cp -puv $(DEMO_CLI)/jraf/sys.js $(BIN_CLI)/jraf/
 	@echo [ OK ]
     
 done:
