@@ -5,7 +5,7 @@
 # 
 # Just copy zip-archive here and run script
 
-ARC_NAME=$(ls jquery-ui-*.custom.zip)
+ARC_NAME=$(ls jquery-ui-*.custom.zip 2>/dev/null)
 DIR_NAME=${ARC_NAME%.zip}
 
 error() {
@@ -13,7 +13,7 @@ error() {
 	exit 1
 }
 
-[ -f "${ARC_NAME}" ] || error "${ARC_NAME} not found!"
+[ -f "${ARC_NAME}" ] || error "Source file not found!"
 
 
 unzip "$ARC_NAME" || error "Unzip error"
