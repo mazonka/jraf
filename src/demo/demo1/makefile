@@ -7,7 +7,7 @@ else
 endif
 
 BIN=../../_bin_$(PLAT)
-BIN_CLI=$(BIN)/jrafcli
+BIN_CLI=$(BIN)/cli
 BIN_JRAF=$(BIN)/jraf
 SRC_JS=../../js
 SRC_CONF=../../conf
