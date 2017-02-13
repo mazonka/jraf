@@ -26,7 +26,7 @@
 
 #include "jr_files.h"
 
-string Worker2::ph_login()
+string Worker2::jr_login()
 {
     if ( !tok.next() ) return er::Code(er::REQ_MSG_BAD);
 
@@ -50,7 +50,7 @@ string Worker2::ph_login()
     if ( tok.next() ) url = tok.sub();
     else url = jraf::loadConf("server");
 
-    if ( url.empty() ) throw "Worker2::ph_login: empty url";
+    if ( url.empty() ) throw "Worker2::jr_login: empty url";
     auto i = url.find('?');
 
     if ( i == string::npos )
@@ -77,7 +77,7 @@ string Worker2::ph_login()
     return er::Code(er::OK);
 }
 
-string Worker2::ph_script(string cmd, string ag)
+string Worker2::jr_script(string cmd, string ag)
 {
     // set default jraf
     if ( cmd.empty() ) cmd = "jraf";
@@ -95,7 +95,7 @@ string Worker2::ph_script(string cmd, string ag)
     return file;
 }
 
-string Worker2::ph_jraf(bool ro)
+string Worker2::jr_jraf(bool ro)
 {
     if ( !gl::issql(tok.c_str()) )
     {
@@ -131,7 +131,7 @@ string Worker2::reseed()
     return er::Code(er::OK);
 }
 
-string Worker2::ph_aucmd()
+string Worker2::jr_aucmd()
 {
     if ( !gl::issql(tok.c_str()) )
     {

@@ -44,19 +44,19 @@ string Worker2::process(bool * recog)
         return er::Code(er::OK);
 
     //if ( ( tok.is("login") || tok.is("l") ) && (en || pn.ping) )
-    //    return ph_login();
+    //    return jr_login();
 
     //if ( tok.is("au") && (en || pn.ping) )
-    //    return ph_aucmd();
+    //    return jr_aucmd();
 
     ///if ( tok.is("jraf") && pn.jw ) // FIXME change to jr/jw
-    ///    return ph_jraf(false);
+    ///    return jr_jraf(false);
 
     if ( tok.is("jw") && pn.jw )
-        return ph_jraf(false);
+        return jr_jraf(false);
 
     if ( tok.is("jr") && pn.jr )
-        return ph_jraf(true);
+        return jr_jraf(true);
 
     if ( tok.is("reseed") && pn.reseed )
         return reseed();
@@ -142,7 +142,7 @@ string Worker2::process(bool * recog)
         string ts = tok.c_str();
         string::size_type i = ts.find('?');
         if ( i != string::npos )
-            return ph_script(ts.substr(0, i), ts.substr(i + 1));
+            return jr_script(ts.substr(0, i), ts.substr(i + 1));
     }
 
     return file(true, false);

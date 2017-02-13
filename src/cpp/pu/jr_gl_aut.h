@@ -1,7 +1,7 @@
 // Hasq Technology Pty Ltd (C) 2013-2016
 
-#ifndef _PH_GL_AUT
-#define _PH_GL_AUT
+#ifndef _JR_GL_AUT
+#define _JR_GL_AUT
 
 #include "jr_db.h"
 #include "jraf.h"

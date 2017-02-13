@@ -49,10 +49,10 @@ struct Worker2
         string slice();
         string drop();
 
-        string ph_login();
-        string ph_script(string, string);
-        string ph_aucmd();
-        string ph_jraf(bool ro);
+        string jr_login();
+        string jr_script(string, string);
+        string jr_aucmd();
+        string jr_jraf(bool ro);
         string reseed();
 
         er::Code fetchRecord(int dbIndex, db::Dn * dn,
