@@ -7,7 +7,7 @@ else
 endif
 
 BIN=../_bin_$(PLAT)
-CLI=$(BIN)/jrafcli
+CLI=$(BIN)/cli
 JRD=../conf
 
 all: $(CLI) $(CLI)/jraf.php conf.jrd
