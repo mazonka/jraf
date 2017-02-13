@@ -20,7 +20,7 @@
 #include "hq_gl_wkr.h"
 #include "hq_gl_key.h"
 
-#include "ph_gl_aut.h"
+#include "jr_gl_aut.h"
 
 
 class GlobalSpace

@@ -31,14 +31,14 @@ JRDIR=../jr
 INC := $(INC) -I$(JRDIR)
 JRLIB=$(JRDIR)/$O/jrlib$(LEXT)
 
-src = ph_files.cpp hq_conflict.cpp \
+src = jr_files.cpp hq_conflict.cpp \
 	hq_connector.cpp hq_logger.cpp hq_svttask.cpp hq_servant.cpp \
 	hq_wkrtask.cpp hq_publisher.cpp hq_config.cpp hq_reorgan.cpp \
 	hq_secretary.cpp hq_chiefeditor.cpp hq_automachine.cpp hq_worker.cpp \
 	hq_globalspace.cpp hq_console.cpp hq_alarms.cpp hq_svtjob.cpp \
 	hq_gl_bin.cpp hq_gl_ced.cpp hq_gl_con.cpp hq_gl_key.cpp \
 	hq_gl_svt.cpp hq_gl_wkr.cpp hq_plebfile.cpp hq_agent.cpp \
-	hq_netenv.cpp ph_wkrtask.cpp ph_gl_aut.cpp
+	hq_netenv.cpp jr_wkrtask.cpp jr_gl_aut.cpp
 	
 obj := $(src:%.cpp=$O/%$(OEXT))
 
