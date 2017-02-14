@@ -6,49 +6,51 @@ else
 	PLAT=unx
 endif
 
-BIN=../../_bin_$(PLAT)
-BIN_CLI=$(BIN)/cli
-BIN_JRAF=$(BIN)/jraf
-SRC_JS=../../js
+WKR_DIR=../..
+BIN=$(WKR_DIR)/_bin_$(PLAT)
+TRG_CLI=$(BIN)/jrclnt
+TRG_JRAF=$(BIN)/jraf
+SRC_JQ=$(WKR_DIR)/ext/jq
+SRC_JS=$(WKR_DIR)/js
 SRC_SH=../shared
-SRC_CONF=../../conf
-SRC_PHP=../../php
-DEMO_CLI=cli
-DEMO_JRAF=jraf
+SRC_CONF=$(WKR_DIR)/conf
+SRC_PHP=$(WKR_DIR)/php
+DEMO_SYS=sys
+DEMO_JRD=jrd
 
-all: jr_mkdir jr_cp conf.jrd php_cp cli_cp done
+# all: jr_mkdir jr_cp conf.jrd php_cp cli_cp done
+all: jr_mkdir jr_cp conf.jrd php_cp cli_cp jq_cp done
 
 jr_mkdir:
-	@echo [ Create folders tree ]
-	@mkdir -p $(BIN_CLI)/jraf
-	@mkdir -p $(BIN_JRAF)/sys
-	@echo [ OK ]
+	@mkdir -p $(TRG_CLI)/jraf
+	@mkdir -p $(TRG_JRAF)/sys
+	@echo [ Create folders tree - OK ]
 
-jr_cp:
-	@echo [ Copy JRAF files ]
-	@cp -puv $(SRC_JS)/*.js $(BIN_JRAF)/sys/
-	@cp -pruv $(SRC_SH)/. $(BIN_JRAF)/
-	@echo [ OK ]
+jr_cp: $(SRC_JS)/jraf.js $(SRC_JS)/write.js $(SRC_JS)/sys.js
+	@cp -puv $(SRC_JS)/jraf.js $(TRG_JRAF)/sys/
+	@cp -puv $(SRC_JS)/write.js $(TRG_JRAF)/sys/
+	@cp -puv $(SRC_JS)/sys.js $(TRG_CLI)/jraf/
+	@cp -pruv $(SRC_SH)/. $(TRG_JRAF)/
+	@echo [ Copy JRAF files - OK ]
 
 conf.jrd: $(SRC_CONF)/conf.jrd
-	cp $< $(BIN_CLI)/
+	@cp $< $(BIN)/
 
-php_cp: $(SRC_PHP)/jraf.php $(SRC_PHP)/index.php
-	@echo [ Copy PHP files ]
-	cp $(SRC_PHP)/jraf.php $(BIN_CLI)
-	cp $(SRC_PHP)/index.php $(BIN_CLI)
-	@echo [ OK ]
+php_cp: $(SRC_PHP)
+	@$(MAKE) -sC $(SRC_PHP)
 	
-cli_cp: $(DEMO_JRAF)/sys/*.js $(DEMO_CLI)/jraf/*.js
-	@echo [ Copy CLI files ]
-	cp -puv $(DEMO_JRAF)/sys/*.js $(BIN_JRAF)/sys/
-	cp -puv $(DEMO_CLI)/jraf/sys.js $(BIN_CLI)/jraf/
-	@echo [ OK ]
-    
+cli_cp: $(DEMO_SYS)/*.js
+	@cp -puv $(DEMO_SYS)/*.js $(TRG_JRAF)/sys/
+	@cp -puv $(DEMO_JRD)/jraf.jrd $(BIN)/
+	@echo [ Copy client files - OK ]
+
+jq_cp: $(SRC_JQ)
+	@$(MAKE) -sC $(SRC_JQ)
+	
 done:
 	@echo Done.
 
 clean:
-	rm -rf $(BIN_JRAF)/sys/*.js
-	rm -rf $(BIN_CLI)/jraf/*.js
+	rm -rf $(TRG_JRAF)/sys/*.js
+	rm -rf $(TRG_CLI)/jraf/*.js
 	@echo Done.
