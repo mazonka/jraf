@@ -10,6 +10,7 @@ BIN=../../_bin_$(PLAT)
 BIN_CLI=$(BIN)/cli
 BIN_JRAF=$(BIN)/jraf
 SRC_JS=../../js
+SRC_SH=../shared
 SRC_CONF=../../conf
 SRC_PHP=../../php
 DEMO_CLI=cli
@@ -26,6 +27,7 @@ jr_mkdir:
 jr_cp:
 	@echo [ Copy JRAF files ]
 	@cp -puv $(SRC_JS)/*.js $(BIN_JRAF)/sys/
+	@cp -pruv $(SRC_SH)/. $(BIN_JRAF)/
 	@echo [ OK ]
 
 conf.jrd: $(SRC_CONF)/conf.jrd
