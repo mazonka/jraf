@@ -29,7 +29,6 @@ jr_mkdir:
 	@mkdir -p $(TRG_JRAF)/sys
 
 jr_cp: $(SRC_JS)/*.js
-	@$(MAKE) -sC $(SRC_PHP)
 	@cp -pruv $(SRC_SH)/. $(TRG_JRAF)/
 
 conf.jrd: $(SRC_CONF)/conf.jrd
