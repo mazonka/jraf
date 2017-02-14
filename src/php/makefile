@@ -10,8 +10,11 @@ BIN=_bin_$(PLAT)
 TRG_CLI=../$(BIN)/jrclnt
 SRC_CONF=../conf
 
-all: bin_mkdir cp_php cp_conf
+all: start bin_mkdir cp_php cp_conf done
 
+start:
+	@echo [ COPY JRAF PHP ]
+	
 bin_mkdir:
 	@mkdir -p $(TRG_CLI)
 
@@ -26,3 +29,5 @@ checkin:
 	@cp -fpuv $(TRG_CLI)/jraf.php ./
 	@cp -fpuv $(TRG_CLI)/index.php ./
 
+done:
+	@echo [ COPY JRAF PHP - OK ]

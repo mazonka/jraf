@@ -15,7 +15,7 @@ SRC_CONF=$(WKR_DIR)/conf
 all: start bin_mkdir cp_js cp_conf done
 
 start:
-	@echo [ JRAF source ]
+	@echo [ COPY JRAF JS ]
 
 bin_mkdir:
 	@mkdir -p $(TRG_CLI)/jraf/
@@ -35,4 +35,4 @@ checkin:
 	@cp -fpuv $(TRG_CLI)/jraf/sys.js ./
 
 done:
-	@echo [ OK ]
+	@echo [ COPY JRAF JS- OK ]
