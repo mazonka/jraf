@@ -46,9 +46,11 @@ jq_cp: $(SRC_JQ)
 	@$(MAKE) -sC $(SRC_JQ)
 	
 done:
-	@echo [ MAKE DEMO OK ]
+	@echo [ MAKE DEMO - OK ]
 
 clean:
-	rm -rf $(TRG_JRAF)/sys/*.js
-	rm -rf $(TRG_CLI)/jraf/*.js
+	rm -rf $(TRG_JRAF)
+	rm -rf $(TRG_CLI)
+	rm -rf $(BIN)/jraf.jrd
+	rm -rf $(BIN)/conf.jrd
 	@echo Done.
