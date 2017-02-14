@@ -1,6 +1,5 @@
 
 function jraf_js(){}
-var g_sys_loaded_jraf = 1;
 
 var g_jraf_root = jraf_node(null,null);
 
