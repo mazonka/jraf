@@ -87,7 +87,7 @@ string Worker2::jr_script(string cmd, string ag)
     // support: "home?sid", "jraf?sid"
     if ( cmd != "home" && cmd != "jraf" ) return er::Code(er::REQ_MSG_BAD);
 
-    string file = gl::file2str(cmd + ".phd");
+    string file = gl::file2str(cmd + ".jrd");
 
     gl::replaceAll(file, "$$$", ag);
 
