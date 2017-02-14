@@ -6,22 +6,23 @@ else
 	PLAT=unx
 endif
 
-BIN=../_bin_$(PLAT)
-CLI=$(BIN)/cli
-JRD=../conf
+BIN=_bin_$(PLAT)
+TRG_CLI=../$(BIN)/jrclnt
+SRC_CONF=../conf
 
-all: $(CLI) $(CLI)/jraf.php conf.jrd
+all: bin_mkdir cp_php cp_conf
 
-$(CLI):
-	@mkdir -p $(CLI)
+bin_mkdir:
+	@mkdir -p $(TRG_CLI)
 
-$(CLI)/jraf.php: jraf.php
-	cp jraf.php $(CLI)
-	cp index.php $(CLI)
+cp_php: jraf.php index.php
+	@cp jraf.php $(TRG_CLI)
+	@cp index.php $(TRG_CLI)
 
-conf.jrd: $(JRD)/conf.jrd
-	cp $< $(BIN)/
+cp_conf: $(SRC_CONF)/conf.jrd
+	@cp -fpuv $< ../$(BIN)/
 
 checkin:
-	cp -fpuv $(CLI)/jraf.php ./
+	@cp -fpuv $(TRG_CLI)/jraf.php ./
+	@cp -fpuv $(TRG_CLI)/index.php ./
 
