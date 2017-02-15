@@ -33,7 +33,7 @@ jr_cp: $(SRC_JS)/*.js
 	@$(MAKE) -sC $(SRC_JS)
 
 conf_cp: $(SRC_CONF)/conf.jrd
-	@cp -puv $(SRC_CONF)/conf.jrd $(TRG_JRAFCL)/
+	@cp -puv $(SRC_CONF)/conf.jrd $(BIN)/
 	@echo [ COPY CONF - OK ]
 	
 php_cp: $(SRC_PHP)/makefile
