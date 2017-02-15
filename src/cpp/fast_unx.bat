@@ -1,4 +1,4 @@
-set PL=PLAT=unx
+set PL=PLAT=u
 
 pushd .
 

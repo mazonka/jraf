@@ -1,6 +1,6 @@
 # Hasq Technology Pty Ltd (C) 2013-2016
 
-# PLAT: msc unx
+# PLAT: w u
 
 include mk_all.mak
 
@@ -15,7 +15,7 @@ VI=vi
 all: ../$(TRG) ../$(TRG)/jrafd$(EEXT) ../$(TRG)/jrmail$(EEXT) 
 
 ../$(TRG):
-	@echo "Usage: make PLAT={msc,unx} [MEMORY=1] [GCOV=1]"
+	@echo "Usage: make PLAT={w,u} [MEMORY=1] [GCOV=1]"
 	@echo "removing ../$(TRG)/jrafd$(EEXT)"
 	rm -f ../$(TRG)/jrafd$(EEXT)
 	@mkdir -p ../$(TRG)
@@ -73,4 +73,4 @@ clean:
 
 install:
 	mkdir -p ~/bin
-	cp _bin_$(PLAT)/* ~/bin/
+	cp _bin$(PLAT)/* ~/bin/

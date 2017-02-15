@@ -1,13 +1,13 @@
 # Hasq Technology Pty Ltd (C) 2013-2016
 
 ifeq ($(OS),Windows_NT)
-PLAT=msc
+PLAT=w
 else
-PLAT=unx
+PLAT=u
 endif
 
 BINR=$(PLAT)
-TRG=_bin_$(BINR)
+TRG=_bin$(BINR)
 
 include $(SRC)mk_$(PLAT).mak
 

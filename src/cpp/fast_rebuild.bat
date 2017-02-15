@@ -1,4 +1,4 @@
-set PL=PLAT=msc
+set PL=PLAT=w
 
 pushd .
 

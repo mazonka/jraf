@@ -43,7 +43,7 @@ Config::Config(int ac, const char * av[], const char * cfgfile)
 
     , quiet(false)
     , listDir(true)
-    , webRoot("jrclnt")
+    , webRoot("jrafcl")
 
     , logSize(100)
     , console(true)
@@ -65,7 +65,7 @@ Config::Config(int ac, const char * av[], const char * cfgfile)
     , webhome("/index.html")
 
     , xfwd("0.0.0.0")
-    , jraf_root("jraf")
+    , jraf_root("jraffs")
 
     , nWorkers(4)
     , seIpLink("127.0.0.1", 16000)
