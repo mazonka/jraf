@@ -5,7 +5,6 @@ function shell_js(){ start_shell(); }
 
 function start_shell()
 {
-    ///start_cli();
     start_main();
 }
 

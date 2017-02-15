@@ -3,7 +3,6 @@
 
 function cli_js(){}
 
-var g_sys_loaded_cli = 1;
 
 var $g_div_cli;
 var $g_input, $g_output, $g_edit, $g_view;

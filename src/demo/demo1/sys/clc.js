@@ -3,8 +3,6 @@
 
 function clc_js(){}
 
-var g_sys_loaded_clc = 1;
-
 function cli_build_cmd_help()
 {
     var help_help = "help: prints help page\n";
