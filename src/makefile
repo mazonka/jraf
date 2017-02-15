@@ -18,9 +18,9 @@ SRC_PHP=php
 SRC_CPP=cpp
 
 # all: jr_mkdir jr_cp conf.jrd php_cp cli_cp done
-all: jr_mkdir jr_cp conf_cp html_cp php_cp jq_cp done
-cpp: jr_mkdir jr_cp conf_cp html_cp cpp_cp jq_cp done
-php: jr_mkdir jr_cp conf_cp html_cp php_cp jq_cp done
+all: jr_mkdir jr_cp conf_cp php_cp jq_cp done
+cpp: jr_mkdir jr_cp conf_cp cpp_cp jq_cp done
+php: jr_mkdir jr_cp conf_cp php_cp jq_cp done
 
 jr_mkdir:
 	@mkdir -p $(TRG_JRAFFS)/sys
@@ -32,9 +32,6 @@ jr_mkdir:
 jr_cp: $(SRC_JS)/*.js
 	@$(MAKE) -sC $(SRC_JS)
 
-html_cp: $(SRC_HTML)/jraf.jrd
-	@cp -puv $< $(TRG_JRAFCL)/
-	
 conf_cp: $(SRC_CONF)/conf.jrd
 	@cp -puv $(SRC_CONF)/conf.jrd $(TRG_JRAFCL)/
 	@echo [ COPY CONF - OK ]
