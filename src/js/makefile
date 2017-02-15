@@ -1,31 +1,31 @@
 # (C) 2016-2017
 
 ifeq ($(OS),Windows_NT)
-	PLAT=msc
+	PLAT=w
 else
-	PLAT=unx
+	PLAT=u
 endif
 
 WKR_DIR=..
-BIN=$(WKR_DIR)/_bin_$(PLAT)
-TRG_CLI=$(BIN)/jrclnt
-TRG_JRAF=$(BIN)/jraf
+BIN=$(WKR_DIR)/_bin$(PLAT)
+TRG_JRAFCL=$(BIN)/jrafcl
+TRG_JRAFFS=$(BIN)/jraffs
 
 all: bin_mkdir cp_js done
 
 bin_mkdir:
-	@mkdir -p $(TRG_CLI)/jraf/
-	@mkdir -p $(TRG_JRAF)/sys/
+	@mkdir -p $(TRG_JRAFCL)/
+	@mkdir -p $(TRG_JRAFFS)/sys/
 
 cp_js: *.js 
-	@cp -puv jraf.js $(TRG_JRAF)/sys/
-	@cp -puv write.js $(TRG_JRAF)/sys/
-	@cp -puv sys.js $(TRG_CLI)/jraf/
+	@cp -puv jraf.js $(TRG_JRAFFS)/sys/
+	@cp -puv write.js $(TRG_JRAFFS)/sys/
+	@cp -puv jrafsys.js $(TRG_JRAFCL)/
 
 checkin:
-	@cp -fpuv $(TRG_JRAF)/sys/jraf.js ./
-	@cp -fpuv $(TRG_JRAF)/sys/write.js ./
-	@cp -fpuv $(TRG_CLI)/jraf/sys.js ./
+	@cp -fpuv $(TRG_JRAFFS)/sys/jraf.js ./
+	@cp -fpuv $(TRG_JRAFFS)/sys/write.js ./
+	@cp -fpuv $(TRG_JRAFCL)/jrafsys.js ./
 
 done:
 	@echo  [ COPY JRAF JS - OK ]
