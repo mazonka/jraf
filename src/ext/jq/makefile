@@ -10,10 +10,7 @@ BIN=_bin_$(PLAT)
 TRG_CLI=../../$(BIN)/jrclnt
 JQ_BZ2=$(shell ls *.bz2)
 
-all: start bin_mkdir jq_untar jq_cp jq_rm done
-
-start:
-	@echo [ COPY JQUERY ]
+all: bin_mkdir jq_untar jq_cp jq_rm done
 
 bin_mkdir:
 	@mkdir -p $(TRG_CLI)
@@ -35,4 +32,4 @@ jq_rm:
 	@rm -rf $(DIR)
 	
 done:
-	@echo [ COPY JQUERY - OK ]
+	@echo [ COPY JQUERY UI - OK ]

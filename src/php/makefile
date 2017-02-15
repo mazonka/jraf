@@ -8,12 +8,8 @@ endif
 
 BIN=_bin_$(PLAT)
 TRG_CLI=../$(BIN)/jrclnt
-SRC_CONF=../conf
 
-all: start bin_mkdir cp_php cp_conf done
-
-start:
-	@echo [ COPY JRAF PHP ]
+all: bin_mkdir cp_php done
 	
 bin_mkdir:
 	@mkdir -p $(TRG_CLI)
@@ -21,9 +17,6 @@ bin_mkdir:
 cp_php: jraf.php index.php
 	@cp jraf.php $(TRG_CLI)
 	@cp index.php $(TRG_CLI)
-
-cp_conf: $(SRC_CONF)/conf.jrd
-	@cp -fpuv $< ../$(BIN)/
 
 checkin:
 	@cp -fpuv $(TRG_CLI)/jraf.php ./

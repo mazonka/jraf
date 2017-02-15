@@ -10,12 +10,8 @@ WKR_DIR=..
 BIN=$(WKR_DIR)/_bin_$(PLAT)
 TRG_CLI=$(BIN)/jrclnt
 TRG_JRAF=$(BIN)/jraf
-SRC_CONF=$(WKR_DIR)/conf
 
-all: start bin_mkdir cp_js cp_conf done
-
-start:
-	@echo [ COPY JRAF JS ]
+all: bin_mkdir cp_js done
 
 bin_mkdir:
 	@mkdir -p $(TRG_CLI)/jraf/
@@ -26,13 +22,10 @@ cp_js: *.js
 	@cp -puv write.js $(TRG_JRAF)/sys/
 	@cp -puv sys.js $(TRG_CLI)/jraf/
 
-cp_conf: $(SRC_CONF)/conf.jrd
-	@cp -fpuv $< $(BIN)/
-
 checkin:
 	@cp -fpuv $(TRG_JRAF)/sys/jraf.js ./
 	@cp -fpuv $(TRG_JRAF)/sys/write.js ./
 	@cp -fpuv $(TRG_CLI)/jraf/sys.js ./
 
 done:
-	@echo [ COPY JRAF JS- OK ]
+	@echo  [ COPY JRAF JS - OK ]

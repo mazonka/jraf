@@ -19,11 +19,8 @@ DEMO_SYS=sys
 DEMO_JRD=jrd
 
 # all: jr_mkdir jr_cp conf.jrd php_cp cli_cp done
-all: start jr_mkdir jr_cp conf.jrd php_cp cli_cp jq_cp done
+all: jr_mkdir jr_cp conf_cp php_cp cli_cp jq_cp done
 
-start:
-	@echo [ MAKE DEMO ]
-	
 jr_mkdir:
 	@mkdir -p $(TRG_CLI)/jraf
 	@mkdir -p $(TRG_JRAF)/sys
@@ -32,7 +29,7 @@ jr_cp: $(SRC_JS)/*.js
 	@$(MAKE) -sC $(SRC_JS)
 	@cp -pruv $(SRC_SH)/. $(TRG_JRAF)/
 
-conf.jrd: $(SRC_CONF)/conf.jrd
+conf_cp: $(SRC_CONF)/conf.jrd
 	@cp $< $(BIN)/
 
 php_cp: $(SRC_PHP)
@@ -53,4 +50,4 @@ clean:
 	rm -rf $(TRG_CLI)
 	rm -rf $(BIN)/jraf.jrd
 	rm -rf $(BIN)/conf.jrd
-	@echo Done.
+	@echo [ CLEANED ]
