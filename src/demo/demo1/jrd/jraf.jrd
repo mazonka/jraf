@@ -10,8 +10,6 @@
         <meta name="description" content="Jraf project"/>
         <meta name="keywords" content="jraf"/>
         <meta name="viewport" content="initial-scale=1.0"/>
-        <!-- <link rel="stylesheet" href="css/pheno.css"/> -->
-        <!-- <link rel="stylesheet" href="css/jraf.css"/> -->
         <link rel="stylesheet" href="lib/jquery-ui.min.css"/>
         <title>Jraf demo client</title>
         <script src="lib/jquery.js"></script>
