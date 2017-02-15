@@ -6,7 +6,7 @@ then
 PLAT=$2
 shift 2
 fi
-[ "z${CURROS}" = "zLinux" ] && PLAT=${PLAT:-unx} || PLAT=${PLAT:-msc}
-execdir=_bin_${PLAT}
+[ "z${CURROS}" = "zLinux" ] && PLAT=${PLAT:-u} || PLAT=${PLAT:-w}
+execdir=_bin${PLAT}
 echo "$PLAT"
 

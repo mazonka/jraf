@@ -4,7 +4,7 @@ die(){ echo $1; exit 1; }
 
 # detect platform
 PLAT=`sh platform.sh`
-execdir=_bin_${PLAT}
+execdir=_bin${PLAT}
 
 #search for _bin
 xpwo=
