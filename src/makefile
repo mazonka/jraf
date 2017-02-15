@@ -13,7 +13,7 @@ SRC_JQ=ext/jq
 SRC_JS=js
 SRC_SH=../shared
 SRC_CONF=conf
-SRC_HTML=html
+# SRC_HTML=html
 SRC_PHP=php
 SRC_CPP=cpp
 
