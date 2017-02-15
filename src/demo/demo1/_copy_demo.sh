@@ -21,4 +21,4 @@ error()
 [ ! -d "$JRAFCL" -o ! -d "$JRAFFS" ] && error "Create JRAF first."
 
 cp -puv sys/*.js "$JRAFFS/sys"
-cp -puv jrd/jraf.jrd "$JRAFCL"
+cp -puv html/jraf.jrd "$JRAFCL"
