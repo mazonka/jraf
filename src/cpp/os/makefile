@@ -14,7 +14,7 @@ GLLIB=$(GLDIR)/$O/htgllib$(LEXT)
 
 psrc = os_net2.cpp os_ipaddr.cpp os_thread.cpp os_sem.cpp os_timer2.cpp \
 	os_file2.cpp os_sysinfo.cpp os_exec.cpp
-dsrc = $(psrc:%=_$(PLAT).%)
+dsrc = $(psrc:%=$(PLAT).%)
 pobj := $(dsrc:%.cpp=$O/%$(OEXT))
 
 src = os_net.cpp os_block.cpp os_place.cpp os_ipaddrc.cpp \
@@ -32,7 +32,7 @@ $(obj): $O/%$(OEXT):%.cpp *.h
 $(pobj): $O/%$(OEXT):%.cpp *.h *.inc
 	$(COMPILER) -c $(OPT) $(INC) $(FLAGS) $< $(OOUT)$@
 
-$(dsrc): _$(PLAT).%:$(PLAT)/% *.h
+$(dsrc): $(PLAT).%:$(PLAT)/% *.h
 	cp $< $@
 	chmod 0777 $@
 
