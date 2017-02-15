@@ -44,9 +44,9 @@ function jraf_boot(id)
         $g_div_main.html(s);
     }
 
-    jraf_ajax('jraf ping', out, 'JRAF : ');
-    jraf_ajax('jraf version client', out, 'Jraf client version : ');
-    jraf_ajax('jraf version backend', out, 'Jraf backend version : ');
+    jraf_ajax('jr ping', out, 'JRAF : ');
+    jraf_ajax('jr version client', out, 'Jraf client version : ');
+    jraf_ajax('jr version backend', out, 'Jraf backend version : ');
 
     var sysjs = function(jo)
     {
