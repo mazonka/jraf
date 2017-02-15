@@ -5,7 +5,7 @@
 error_reporting(-1);
 
 // jraf globals
-$root_dir = 'jraf';
+$root_dir = 'jraffs';
 $be_version = '10420';
 $sys_name = '.jraf.sys';
 $ver_name = '.jraf.ver';
@@ -92,7 +92,7 @@ exit;
 
 function loadPhd($auid)
 {
-    $file = OsPath::file_get_contents('jraf.phd');
+    $file = OsPath::file_get_contents('jraf.jrd');
     $file = str_replace('$$$',$auid,$file);
     echo $file;
 }
@@ -650,7 +650,7 @@ function Jraf_sendmail(&$url, $sid, $em) // => void
 
 function Jraf_config($key,$val)
 {
-    $fstr = OsPath::file_get_contents('conf.phd');
+    $fstr = OsPath::file_get_contents('conf.jrd');
     $words = preg_split('/[\s]+/', $fstr);
     //var_dump($words);
 
