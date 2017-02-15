@@ -21,11 +21,11 @@ jq_untar: $(JQ_BZ2)
 
 jq_cp:
 	$(eval DIR := $(shell ls -d */))
-	@cp $(DIR)/jquery-ui.min.js $(TRG_CLI)/lib/
-	@cp $(DIR)/jquery-ui.min.css $(TRG_CLI)/lib/
-	@cp $(DIR)/external/jquery/jquery.js $(TRG_CLI)/lib/
-	@cp $(DIR)/images/*.png $(TRG_CLI)/lib/images
-	@cp $(DIR)/external/jquery/jquery.js $(TRG_CLI)/lib/
+	@cp -puv $(DIR)/jquery-ui.min.js $(TRG_CLI)/lib/
+	@cp -puv $(DIR)/jquery-ui.min.css $(TRG_CLI)/lib/
+	@cp -puv $(DIR)/external/jquery/jquery.js $(TRG_CLI)/lib/
+	@cp -puv $(DIR)/images/*.png $(TRG_CLI)/lib/images
+	@cp -puv $(DIR)/external/jquery/jquery.js $(TRG_CLI)/lib/
 	
 jq_rm:
 	$(eval DIR := $(shell ls -d */))

@@ -13,7 +13,6 @@ TRG_JRAF=$(BIN)/jraf
 SRC_JQ=$(WKR_DIR)/ext/jq
 SRC_JS=$(WKR_DIR)/js
 SRC_SH=../shared
-SRC_CONF=$(WKR_DIR)/conf
 SRC_PHP=$(WKR_DIR)/php
 DEMO_SYS=sys
 DEMO_JRD=jrd
@@ -29,15 +28,17 @@ jr_cp: $(SRC_JS)/*.js
 	@$(MAKE) -sC $(SRC_JS)
 	@cp -pruv $(SRC_SH)/. $(TRG_JRAF)/
 
-conf_cp: $(SRC_CONF)/conf.jrd
-	@cp $< $(BIN)/
+conf_cp: $(DEMO_JRD)/conf.jrd
+	@cp -puv $(DEMO_JRD)/conf.jrd $(BIN)/
+	@echo [ COPY JRAF CONF - OK ]
 
 php_cp: $(SRC_PHP)
 	@$(MAKE) -sC $(SRC_PHP)
 	
-cli_cp: $(DEMO_SYS)/*.js
+cli_cp: $(DEMO_SYS)/*.js $(DEMO_JRD)/jraf.jrd
 	@cp -puv $(DEMO_SYS)/*.js $(TRG_JRAF)/sys/
 	@cp -puv $(DEMO_JRD)/jraf.jrd $(BIN)/
+	@echo [ COPY CLIENT FILES - OK ]
 
 jq_cp: $(SRC_JQ)
 	@$(MAKE) -sC $(SRC_JQ)

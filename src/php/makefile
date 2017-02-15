@@ -15,8 +15,8 @@ bin_mkdir:
 	@mkdir -p $(TRG_CLI)
 
 cp_php: jraf.php index.php
-	@cp jraf.php $(TRG_CLI)
-	@cp index.php $(TRG_CLI)
+	@cp jraf.php $(TRG_CLI)/
+	@cp index.php $(TRG_CLI)/
 
 checkin:
 	@cp -fpuv $(TRG_CLI)/jraf.php ./
