@@ -135,7 +135,7 @@ function jraf_read_obj(path, ob, cb, extra)
 		if( data != null )
 	        return ext.cb(jraf_parse_obj(data,ext.ob),ext.ex);
 
-		console.log(path+" - failed");
+		console.log(path+ob+" - failed");
     }
 
     var ex = {};
