@@ -112,8 +112,6 @@ function sys_loaded()
 	    }
 		else
 		{
-			///console.log(i);
-			///console.log(typeof window[i]);
 			///console.log(window[i]);
 		}
 	}
@@ -143,7 +141,6 @@ function jraf_read_obj(path, ob, cb, extra)
     ex.ex = extra;
     ex.ob = ob;
     ex.cb = cb;
-    // jraf_ajax('jr read 0 '+path+ob, par, ex);
     jraf_ajax('jr read ' + g_session + ' ' + path + ob, par, ex);
 }
 
@@ -199,7 +196,6 @@ function jraf_parse_obj(text,nm)
         }
     }
 
-    ///console.log('jraf_parse_obj : '+r);
     return r;
 }
 
