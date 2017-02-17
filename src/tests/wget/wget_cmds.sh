@@ -29,13 +29,13 @@ run()
 	sh $1.sh >> wget.out
 	fi
 
-	if cmp $1.o wget.out
+	if cmp $1.out wget.out
 	then
 	echo "$1 - ok"
 	else
 	echo $cm
 	echo "$1 - FAILED see wget.out"
-	diff $1.o wget.out | grep -v "No newline at end of file"
+	diff $1.out wget.out | grep -v "No newline at end of file"
 	exit 1
 	fi
 }
