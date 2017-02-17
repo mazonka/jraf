@@ -12,7 +12,7 @@ function jraf_ajax(cmd, callback, extra) {
     $.post('/','command=' + cmd)
 
     .done(function (data) {
-		if( !(++test%7) )
+		if( !(++test%17) )
         callback(data,extra);
 		else
         callback(null,extra);
@@ -25,6 +25,18 @@ function jraf_ajax(cmd, callback, extra) {
     .always(function () {});
 }
 
+var div_main_out = function(data,extra)
+{
+	if( data == null )data = 'FAILED';
+
+    if( data.length > 4 && data.substr(0,3) == 'OK ' )
+        data = data.substr(3);
+
+    var s = $g_div_main.html();
+    s += '# ' + extra + data + '<br/>';
+    $g_div_main.html(s);
+}
+
 
 function jraf_boot(id)
 {
@@ -35,17 +47,7 @@ function jraf_boot(id)
     document.write('<div id="div_main" style="text-align: left;"></div>');
     $g_div_main = $('#div_main');
 
-    var out = function(data,extra)
-    {
-		if( data == null )data = 'FAILED';
-
-        if( data.length > 4 && data.substr(0,3) == 'OK ' )
-            data = data.substr(3);
-
-        var s = $g_div_main.html();
-        s += '# ' + extra + data + '<br/>';
-        $g_div_main.html(s);
-    }
+    var out = div_main_out;
 
     jraf_ajax('jr ping', out, 'JRAF : ');
     jraf_ajax('jr version client', out, 'Jraf client version : ');
@@ -135,7 +137,8 @@ function jraf_read_obj(path, ob, cb, extra)
 		if( data != null )
 	        return ext.cb(jraf_parse_obj(data,ext.ob),ext.ex);
 
-		console.log(path+ob+" - failed");
+		div_main_out(" FAILED - trying again",path+ob);
+		jraf_read_obj(path, ob, cb, extra);
     }
 
     var ex = {};
