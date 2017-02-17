@@ -1,7 +1,7 @@
 // JRAF Team (C) 2016
 'use strict';
 
-function shell_js()
+function main_js()
 {
     var $cli = $('<div/>');
 
