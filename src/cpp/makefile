@@ -67,7 +67,7 @@ clean:
 	cd $(DB) && make clean
 	cd $(GL) && make clean
 	cd $(SG) && make clean
-	cd $(OS) && make clean
+	cd $(OS) && make PLAT=$(PLAT) clean
 	cd $(PU) && make clean
 	cd $(MA) && make clean
 
