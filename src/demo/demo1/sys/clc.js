@@ -177,15 +177,16 @@ function cli_build_cmd_unbind()
 
 function cli_build_cmd_md()
 {
-    var help = 'mkdir/md node: create new directory node on server\n';
+    var help1 = 'md node: create new directory node on server\n';
+    var help2 = 'mkdir node: same as md\n';
     var run = function(c)
     {
         if( c.length != 2 ) return 'need one argument';
         cli_write_md(g_cwd,c[1]);
         return '';
     };
-    g_cli_commands.md = { help : help, run : run };
-    g_cli_commands.mkdir = { help : help, run : run };
+    g_cli_commands.md = { help : help1, run : run };
+    g_cli_commands.mkdir = { help : help2, run : run };
 }
 
 function cli_build_cmd_mk()
