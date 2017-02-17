@@ -19,7 +19,7 @@ bin_mkdir:
 
 cp_js: *.js 
 	@cp -puv jraf.js $(TRG_JRAFFS)/sys/
-	@cp -puv jrafsys.js $(TRG_JRAFCL)/
+	@cp -puv jrboot.js $(TRG_JRAFCL)/
 	@cp -puv index.html $(TRG_JRAFCL)/
 	@cp -puv jraf.jrd $(BIN)/
 	@cp -puv conf.jrd $(BIN)/
@@ -27,7 +27,7 @@ cp_js: *.js
 
 checkin:
 	@cp -fpuv $(TRG_JRAFFS)/sys/jraf.js ./
-	@cp -fpuv $(TRG_JRAFCL)/jrafsys.js ./
+	@cp -fpuv $(TRG_JRAFCL)/jrboot.js ./
 ##	@cp -fpuv $(TRG_JRAFFS)/sys/write.js ./
 
 done:

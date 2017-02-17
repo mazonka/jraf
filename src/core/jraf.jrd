@@ -14,7 +14,7 @@
         <title>Jraf client demo</title>
         <script src="lib/jquery.js"></script>
         <script src="lib/jquery-ui.min.js"></script>
-        <script src="jrafsys.js"></script>
+        <script src="jrboot.js"></script>
     </head>
     <body>
         <script>
