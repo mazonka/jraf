@@ -6,16 +6,14 @@ var g_sys_files = {};
 var g_session;
 var $g_div_main;
 
-var test = 1;
+//var ajax_test = 1;
 
 function jraf_ajax(cmd, callback, extra) {
     $.post('/','command=' + cmd)
 
     .done(function (data) {
-		if( !(++test%17) )
+		//if( ++ajax_test%5 ) return callback(null,extra);
         callback(data,extra);
-		else
-        callback(null,extra);
     })
 
     .fail(function () {
