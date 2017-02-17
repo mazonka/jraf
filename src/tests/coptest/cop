@@ -43,9 +43,9 @@ PLAT=$2
 shift 2
 fi
 
-[ "z${CURROS}" = "zLinux" ] && PLAT=${PLAT:-unx} || PLAT=${PLAT:-msc}
+[ "z${CURROS}" = "zLinux" ] && PLAT=${PLAT:-u} || PLAT=${PLAT:-w}
 
-execdir=_bin_${PLAT}
+execdir=_bin${PLAT}
 
 #------------------------------------------------
 find_bin() {
