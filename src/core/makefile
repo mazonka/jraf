@@ -23,6 +23,7 @@ cp_js: *.js
 	@cp -puv jrafsys.js $(TRG_JRAFCL)/
 	@cp -puv index.html $(TRG_JRAFCL)/
 	@cp -puv jraf.jrd $(BIN)/
+	@cp -puv conf.jrd $(BIN)/
 
 checkin:
 	@cp -fpuv $(TRG_JRAFFS)/sys/jraf.js ./

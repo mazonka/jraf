@@ -12,15 +12,15 @@ TRG_JRAFFS=$(BIN)/jraffs
 SRC_JQ=ext/jq
 SRC_JS=core
 SRC_SH=../shared
-SRC_CONF=conf
+# SRC_CONF=conf
 # SRC_HTML=html
 SRC_PHP=php
 SRC_CPP=cpp
 
 # all: jr_mkdir jr_cp conf.jrd php_cp cli_cp done
-all: jr_mkdir jr_cp conf_cp php_cp jq_cp done
-cpp: jr_mkdir jr_cp conf_cp cpp_cp jq_cp done
-php: jr_mkdir jr_cp conf_cp php_cp jq_cp done
+all: jr_mkdir jr_cp php_cp jq_cp done
+cpp: jr_mkdir jr_cp cpp_cp jq_cp done
+php: jr_mkdir jr_cp php_cp jq_cp done
 
 jr_mkdir:
 	@mkdir -p $(TRG_JRAFFS)/sys
@@ -32,9 +32,9 @@ jr_mkdir:
 jr_cp: $(SRC_JS)/*.js
 	@$(MAKE) -sC $(SRC_JS)
 
-conf_cp: $(SRC_CONF)/conf.jrd
-	@cp -puv $(SRC_CONF)/conf.jrd $(BIN)/
-	@echo [ COPY CONF - OK ]
+#conf_cp: $(SRC_CONF)/conf.jrd
+#	@cp -puv $(SRC_CONF)/conf.jrd $(BIN)/
+#	@echo [ COPY CONF - OK ]
 	
 php_cp: $(SRC_PHP)/makefile
 	@$(MAKE) -sC $(SRC_PHP)
