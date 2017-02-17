@@ -1,24 +1,25 @@
-
+// JRAF Team (C) 2017
 
 'use strict';
-
-///var jraf = {};
-///jraf.vers = 0;
-///jraf.cb = null;
 
 var g_sys_files = {};
 var g_session;
 var $g_div_main;
 
+var test = 1;
+
 function jraf_ajax(cmd, callback, extra) {
     $.post('/','command=' + cmd)
 
     .done(function (data) {
+		if( !(++test%7) )
         callback(data,extra);
+		else
+        callback(null,extra);
     })
 
     .fail(function () {
-        callback('FAIL');
+        callback(null,extra);
     })
 
     .always(function () {});
@@ -36,6 +37,8 @@ function jraf_boot(id)
 
     var out = function(data,extra)
     {
+		if( data == null )data = 'FAILED';
+
         if( data.length > 4 && data.substr(0,3) == 'OK ' )
             data = data.substr(3);
 
@@ -85,8 +88,6 @@ function jraf_boot(id)
     jraf_read_obj('/', 'sys', sysjs);
 
     console.log('sys loading started');
-    //sys_loaded1();
-    //sys_loaded2();
 }
 
 /*
@@ -131,7 +132,10 @@ function jraf_read_obj(path, ob, cb, extra)
 {
     var par = function(data, ext)
     {
-        ext.cb(jraf_parse_obj(data,ext.ob),ext.ex);
+		if( data != null )
+	        return ext.cb(jraf_parse_obj(data,ext.ob),ext.ex);
+
+		console.log(path+" - failed");
     }
 
     var ex = {};
