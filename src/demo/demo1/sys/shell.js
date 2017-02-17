@@ -1,11 +1,14 @@
 // (C) 2016
 'use strict';
 
-function shell_js(){ start_shell(); }
-
-function start_shell()
+function shell_js()
 {
-    start_main();
+    var $cli = $('<div/>');
+
+    $g_div_main.html('');
+    $g_div_main.append($cli);
+    start_cli($cli);
 }
+
 
 
