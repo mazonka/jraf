@@ -303,9 +303,6 @@ function jraf_update_DD(jo,nd,cbi)
 
 		jraf_update_obj(nd.str()+'/',i,cbi,n);
 	}
-
-	///console.log(jo);
-	///console.log(nd);
 }
 
 function jraf_update_FF(jo,nd)
@@ -362,12 +359,61 @@ function jraf_bind_virtual(node,path,cb)
 		n = n.parent;
 	}
 
-	///console.log('--- AAA');
-	///console.log(n);
-	///console.log(cb);
-
 	jraf_node_up(n);
 
 	return r;
+}
+
+// write section
+
+function o(x){ console.log(x); }
+
+function jraf_write_md(cwd,name,cbi)
+{
+    var cb = function(jo){ cbi(jo); };
+    var path = (cwd.str() == '/') ? cwd.str() + name : cwd.str() + '/' +name;
+    jraf_write_obj('md', path, cb);
+}
+
+function jraf_write_save(pth,body,cbi)
+{
+    var cb = function(jo){ cbi(jo); };
+    var b64 = window.btoa(body);
+    jraf_write_obj('save', pth+' '+body.length+' '+b64, cb);
+}
+
+function jraf_write_rm(cwd,name,cbi)
+{
+    var cb = function(jo){ cbi(jo); };
+    var path = cwd.str()+'/'+name;
+    jraf_write_obj('rm', path, cb);
+}
+
+function jraf_write_obj(cmd, pth, cb, extra)
+{
+    var parser = function(data, ext)
+    {
+        ext.cb(jraf_parse_wrt(data),ext.ex);
+    }
+
+    var ex = {};
+    ex.ex = extra;
+    ex.cb = cb;
+    jraf_ajax('jw ' + cmd + ' ' + g_session + ' ' + pth, parser, ex);
+}
+
+function jraf_parse_wrt(data)
+{
+    data = data.trim();
+    var a = data.split(' ');
+    var r = { err: '' };
+    if( a[0] != 'OK' )
+    {
+        console.log('Backend reply: ' + data);
+        return { err: data };
+    }
+
+    r.msg = 'ok';
+    return r;
 }
 
