@@ -51,7 +51,7 @@ function jraf_node(prnt, ini)
 		{
 			kid.full = 0;
 			kid.sz = -1;
-			text = '';
+			kid.text = '';
 		}
 	};
 
