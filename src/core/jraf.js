@@ -477,10 +477,15 @@ function jr_api_node(n)
 		return this;
 	};
 
-	vn.up = function()
+	vn.up = function(cb)
 	{
-	    var cb = function(j,n){ if( j.err && j.err != '' ) o(j.err); }
-		jraf_update_node(this.node,cb);
+	    var cbi = function(j,n)
+		{
+			if(cb) cb(n); 
+			if( j.err && j.err != '' ) o(j.err); 
+		};
+
+		jraf_update_node(this.node,cbi);
 		return this;
 	};
 

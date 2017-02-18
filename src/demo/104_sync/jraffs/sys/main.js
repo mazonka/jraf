@@ -3,7 +3,7 @@
 
 var g_main = {};
 
-function change_direct()
+function change_direct() // use this function to test direct copying
 {
 	var text = g_main.inp.val();
 	g_main.div.html(text);
@@ -13,6 +13,16 @@ function change()
 {
 	var text = g_main.inp.val();
 	jr('/demo/104/a.txt').save(text).up();
+}
+
+function init()
+{
+	var cb = function(node)
+	{
+		g_main.inp.val(node.text);
+	};
+
+	jr('/demo/104/a.txt').up(cb);
 }
 
 function main_js()
@@ -34,6 +44,6 @@ function main_js()
 	o($g_div_main.html());
 
 	jr('/demo/104').md().x('a.txt').bind_html($div);
-	//jr('/demo/104/a.txt').bind_html($div);
+	init();
 }
 
