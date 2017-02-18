@@ -155,7 +155,6 @@ function cli_build_cmd_bind()
 			return 'node does not exist - binding virtual\n'
 			+ jraf_bind_virtual_path(g_cwd,c[1],cli_view_update);
 		}
-        ///if( n.full == 0 ) return 'node is not loaded';
         return n.bind(cli_view_update);
     };
     g_cli_commands.bind = { help : help, run : run };
@@ -262,7 +261,7 @@ function cli_build_cmd_cj()
 
 //function cli_build_cmd_ ()
 
-////////////////////////////////////////////////////////
+//  =  =  =  =  =  =  =  =  =  =  =  =  =  =  =  =  =  =
 // ls
 
 function cli_list_to_array(node)
@@ -343,9 +342,10 @@ function cli_list_kids(node)
     return r;
 }
 
-////////////////////////////////////////////////////////
+//  =  =  =  =  =  =  =  =  =  =  =  =  =  =  =  =  =  =
 // up
 
+/*///
 function cli_update_node(node)
 {
     var ver = node.ver;
@@ -378,8 +378,32 @@ function cli_update_node(node)
 
     jraf_update_obj(path,name,cb,node);
 }
+*/
 
-////////////////////////////////////////////////////////
+function cli_update_node(node)
+{
+    var ver = node.ver;
+    var cb = function(jo,nd)
+    {
+        //console.log(jo);
+        //console.log(nd);
+        let s = '';
+        if( jo.err == '' )
+        {
+            if( ver == nd.ver ) s = ''+nd.ver;
+            else s = '' + ver + ' -> '+nd.ver;
+        }
+        else
+            s = jo.err;
+
+        ///$g_output[0].value += 'up ['+nd.str()+'] ' + s + '\n';
+		cli_output('up ['+nd.str()+'] ' + s);
+    };
+
+    jraf_update_node(node,cb);
+}
+
+//  =  =  =  =  =  =  =  =  =  =  =  =  =  =  =  =  =  =
 // md
 
 function cli_write_md(cwd,name)
@@ -399,7 +423,7 @@ function cli_write_md(cwd,name)
     jraf_write_md(cwd,name,cb);
 }
 
-////////////////////////////////////////////////////////
+//  =  =  =  =  =  =  =  =  =  =  =  =  =  =  =  =  =  =
 // rm
 
 function cli_write_rm(cwd,name)
@@ -419,7 +443,7 @@ function cli_write_rm(cwd,name)
     jraf_write_rm(cwd,name,cb);
 }
 
-////////////////////////////////////////////////////////
+//  =  =  =  =  =  =  =  =  =  =  =  =  =  =  =  =  =  =
 // cj
 
 function cli_run_cj(node)
@@ -436,7 +460,7 @@ function cli_run_cj(node)
 	return r;
 
 }
-////////////////////////////////////////////////////////
+//  =  =  =  =  =  =  =  =  =  =  =  =  =  =  =  =  =  =
 // save
 
 function cli_save(pth,body)
@@ -457,6 +481,6 @@ function cli_save(pth,body)
 
 	return 'use \'up\' to refresh value';
 }
-////////////////////////////////////////////////////////
+//  =  =  =  =  =  =  =  =  =  =  =  =  =  =  =  =  =  =
 //
 

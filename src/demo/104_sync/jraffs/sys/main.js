@@ -1,10 +1,39 @@
 // Jraf team (C) 2017
 'use strict';
 
+var g_main = {};
+
+function change_direct()
+{
+	var text = g_main.inp.val();
+	g_main.div.html(text);
+}
+
+function change()
+{
+	var text = g_main.inp.val();
+	jr('/demo/104/a.txt').save(text).up();
+}
+
 function main_js()
 {
     $g_div_main.html('<h3>Demo 104: synchronising widget</h3>');
+
+    var $inp = $('<input/>');
+    $g_div_main.append($inp);
+
+	$inp.on('change textInput input',change);
+
     var $div = $('<div/>');
+	$div.html('OUTPUT');
     $g_div_main.append($div);
+
+	g_main.inp = $inp;
+	g_main.div = $div;
+
+	o($g_div_main.html());
+
+	jr('/demo/104').md().x('a.txt').bind_html($div);
+	//jr('/demo/104/a.txt').bind_html($div);
 }
 

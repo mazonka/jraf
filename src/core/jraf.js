@@ -221,6 +221,21 @@ function jraf_update_obj(path,name,cbi,node)
 	jraf_read_obj(path,name,jraf_update_callback,ex);
 }
 
+function jraf_update_node(node,cb)
+{
+    var name = node.name;
+    var path;
+    if( node.parent == null )
+    {
+        path = '/';
+        name = '';
+    }
+    else
+        path = node.parent.str()+'/';
+
+    jraf_update_obj(path,name,cb,node);
+}
+
 function jraf_update_DF(jo,nd)
 {
 	{
@@ -425,10 +440,15 @@ function jraf_parse_wrt(data)
 // =  =  =  =  =  =  =  =  =  =  =  =  =  =  =  =  =  =  =  =  =  =  =  =  =
 /* API section
 
-jr('path')                => returns apinode
-apinode.bind_fun(fun)     == binds node to a function
-apinode.bind_html(jq_obj) == binds text node to a jquery object
-apinode.bind_list(jq_obj) == binds list node to a jquery object
+jr('path')         => return apinode
+.bind_html(jq_obj) == bind text node to a jquery object
+.md()              == create directory on server
+.save(text)        == save text on server
+.up()              == update node
+.x(path)           == return new apinode relative
+
+.bind_fun(fun)     == binds node to a function
+.bind_list(jq_obj) == binds list node to a jquery object
 */
 
 function jr_api_node(n)
@@ -440,6 +460,33 @@ function jr_api_node(n)
 	{
 		var cb = function(r){ jqo.html(r.text);	}
 		jraf_bind_virtual_leaf(this.node,cb);
+		return this;
+	};
+
+	vn.md = function()
+	{
+	    var cb = function(x){ if( x.err && x.err != '' ) o(x.err); };
+		jraf_write_md(g_jraf_root,this.node.str(),cb)
+		return this;
+	};
+
+	vn.save = function(body)
+	{
+	    var cb = function(x){ if( x.err && x.err != '' ) o(x.err); };
+		jraf_write_save(this.node.str(),body,cb)
+		return this;
+	};
+
+	vn.up = function()
+	{
+	    var cb = function(j,n){ if( j.err && j.err != '' ) o(j.err); }
+		jraf_update_node(this.node,cb);
+		return this;
+	};
+
+	vn.x = function(path)
+	{
+		return jr_api_node(jraf_virtual_node(this.node,path));
 	}
 
 	return vn;
