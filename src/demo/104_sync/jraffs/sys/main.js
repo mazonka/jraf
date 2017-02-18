@@ -35,7 +35,6 @@ function main_js()
 	$inp.on('change textInput input',change);
 
     var $div = $('<div/>');
-	$div.html('OUTPUT');
     $g_div_main.append($div);
 
 	g_main.inp = $inp;
