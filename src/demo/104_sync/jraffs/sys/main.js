@@ -41,8 +41,6 @@ function main_js()
 	g_main.inp = $inp;
 	g_main.div = $div;
 
-	o($g_div_main.html());
-
 	jr('/demo/104').md().x('a.txt').bind_html($div);
 	init();
 }
