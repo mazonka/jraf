@@ -3,9 +3,9 @@
 
 function main_js()
 {
-    $g_div_main.html('LOADING');
+    $g_div_main.html('<h3>Hello, World 103 !</h3>');
     var $div = $('<div/>');
-	$div.html('starting...');
+	$div.html('LOADING');
     $g_div_main.append($div);
 
 	var n = jr('/demo/103/hw.txt');
