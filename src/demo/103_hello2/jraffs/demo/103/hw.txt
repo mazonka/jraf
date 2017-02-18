@@ -12,10 +12,7 @@ function main_js()
 {
     $g_div_main.html('&lt;h3>Hello, World 103 !&lt;/h3>');
     var $div = $('&lt;div/>');
-    $div.html('LOADING');
     $g_div_main.append($div);
-
-    var n = jr('/demo/103/hw.txt');
-    n.bind_html($div);
+    jr('/demo/103/hw.txt').bind_html($div);
 }
 </pre>
