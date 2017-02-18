@@ -3,11 +3,12 @@
 
 function main_js()
 {
-	$g_div_main.html("<h1>Hello, World!</h1>");
-//    $g_div_main.html('');
-//    var $div = $('<div/>');
-//    $g_div_main.append($div);
+    $g_div_main.html('LOADING');
+    var $div = $('<div/>');
+	$div.html('starting...');
+    $g_div_main.append($div);
 
-	jr('/demo/103/hw.txt').bind_text($div);
+	var n = jr('/demo/103/hw.txt');
+	n.bind_html($div);
 }
 

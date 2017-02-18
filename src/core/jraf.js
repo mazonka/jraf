@@ -9,7 +9,7 @@ var g_keep_loading = false;
 function jraf_node(prnt, ini)
 {
 	var node = {};
-	node.ver = 0;
+	node.ver = -1;
 	node.sz = -1; 
 	node.watch = 0; // 0,1,2 - none, monitor, bound
 	// monitor means some distant kids have binding
@@ -208,7 +208,6 @@ function jraf_update_callback(jo,ex)
 		if( jo.sz<0 ) jraf_update_FD(jo,nd,ex.cbi);
 		else jraf_update_FF(jo,nd);
 	}
-
 	if( nd.watch == 2 ) nd.wid(nd);
 
 	ex.cbi(jo,nd);
@@ -357,7 +356,6 @@ function jraf_bind_virtual_leaf(leaf,cb)
 		if( n.parent.full > 0 ) break;
 		n = n.parent;
 	}
-
 	jraf_node_up(n);
 
 	return r;
@@ -429,7 +427,7 @@ function jraf_parse_wrt(data)
 
 jr('path')                => returns apinode
 apinode.bind_fun(fun)     == binds node to a function
-apinode.bind_text(jq_obj) == binds text node to a jquery object
+apinode.bind_html(jq_obj) == binds text node to a jquery object
 apinode.bind_list(jq_obj) == binds list node to a jquery object
 */
 
@@ -438,9 +436,9 @@ function jr_api_node(n)
 	var vn = {};
 	vn.node = n;
 
-	vn.bind_text = function(jqo)
+	vn.bind_html = function(jqo)
 	{
-		var cb = function(r){ jqo[0].value = r;	}
+		var cb = function(r){ jqo.html(r.text);	}
 		jraf_bind_virtual_leaf(this.node,cb);
 	}
 
