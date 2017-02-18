@@ -32,4 +32,5 @@ error()
 
 [ ! -d "$JRAFCL" -o ! -d "$JRAFFS" ] && error "Create JRAF first."
 
-cp -pv $1/*.js "$JRAFFS/sys"
+#cp -pv $1/*.js "$JRAFFS/sys"
+cp -pvR $1/* $BIN/
