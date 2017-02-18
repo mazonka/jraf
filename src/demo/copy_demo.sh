@@ -1,16 +1,13 @@
 #!/bin/sh
 
-if [ "$1" == "" ]; then
-echo "Use demo directory as the argument"
-exit
-fi
+error() 
+{
+	[ -z "$1" ] || echo "$1"
+	exit 1
+}
 
-if test -d $1 ; then
-:
-else
-echo "Not a directory: $1"
-exit
-fi
+[ "$1" = "" ] && error "Use demo directory as the argument"
+[ ! -d $1 ] && error "Not a directory: $1"
 
 PLAT=$(uname | grep "Linux")
 if [[ ${PLAT} == "" ]]
@@ -24,13 +21,8 @@ BIN=../_bin${PLAT}
 JRAFCL=${BIN}/jrafcl
 JRAFFS=${BIN}/jraffs
 
-error() 
-{
-	[ -z "$1" ] || echo "$1"
-	exit 1
-}
-
-[ ! -d "$JRAFCL" -o ! -d "$JRAFFS" ] && error "Create JRAF first."
+[ ! -d $JRAFCL ] && error "Create $JRAFCL first."
+[ ! -d $JRAFFS ] && error "Create $JRAFFS first."
 
 #cp -pv $1/*.js "$JRAFFS/sys"
 cp -pvR $1/* $BIN/

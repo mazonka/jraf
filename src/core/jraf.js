@@ -345,9 +345,8 @@ function jraf_virtual_node(wd,c)
 	return wd;
 }
 
-function jraf_bind_virtual(node,path,cb)
+function jraf_bind_virtual_leaf(leaf,cb)
 {
-	var leaf = jraf_virtual_node(node,path);
 	var r = leaf.bind(cb);
 
 	if( leaf.full > 0 ) return r;
@@ -364,6 +363,13 @@ function jraf_bind_virtual(node,path,cb)
 	return r;
 }
 
+function jraf_bind_virtual_path(node,path,cb)
+{
+	var leaf = jraf_virtual_node(node,path);
+	return jraf_bind_virtual_leaf(leaf,cb);
+}
+
+// =  =  =  =  =  =  =  =  =  =  =  =  =  =  =  =  =  =  =  =  =  =  =  =  =
 // write section
 
 function o(x){ console.log(x); }
@@ -415,5 +421,35 @@ function jraf_parse_wrt(data)
 
     r.msg = 'ok';
     return r;
+}
+
+
+// =  =  =  =  =  =  =  =  =  =  =  =  =  =  =  =  =  =  =  =  =  =  =  =  =
+/* API section
+
+jr('path')                => returns apinode
+apinode.bind_fun(fun)     == binds node to a function
+apinode.bind_text(jq_obj) == binds text node to a jquery object
+apinode.bind_list(jq_obj) == binds list node to a jquery object
+*/
+
+function jr_api_node(n)
+{
+	var vn = {};
+	vn.node = n;
+
+	vn.bind_text = function(jqo)
+	{
+		var cb = function(r){ jqo[0].value = r;	}
+		jraf_bind_virtual_leaf(this.node,cb);
+	}
+
+	return vn;
+}
+
+
+function jr(path)
+{
+	return jr_api_node(jraf_virtual_node(g_jraf_root,path));
 }
 

@@ -35,7 +35,6 @@ var div_main_out = function(data,extra)
     $g_div_main.html(s);
 }
 
-
 function jraf_boot(id)
 {
     g_session = id;
@@ -45,7 +44,17 @@ function jraf_boot(id)
     document.write('<div id="div_main" style="text-align: left;"></div>');
     $g_div_main = $('#div_main');
 
-    var out = div_main_out;
+    var out = function(data,extra)
+	{
+		if( data == null ) data = 'FAILED';
+
+	    if( data.length > 4 && data.substr(0,3) == 'OK ' )
+	        data = data.substr(3);
+
+	    var s = $g_div_main.html();
+	    s += '# ' + extra + data + '<br/>';
+	    $g_div_main.html(s);
+	};
 
     jraf_ajax('jr ping', out, 'JRAF : ');
     jraf_ajax('jr version client', out, 'Jraf client version : ');
@@ -133,7 +142,7 @@ function jraf_read_obj(path, ob, cb, extra)
 		if( data != null )
 	        return ext.cb(jraf_parse_obj(data,ext.ob),ext.ex);
 
-		div_main_out(" FAILED - trying again",path+ob);
+		console.log(path+ob+" load failed - retry");
 		jraf_read_obj(path, ob, cb, extra);
     }
 

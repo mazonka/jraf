@@ -153,7 +153,7 @@ function cli_build_cmd_bind()
 		{	
 			if( c.length < 1 ) return 'node does not exist\n'
 			return 'node does not exist - binding virtual\n'
-			+ jraf_bind_virtual(g_cwd,c[1],cli_view_update);
+			+ jraf_bind_virtual_path(g_cwd,c[1],cli_view_update);
 		}
         ///if( n.full == 0 ) return 'node is not loaded';
         return n.bind(cli_view_update);
