@@ -8,7 +8,12 @@ function main_js()
     var $div = $('<div/>');
     $g_div_main.append($div);
 
-	jr('/demo/106/page1.html').bind_html($div);
+	var f = function(x)
+	{
+		return x.replace(/i/g,'I');
+	};
+
+	jr('/demo/106/page1.html').bind_html($div,f);
 }
 
 
