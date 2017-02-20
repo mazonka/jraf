@@ -442,12 +442,13 @@ function jraf_parse_wrt(data)
 // =  =  =  =  =  =  =  =  =  =  =  =  =  =  =  =  =  =  =  =  =  =  =  =  =
 /* API section
 
-jr('path')         => return apinode
-.bind_html(jq_obj) == bind text node to a jquery object
-.md()              == create directory on server
-.save(text)        == save text on server
-.up()              == update node
-.x(path)           == return new apinode relative
+jr('path')               => return apinode
+.bind_html(jq_obj,[fun]) == bind text node to a jquery object
+                            fun - optional translation function
+.md()                    == create directory on server
+.save(text)              == save text on server
+.up()                    == update node
+.x(path)                 == return new apinode relative
 
 .bind_fun(fun)     == binds node to a function
 .bind_list(jq_obj) == binds list node to a jquery object
@@ -458,9 +459,9 @@ function jr_api_node(n)
 	var vn = {};
 	vn.node = n;
 
-	vn.bind_html = function(jqo)
+	vn.bind_html = function(jqo,fun)
 	{
-		var cb = function(r){ jqo.html(r.text);	}
+		var cb = function(r){ jqo.html(fun?fun(r.text):r.text); }
 		jraf_bind_virtual_leaf(this.node,cb);
 		return this;
 	};

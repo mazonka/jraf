@@ -40,7 +40,9 @@ function main_js()
 	g_main.inp = $inp;
 	g_main.div = $div;
 
-	jr('/demo/104').md().x('a.txt').bind_html($div);
+	var rep = function(x){ return x.replace(/0/g,'x'); }
+
+	jr('/demo/104').md().x('a.txt').bind_html($div,rep);
 	init();
 }
 
