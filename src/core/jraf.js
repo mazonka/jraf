@@ -396,8 +396,10 @@ function jraf_write_md(cwd,name,cbi)
 
 function jraf_write_save(pth,body,cbi)
 {
+    body = String(body);
     var cb = function(jo){ cbi(jo); };
     var b64 = window.btoa(body);
+
     jraf_write_obj('save', pth+' '+body.length+' '+b64, cb);
 }
 
