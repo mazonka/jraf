@@ -1,7 +1,6 @@
 // JRAF Team (C) 2016
 'use strict';
 
-
 var g_main = {
     tlt: $('<textarea/>',{id: 'tlt'}),
     trt: $('<textarea/>',{id: 'trt'}),
@@ -49,10 +48,11 @@ function main_js()
     g_main.trt.focus(function(){fokus($(this))});
     g_main.tlt.click(function(){fokus($(this))});
     g_main.trt.click(function(){fokus($(this))});
+    
     //g_main.tlt.focusout(function() { g_main.trt.focus() } );
     //g_main.trt.focusout(function() { g_main.tlt.focus() } );
     
-    $g_div_main.html('<h3>Demo 105: editor widget</h3>');
+    $g_div_main.html('<h3>Demo 105: Multiuser editor widget</h3>');
     $g_div_main.css('text-align', 'center');
 
     $g_div_main.append(g_main.tlt);
@@ -111,13 +111,15 @@ function init()
         }
         else
         {
-            Boolean(g_main.out().val() != text) && g_main.out().val(get_pipe(text, g_node.pos));
+            Boolean(g_main.out().val() != text) 
+                && g_main.out().val(get_pipe(text, g_node.pos));
+                
             if (g_main.foc().val() != text)
             {
-                set_caret_pos(g_main.foc(), g_node.pos);
+                //set_caret_pos(g_main.foc(), g_node.pos);
             }
             //Boolean(g_main.foc().val() != text) && g_main.foc().val(text);
-            //set_caret_pos(g_main.foc(), pos);
+            //set_caret_pos(g_main.foc(), g_node.pos);
         }
     };
     
