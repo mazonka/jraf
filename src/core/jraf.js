@@ -461,8 +461,14 @@ function jr_api_node(n)
 
 	vn.bind_html = function(jqo,fun)
 	{
-		var cb = function(r){ jqo.html(fun?fun(r.text):r.text); }
+		var cb = function(n)
+		{
+			if( 'boundto' in jqo ) jqo.boundto.unbind();
+			jqo.html(fun?fun(n.text):n.text);
+			jqo.boundto = n;
+		}
 		jraf_bind_virtual_leaf(this.node,cb);
+		
 		return this;
 	};
 
