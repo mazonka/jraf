@@ -6,7 +6,7 @@ var g_sys_files = {};
 var g_session;
 var $g_div_main;
 
-//var ajax_test = 1;
+//var ajax_test = 2;
 
 function jraf_ajax(cmd, callback, extra) {
     $.post('/','command=' + cmd)
@@ -21,18 +21,6 @@ function jraf_ajax(cmd, callback, extra) {
     })
 
     .always(function () {});
-}
-
-var div_main_out = function(data,extra)
-{
-	if( data == null )data = 'FAILED';
-
-    if( data.length > 4 && data.substr(0,3) == 'OK ' )
-        data = data.substr(3);
-
-    var s = $g_div_main.html();
-    s += '# ' + extra + data + '<br/>';
-    $g_div_main.html(s);
 }
 
 function jraf_boot(id)
@@ -140,9 +128,12 @@ function jraf_read_obj(path, ob, cb, extra)
     var par = function(data, ext)
     {
 		if( data != null )
+		{
+			console.log('load '+path+ob+" - OK");
 	        return ext.cb(jraf_parse_obj(data,ext.ob),ext.ex);
+		}
 
-		console.log(path+ob+" load failed - retry");
+		console.log('load '+path+ob+" FAILED");
 		jraf_read_obj(path, ob, cb, extra);
     }
 
