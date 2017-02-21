@@ -1,9 +1,7 @@
 // JRAF Team (C) 2016
 'use strict';
 
-var g_dir = '/demo/105';
-var g_txt = '/demo/105/txt.txt';
-var g_cur = '/demo/105/cur.txt';
+
 var g_main = {
     tlt: $('<textarea/>',{id: 'tlt'}),
     trt: $('<textarea/>',{id: 'trt'}),
@@ -24,7 +22,13 @@ var g_main = {
                 return this.tlt;
             else
                 return null;
-        },
+        }
+};
+
+var g_node = {
+    dir: '/demo/105',
+    txt: '/demo/105/txt.txt',
+    cur: '/demo/105/cur.txt',
     pos: 0
 };
 
@@ -43,6 +47,8 @@ function main_js()
 
     g_main.tlt.focus(function(){fokus($(this))});
     g_main.trt.focus(function(){fokus($(this))});
+    g_main.tlt.click(function(){fokus($(this))});
+    g_main.trt.click(function(){fokus($(this))});
     //g_main.tlt.focusout(function() { g_main.trt.focus() } );
     //g_main.trt.focusout(function() { g_main.tlt.focus() } );
     
@@ -52,7 +58,7 @@ function main_js()
     $g_div_main.append(g_main.tlt);
     $g_div_main.append(g_main.trt);
 
-    jr(g_dir).md().x(g_txt).x(g_cur);
+    jr(g_node.dir).md().x(g_node.txt).x(g_node.cur);
     
     // g_main.tlt.focus();
     
@@ -63,7 +69,7 @@ function change(text)
 {
     var cb = function(node)
     { 
-        g_main.out().val(get_pipe(node.text, g_main.pos)); 
+        g_main.out().val(get_pipe(node.text, g_node.pos)); 
     };
     
     var pos = g_main.foc() != null 
@@ -71,8 +77,8 @@ function change(text)
         : 0;
     
     
-    jr(g_txt).save(g_main.foc().val()).up(cb);
-    jr(g_cur).save(pos).up();
+    jr(g_node.txt).save(g_main.foc().val()).up(cb);
+    jr(g_node.cur).save(pos).up();
 }
 
 function fokus($o)
@@ -81,13 +87,13 @@ function fokus($o)
     {
         var text = node.text;
         
-        g_main.out().val(get_pipe(text, g_main.pos));
+        g_main.out().val(get_pipe(text, g_node.pos));
         g_main.foc().val(text);
         
-        set_caret_pos(g_main.foc(), g_main.pos);
+        set_caret_pos(g_main.foc(), g_node.pos);
     };
     
-    jr(g_txt).up(cb);
+    jr(g_node.txt).up(cb);
 }
 
 function init()
@@ -99,13 +105,17 @@ function init()
         if (g_main.out() == null)
         {
             Boolean(g_main.tlt.val() != text) 
-                && g_main.tlt.val(get_pipe(text, g_main.pos));
+                && g_main.tlt.val(get_pipe(text, g_node.pos));
             Boolean(g_main.trt.val() != text) 
-                && g_main.trt.val(get_pipe(text, g_main.pos));
+                && g_main.trt.val(get_pipe(text, g_node.pos));
         }
         else
         {
-            Boolean(g_main.out().val() != text) && g_main.out().val(get_pipe(text, g_main.pos));
+            Boolean(g_main.out().val() != text) && g_main.out().val(get_pipe(text, g_node.pos));
+            if (g_main.foc().val() != text)
+            {
+                set_caret_pos(g_main.foc(), g_node.pos);
+            }
             //Boolean(g_main.foc().val() != text) && g_main.foc().val(text);
             //set_caret_pos(g_main.foc(), pos);
         }
@@ -113,9 +123,9 @@ function init()
     
     setInterval(function()
     { 
-        jr(g_cur).up(function(node) { g_main.pos = +node.text||0; });
-        // jr(g_txt).up(function(node) { change(node.text) });
-        jr(g_txt).up(cb);
+        jr(g_node.cur).up(function(node) { g_node.pos = +node.text||0; });
+        // jr(g_node.txt).up(function(node) { change(node.text) });
+        jr(g_node.txt).up(cb);
 
     }, 200);
 }
