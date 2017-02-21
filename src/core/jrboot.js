@@ -68,7 +68,9 @@ function jraf_boot(id)
             var sc = document.createElement('script');
             sc.innerHTML = data.text;
             //console.log(sc.innerHTML);
-            document.head.append(sc);
+            if( 'append' in document.head ) document.head.append(sc);
+			else document.head.appendChild(sc);
+            //$('head').append(sc);
         }
 
         for( var i in jo.kids ) g_sys_files[i.replace('.','_')] = 1;
