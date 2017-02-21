@@ -5,7 +5,7 @@ var g_div;
 
 function main_js()
 {
-    $g_div_main.html('<h3>Demo 106: web site with a few pages - late loading</h3>');
+    $g_div_main.html('<h3>Demo 106: web site with a few pages - lazy loading</h3>');
 
     var $div = $('<div/>');
     $g_div_main.append($div);
