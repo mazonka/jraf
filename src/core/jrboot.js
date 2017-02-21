@@ -12,7 +12,7 @@ function jraf_ajax(cmd, callback, extra) {
     $.post('/','command=' + cmd)
 
     .done(function (data) {
-		//if( ++ajax_test%5 ) return callback(null,extra);
+        //if( ++ajax_test%5 ) return callback(null,extra);
         callback(data,extra);
     })
 
@@ -33,16 +33,16 @@ function jraf_boot(id)
     $g_div_main = $('#div_main');
 
     var out = function(data,extra)
-	{
-		if( data == null ) data = 'FAILED';
+    {
+        if( data == null ) data = 'FAILED';
 
-	    if( data.length > 4 && data.substr(0,3) == 'OK ' )
-	        data = data.substr(3);
+        if( data.length > 4 && data.substr(0,3) == 'OK ' )
+            data = data.substr(3);
 
-	    var s = $g_div_main.html();
-	    s += '# ' + extra + data + '<br/>';
-	    $g_div_main.html(s);
-	};
+        var s = $g_div_main.html();
+        s += '# ' + extra + data + '<br/>';
+        $g_div_main.html(s);
+    };
 
     jraf_ajax('jr ping', out, 'JRAF : ');
     jraf_ajax('jr version client', out, 'Jraf client version : ');
@@ -69,19 +69,19 @@ function jraf_boot(id)
             sc.innerHTML = data.text;
             //console.log(sc.innerHTML);
             if( 'append' in document.head ) document.head.append(sc);
-			else document.head.appendChild(sc);
+            else document.head.appendChild(sc);
             //$('head').append(sc);
         }
 
         for( var i in jo.kids ) g_sys_files[i.replace('.','_')] = 1;
-	    console.log('sys objects: '+ Object.keys(g_sys_files).length);
+        console.log('sys objects: '+ Object.keys(g_sys_files).length);
 
         for( var i in jo.kids )
         {
             jraf_read_obj('/sys/',i, cb, i+' : ');
         }
 
-	    sys_loaded();
+        sys_loaded();
     }
 
     jraf_read_obj('/', 'sys', sysjs);
@@ -101,26 +101,26 @@ try {
 
 function sys_loaded()
 {
-	for( let i in g_sys_files )
-	{
-		if( typeof window[i] === 'undefined' )
-	    {
-			console.log('waiting for '+i);
-    	    setTimeout(sys_loaded,500);
-	        return;
-	    }
-		else
-		{
-			///console.log(window[i]);
-		}
-	}
+    for( let i in g_sys_files )
+    {
+        if( typeof window[i] === 'undefined' )
+        {
+            console.log('waiting for '+i);
+            setTimeout(sys_loaded,500);
+            return;
+        }
+        else
+        {
+            ///console.log(window[i]);
+        }
+    }
 
     console.log('sys loaded');
 
-	for( let i in g_sys_files )
-	{
-		window[i]();
-	}
+    for( let i in g_sys_files )
+    {
+        window[i]();
+    }
 
     console.log('sys started');
 }
@@ -129,14 +129,14 @@ function jraf_read_obj(path, ob, cb, extra)
 {
     var par = function(data, ext)
     {
-		if( data != null )
-		{
-			console.log('load '+path+ob+" - OK");
-	        return ext.cb(jraf_parse_obj(data,ext.ob),ext.ex);
-		}
+        if( data != null )
+        {
+            console.log('load '+path+ob+" - OK");
+            return ext.cb(jraf_parse_obj(data,ext.ob),ext.ex);
+        }
 
-		console.log('load '+path+ob+" FAILED");
-		jraf_read_obj(path, ob, cb, extra);
+        console.log('load '+path+ob+" FAILED");
+        jraf_read_obj(path, ob, cb, extra);
     }
 
     var ex = {};
