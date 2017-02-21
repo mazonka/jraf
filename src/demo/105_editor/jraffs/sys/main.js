@@ -7,7 +7,7 @@ var g_cur = '/demo/105/cur.txt';
 var g_main = {
     tlt: $('<textarea/>',{id: 'tlt'}),
     trt: $('<textarea/>',{id: 'trt'}),
-    fok: function()
+    foc: function()
         {
             if (this.tlt.is(':focus'))
                 return this.tlt;
@@ -18,9 +18,9 @@ var g_main = {
         },
     out: function()
         {
-            if (this.fok() == this.tlt)
+            if (this.foc() == this.tlt)
                 return this.trt;
-            else if (this.fok() == this.trt)
+            else if (this.foc() == this.trt)
                 return this.tlt;
             else
                 return null;
@@ -38,12 +38,13 @@ function main_js()
         .css('width', '40%')
         .css('height', '8em');
 
-    // g_main.tlt.on('input', function() { change($(this)) } );
-    g_main.tlt.on('input', function() { change() } );
-    g_main.tlt.focusout(function() { g_main.trt.focus() } );
-    // g_main.trt.on('input', function() { change($(this)) } );
-    g_main.trt.on('input', function() { change() } );
-    g_main.trt.focusout(function() { g_main.tlt.focus() } );
+    g_main.tlt.on('input', change );
+    g_main.trt.on('input', change );
+
+    g_main.tlt.focus(function(){fokus($(this))});
+    g_main.trt.focus(function(){fokus($(this))});
+    //g_main.tlt.focusout(function() { g_main.trt.focus() } );
+    //g_main.trt.focusout(function() { g_main.tlt.focus() } );
     
     $g_div_main.html('<h3>Demo 105: editor widget</h3>');
     $g_div_main.css('text-align', 'center');
@@ -58,49 +59,78 @@ function main_js()
     init();
 }
 
-// function change($o)
 function change(text)
 {
     var cb = function(node)
-    {
-        g_main.out().val(get_pipe(node.text, g_main.pos));
-    };    
+    { 
+        g_main.out().val(get_pipe(node.text, g_main.pos)); 
+    };
     
-    if (text)
-    {
-        if (g_main.out() == null)
-        {
-            Boolean(g_main.tlt.val() != text) && g_main.tlt.val(get_pipe(text, g_main.pos));
-            Boolean(g_main.trt.val() != text) && g_main.trt.val(get_pipe(text, g_main.pos));
-        }
-        else
-        {
-            Boolean(g_main.out().val() != text) && g_main.out().val(get_pipe(text, g_main.pos));
-            Boolean(g_main.fok().val() != text) && g_main.fok().val(text);
-        }
-        
-        return;
-    }
+    var pos = g_main.foc() != null 
+        ? g_main.foc().prop('selectionStart')
+        : 0;
     
-    var pos = g_main.fok().prop('selectionStart');
-    jr(g_txt).save(g_main.fok().val()).up(cb);
+    
+    jr(g_txt).save(g_main.foc().val()).up(cb);
     jr(g_cur).save(pos).up();
+}
+
+function fokus($o)
+{
+    var cb = function(node)
+    {
+        var text = node.text;
+        
+        g_main.out().val(get_pipe(text, g_main.pos));
+        g_main.foc().val(text);
+        
+        set_caret_pos(g_main.foc(), g_main.pos);
+    };
+    
+    jr(g_txt).up(cb);
 }
 
 function init()
 {
+    var cb = function(node)
+    {
+        var text = node.text;
+        
+        if (g_main.out() == null)
+        {
+            Boolean(g_main.tlt.val() != text) 
+                && g_main.tlt.val(get_pipe(text, g_main.pos));
+            Boolean(g_main.trt.val() != text) 
+                && g_main.trt.val(get_pipe(text, g_main.pos));
+        }
+        else
+        {
+            Boolean(g_main.out().val() != text) && g_main.out().val(get_pipe(text, g_main.pos));
+            //Boolean(g_main.foc().val() != text) && g_main.foc().val(text);
+            //set_caret_pos(g_main.foc(), pos);
+        }
+    };
+    
     setInterval(function()
     { 
-        // jr(g_txt).up(cb);
         jr(g_cur).up(function(node) { g_main.pos = +node.text||0; });
-        jr(g_txt).up(function(node) { change(node.text) });
+        // jr(g_txt).up(function(node) { change(node.text) });
+        jr(g_txt).up(cb);
 
     }, 200);
 }
 
 function get_pipe(text, pos)
 {
-    return text.substr(0,pos) + '|' + text.substr(pos);
+    var d = new Date();
+    var s = d.getSeconds();
+    
+    return (s % 2 == 0)
+        ? text.substr(0,pos) + '|' + text.substr(pos)
+        : text.substr(0,pos) + ' ' + text.substr(pos);
+    
+    ///constant pipe
+    ///return text.substr(0,pos) + '|' + text.substr(pos);
 }
 
 function set_caret_pos($o, i) {
