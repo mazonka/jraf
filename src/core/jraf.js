@@ -472,6 +472,12 @@ function jr_api_node(n)
         return this;
     };
 
+    vn.bind_fun = function(fun)
+    {
+        jraf_bind_virtual_leaf(this.node,fun);
+        return this;
+    };
+
     vn.md = function()
     {
         var cb = function(x){ if( x.err && x.err != '' ) o(x.err); };
