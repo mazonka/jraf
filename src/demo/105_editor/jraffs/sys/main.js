@@ -33,11 +33,17 @@ var g_node = {
 
 function main_js()
 {
-    g_main.tlt.css('margin', '1em')
+    g_main.tlt
+        .css('white-space', 'pre')
+        .css('resize', 'none')
+        .css('margin', '1em')
         .css('width', '40%')
         .css('height', '8em');
 
-    g_main.trt.css('margin', '1em')
+    g_main.trt
+        .css('white-space', 'pre')
+        .css('resize', 'none')
+        .css('margin', '1em')
         .css('width', '40%')
         .css('height', '8em');
 
@@ -104,9 +110,9 @@ function init()
         
         if (g_main.out() == null)
         {
-            Boolean(g_main.tlt.val() != text) 
+            Boolean(g_main.tlt.val() != text || text == '') 
                 && g_main.tlt.val(get_pipe(text, g_node.pos));
-            Boolean(g_main.trt.val() != text) 
+            Boolean(g_main.trt.val() != text || text == '') 
                 && g_main.trt.val(get_pipe(text, g_node.pos));
         }
         else
@@ -116,20 +122,22 @@ function init()
                 
             if (g_main.foc().val() != text)
             {
-                //set_caret_pos(g_main.foc(), g_node.pos);
+                var area = g_main.foc();
+                /// area.trigger('blur');
+                area.blur();
+                area.val(text);
+                area.focus();
+                set_caret_pos(area, g_node.pos);
             }
-            //Boolean(g_main.foc().val() != text) && g_main.foc().val(text);
-            //set_caret_pos(g_main.foc(), g_node.pos);
         }
     };
     
     setInterval(function()
     { 
         jr(g_node.cur).up(function(node) { g_node.pos = +node.text||0; });
-        // jr(g_node.txt).up(function(node) { change(node.text) });
         jr(g_node.txt).up(cb);
 
-    }, 200);
+    }, 250);
 }
 
 function get_pipe(text, pos)
