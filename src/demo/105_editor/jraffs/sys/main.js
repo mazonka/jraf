@@ -49,29 +49,6 @@ var g_wid = {
     }
 };
 
-
-function get_fi(x,y)
-{
-    if (x.is(':focus'))
-        return x;
-    else if (y.is(':focus'))
-        return y;
-
-    return null;
-}
-
-function get_fo(x,y)
-{
-    var self = this;
-
-    if (get_fi(x,y) == x)
-        return y;
-    else if (get_fi(x,y) == y)
-        return x;
-
-    return null;
-}
-
 function get_pipe(t, p)
 {
     var d = new Date();
@@ -154,25 +131,18 @@ function change($o, e)
     if (t == o.text && p == o.pos) return;
     
     //save data - version, text and cursor position;
-    if (t != o.text ) 
-    {
-        console.log('11111');
-        ++o.ver;
-    }
-    
-    if (p != o.pos) 
-    {
-        console.log('222222');
-        ++o.ver;
-    }
+    // if (t != o.text ) ++o.ver;
+    // if (p != o.pos) ++o.ver;
     
     o.text = t;
     o.pos = p;
 
+/*
     if (o.wid.prop('id') == 'l')
         g_wid.span_l_area_ver.wid.html(g_wid.texarea_l.ver);
     else
-        g_wid.span_r_area_ver.wid.html(g_wid.texarea_r.ver);
+        g_wid.span_r_area_ver.wid.html(g_wid.texarea_r.ver); 
+*/
 
     jr(g_node.txt).save(t).up();
     jr(g_node.pos).save(p).up();
@@ -182,11 +152,11 @@ function init()
 {
     var fn_init_ver = function(node)
     {
-        g_wid.texarea_l.ver=+node.ver;
-        g_wid.texarea_r.ver=+node.ver;
-        g_wid.span_l_area_ver.wid.html(node.ver);
-        g_wid.span_r_area_ver.wid.html(node.ver);
-        g_wid.span_node_ver.wid.html(node.ver);
+        // g_wid.texarea_l.ver=+node.ver;
+        // g_wid.texarea_r.ver=+node.ver;
+        // g_wid.span_l_area_ver.wid.html(node.ver);
+        // g_wid.span_r_area_ver.wid.html(node.ver);
+        // g_wid.span_node_ver.wid.html(node.ver);
 
     };
 
@@ -206,28 +176,28 @@ function init()
     {
         var tl = g_wid.texarea_l;
         var tr = g_wid.texarea_r;
-        var vn = +node.parent.ver;
-        var vl = +g_wid.texarea_l.ver;
-        var vr = +g_wid.texarea_r.ver;
+        // var vn = +node.parent.ver;
+        // var vl = +g_wid.texarea_l.ver;
+        // var vr = +g_wid.texarea_r.ver;
 
         var fcd = g_wid.fcd();
         var ufd = g_wid.ufd();
 
-        if (g_wid.span_node_ver.wid.html() != node.parent.ver)
-            g_wid.span_node_ver.wid.html(vn);
+        // if (g_wid.span_node_ver.wid.html() != node.parent.ver)
+            // g_wid.span_node_ver.wid.html(vn);
 
-        if (tl.ver !== vn && tl.text !== node.text)
+        if (tl.text !== node.text)
         {
             tl.wid.val(node.text);
             tl.text = node.text;
-            tl.ver = vn;
+            // tl.ver = vn;
         }
 
-        if (tr.ver !== vn && tr.text !== node.text)
+        if (tr.text !== node.text)
         {
             tr.wid.val(node.text);
             tr.text = node.text;
-            tr.ver = vn;
+            // tr.ver = vn;
         }
     };
 
@@ -235,12 +205,23 @@ function init()
     {
         var tl = g_wid.texarea_l;
         var tr = g_wid.texarea_r;
-        var vn = +node.parent.ver;
-        var vl = +g_wid.texarea_l.ver;
-        var vr = +g_wid.texarea_r.ver;
+        // var vn = +node.parent.ver;
+        // var vl = +g_wid.texarea_l.ver;
+        // var vr = +g_wid.texarea_r.ver;
         
-        if (g_wid.span_node_ver.wid.html() != node.parent.ver)
-            g_wid.span_node_ver.wid.html(vn);        
+        // if (g_wid.span_node_ver.wid.html() != node.parent.ver)
+            // g_wid.span_node_ver.wid.html(vn);   
+        
+        var fcd = g_wid.fcd();
+        var ufd = g_wid.ufd();
+        
+        if (fcd != null)
+        {
+            if (fcd.pos != +node.text)
+                set_caret_pos(fcd.wid, +node.text);
+        }
+        
+        ufd.wid.val(get_pipe(ufd.text, +node.text));
         
     };
     
