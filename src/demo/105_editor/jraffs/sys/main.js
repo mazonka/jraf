@@ -20,19 +20,22 @@ var g_node = {
 };
 
 var g_wid = {
-    texarea_l: { wid: $('<textarea/>', {id: 'l'}), text: '', pos: 0, ver: 0 },
-    texarea_r: { wid: $('<textarea/>', {id: 'r'}), text: '', pos: 0, ver: 0 },
-    span_l_area_ver: { wid: $('<span/>') },
-    span_r_area_ver: { wid: $('<span/>') },
-    span_node_ver: { wid: $('<span/>') },
+    l: { wid: $('<textarea/>', {id: 'l'}), text: '', pos: 0, pver: 0, tver: 0 },
+    r: { wid: $('<textarea/>', {id: 'r'}), text: '', pos: 0, pver: 0, tver: 0 },
+    ltv: { wid: $('<span/>') },
+    lpv: { wid: $('<span/>') },
+    rtv: { wid: $('<span/>') },
+    rpv: { wid: $('<span/>') },
+    ntv: { wid: $('<span/>') },
+    npv: { wid: $('<span/>') },
     fcd: function()
     {
         var self = this;
-
-        if (self.texarea_l.wid.is(':focus'))
-            return self.texarea_l;
-        else if (self.texarea_l.wid.is(':focus'))
-            return self.texarea_r;
+        
+        if (self.l.wid.is(':focus'))
+            return self.l;
+        else if (self.r.wid.is(':focus'))
+            return self.r;
 
         return null;
     },
@@ -40,12 +43,12 @@ var g_wid = {
     {
         var self = this;
 
-        if (!self.texarea_l.wid.is(':focus'))
-            return self.texarea_l;
-        else if (!self.texarea_r.wid.is(':focus'))
-            return self.texarea_r;
-        else
-            return null;
+        if (self.fcd() == self.l)
+            return self.r;
+        else if (self.fcd() == self.r)
+            return self.l;
+        
+        return null;
     }
 };
 
@@ -72,36 +75,39 @@ function main_html()
             .css('margin', 'auto')
             .css('width', '80%')
             .append($('<tr/>')
-                .append($('<td/>', { colspan: '2' } )
-                    .append(g_wid.span_node_ver.wid)))
+                .append($('<td/>', {colspan: '2'})
+                    .css('text-align', 'center')
+                    .append(g_wid.ntv.wid)
+                    .append($('<span/>',{ text: ':' }))
+                    .append(g_wid.npv.wid)))
             .append($('<tr/>')
                 .append($('<td/>')
-                    .append(g_wid.span_l_area_ver.wid
+                    .append(g_wid.ltv.wid
                         .css('margin-left','1em'))
+                    .append($('<span/>', {text: ':'}))
+                    .append(g_wid.lpv.wid)
                     .css('text-align', 'left'))
                 .append($('<td/>')
-                    .append(g_wid.span_r_area_ver.wid
+                    .append(g_wid.rtv.wid
                         .css('margin-left','1em'))
+                    .append($('<span/>', {text: ':'}))
+                    .append(g_wid.rpv.wid)
                     .css('text-align', 'left')))
             .append($('<tr/>')
                 .append($('<td/>')
-                    .append(g_wid.texarea_l.wid
+                    .append(g_wid.l.wid
                         .css('white-space', 'pre')
                         .css('resize', 'none')
                         // .css('margin', '1em')
                         .css('width', '95%')
-                        .css('height', '8em')
-                    ))
+                        .css('height', '8em')))
                 .append($('<td/>')
-                    .append(g_wid.texarea_r.wid
+                    .append(g_wid.r.wid
                         .css('white-space', 'pre')
                         .css('resize', 'none')
                         // .css('margin', '1em')
                         .css('width', '95%')
-                        .css('height', '8em')
-                    ))
-            )
-        )
+                        .css('height', '8em')))));
 
     $g_div_main.html($div);
     $g_div_main.css('text-align', 'center');
@@ -111,132 +117,161 @@ function main_js()
 {
     main_html();
 
-    g_wid.span_l_area_ver.wid.html(g_wid.texarea_l.ver);
-    g_wid.span_r_area_ver.wid.html(g_wid.texarea_l.ver);
+    /// keydown not working by HOME/END sometimes...
+    g_wid.l.wid.on('input keyup click', function(e){change($(this), e); });
+    g_wid.r.wid.on('input keyup click', function(e){change($(this), e); });
 
-    g_wid.texarea_l.wid.on('input keydown click', function(e){change($(this), e); });
-    g_wid.texarea_r.wid.on('input keydown click', function(e){change($(this), e); });
-
+    g_wid.l.wid.focus(fokus);
+    g_wid.r.wid.focus(fokus);
+    
     jr(g_node.dir).md().up();
 
     init();
 }
 
+function fokus()
+{
+    g_wid.fcd().wid.val(g_wid.fcd().text);
+}
+
 function change($o, e)
 {
-    var o = ($o.prop('id') == 'l') ? g_wid.texarea_l : g_wid.texarea_r;
+    var o = ($o.prop('id') == 'l') ? g_wid.l : g_wid.r;
     var p = o.wid.prop('selectionStart') || 0;
     var t = o.wid.val() || '';
-
+    
     if (t == o.text && p == o.pos) return;
-    
-    //save data - version, text and cursor position;
-    // if (t != o.text ) ++o.ver;
-    // if (p != o.pos) ++o.ver;
-    
-    o.text = t;
-    o.pos = p;
 
-/*
+    // save data - version, text and cursor position;
+    if (t != o.text )
+    {
+        jr(g_node.txt).save(t).up();
+        ++o.tver;
+        o.text = t;
+    }
+
+    if (p != o.pos)
+    {
+        jr(g_node.pos).save(p).up();
+        o.pos = p;
+        ++o.pver;
+    }
+
     if (o.wid.prop('id') == 'l')
-        g_wid.span_l_area_ver.wid.html(g_wid.texarea_l.ver);
+    {
+        g_wid.ltv.wid.html(g_wid.l.tver);
+        g_wid.lpv.wid.html(g_wid.l.pver);
+    }
     else
-        g_wid.span_r_area_ver.wid.html(g_wid.texarea_r.ver); 
-*/
-
-    jr(g_node.txt).save(t).up();
-    jr(g_node.pos).save(p).up();
+    {
+        g_wid.rtv.wid.html(g_wid.r.tver);
+        g_wid.rpv.wid.html(g_wid.r.pver);
+    }
 }
 
 function init()
 {
-    var fn_init_ver = function(node)
+    var fn_txt_init = function(node)
     {
-        // g_wid.texarea_l.ver=+node.ver;
-        // g_wid.texarea_r.ver=+node.ver;
-        // g_wid.span_l_area_ver.wid.html(node.ver);
-        // g_wid.span_r_area_ver.wid.html(node.ver);
-        // g_wid.span_node_ver.wid.html(node.ver);
+        g_wid.l.tver = +node.ver;
+        g_wid.r.tver = +node.ver;
 
-    };
+        g_wid.ltv.wid.html(node.ver);
+        g_wid.rtv.wid.html(node.ver);
+        g_wid.ntv.wid.html(node.ver);
 
-    var fn_init_txt = function(node)
-    {
-        g_wid.texarea_l.text = node.text;
-        g_wid.texarea_r.text = node.text;
+        g_wid.l.text = node.text;
+        g_wid.r.text = node.text;
     }
 
-    var fn_init_pos = function(node)
+    var fn_pos_init = function(node)
     {
-        g_wid.texarea_l.pos = node.text;
-        g_wid.texarea_r.pos = node.text;
+        g_wid.l.pver = +node.ver;
+        g_wid.r.pver = +node.ver;
+
+        g_wid.lpv.wid.html(node.ver);
+        g_wid.rpv.wid.html(node.ver);
+        g_wid.npv.wid.html(node.ver);
+
+        g_wid.l.pos = +node.text;
+        g_wid.r.pos = +node.text;
     }
 
-    var fn_bind_txt = function(node)
+    var fn_txt_bind = function(node)
     {
-        var tl = g_wid.texarea_l;
-        var tr = g_wid.texarea_r;
-        // var vn = +node.parent.ver;
-        // var vl = +g_wid.texarea_l.ver;
-        // var vr = +g_wid.texarea_r.ver;
+        //change displayed node version
+        if (g_wid.ntv.wid.html() != node.ver) g_wid.ntv.wid.html(node.ver);
 
-        var fcd = g_wid.fcd();
-        var ufd = g_wid.ufd();
-
-        // if (g_wid.span_node_ver.wid.html() != node.parent.ver)
-            // g_wid.span_node_ver.wid.html(vn);
-
-        if (tl.text !== node.text)
+        if (g_wid.l.tver != +node.ver)
         {
-            tl.wid.val(node.text);
-            tl.text = node.text;
-            // tl.ver = vn;
+            g_wid.l.wid.val(node.text);
+            // g_wid.l.wid.val(get_pipe(node.text, g_wid.l.pos));
+
+            g_wid.l.tver = +node.ver;
+            g_wid.l.text = node.text;
+
+            g_wid.ltv.wid.html(node.ver);
         }
 
-        if (tr.text !== node.text)
+        if (g_wid.r.tver != +node.ver)
         {
-            tr.wid.val(node.text);
-            tr.text = node.text;
-            // tr.ver = vn;
+            g_wid.r.wid.val(node.text);
+            // g_wid.r.wid.val(get_pipe(node.text, g_wid.r.pos));
+            
+            g_wid.r.tver = +node.ver;
+            g_wid.r.text = node.text;
+
+            g_wid.rtv.wid.html(node.ver);
         }
     };
 
-    var fn_bind_pos = function(node)
+    var fn_pos_bind = function(node)
     {
-        var tl = g_wid.texarea_l;
-        var tr = g_wid.texarea_r;
-        // var vn = +node.parent.ver;
-        // var vl = +g_wid.texarea_l.ver;
-        // var vr = +g_wid.texarea_r.ver;
+            console.log('fn_pos_bind');
+        //change displayed node version
+        if (g_wid.npv.wid.html() != node.ver) g_wid.npv.wid.html(node.ver);
         
-        // if (g_wid.span_node_ver.wid.html() != node.parent.ver)
-            // g_wid.span_node_ver.wid.html(vn);   
-        
-        var fcd = g_wid.fcd();
-        var ufd = g_wid.ufd();
-        
-        if (fcd != null)
+        if (g_wid.fcd() === null)
         {
-            if (fcd.pos != +node.text)
-                set_caret_pos(fcd.wid, +node.text);
+            if (g_wid.l.pver != +node.ver)
+            {
+                // g_wid.l.wid.val(get_pipe(g_wid.l.text, +node.text));
+
+                g_wid.l.pver = +node.ver;
+                g_wid.l.pos = node.text;
+
+                g_wid.lpv.wid.html(node.ver);
+            }
+
+            if (g_wid.r.pver != +node.ver)
+            {
+                // g_wid.r.wid.val(get_pipe(g_wid.r.text, +node.text));
+
+                g_wid.r.pver = +node.ver; 
+                g_wid.r.pos = node.text;
+
+                g_wid.rpv.wid.html(node.ver);
+            }
+        }
+        else
+        {
+            set_caret_pos(g_wid.fcd().wid, +node.text);
+            console.log('111');
         }
         
-        ufd.wid.val(get_pipe(ufd.text, +node.text));
-        
-    };
-    
-    jr(g_node.txt).up(fn_init_txt);
-    jr(g_node.pos).up(fn_init_pos);
-    jr(g_node.dir).up(fn_init_ver);
 
-    jr(g_node.txt).up().bind_fun(fn_bind_txt);
-    jr(g_node.pos).up().bind_fun(fn_bind_pos);
+    };
+
+    jr(g_node.txt).up(fn_txt_init);
+    jr(g_node.pos).up(fn_pos_init);
+
+    jr(g_node.txt).bind_fun(fn_txt_bind);
+    jr(g_node.pos).bind_fun(fn_pos_bind);
 
     setInterval(function()
     {
         jr(g_node.txt).up();
         jr(g_node.pos).up();
-        jr(g_node.dir).up();
     }, 1000);
 }
 
