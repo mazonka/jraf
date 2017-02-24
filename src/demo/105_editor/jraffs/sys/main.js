@@ -145,14 +145,16 @@ function change($o, e)
     // save data - version, text and cursor position;
     if (t != o.text )
     {
-        jr(g_node.txt).save(t).up();
+        // see below
+        // jr(g_node.txt).save(t).up();
         ++o.tver;
         o.text = t;
     }
 
     if (p != o.pos)
     {
-        jr(g_node.pos).save(p).up();
+        // see below
+        // jr(g_node.pos).save(p).up();
         o.pos = p;
         ++o.pver;
     }
@@ -167,6 +169,9 @@ function change($o, e)
         g_wid.rtv.wid.html(g_wid.r.tver);
         g_wid.rpv.wid.html(g_wid.r.pver);
     }
+    /// ask why bind_fun do not work without version changes
+    jr(g_node.txt).save(t).up();
+    jr(g_node.pos).save(p).up();
 }
 
 function init()
@@ -256,7 +261,6 @@ function init()
         else
         {
             set_caret_pos(g_wid.fcd().wid, +node.text);
-            console.log('111');
         }
         
 
