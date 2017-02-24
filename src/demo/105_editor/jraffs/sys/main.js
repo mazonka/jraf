@@ -140,7 +140,7 @@ function fok_o($o)
     // if (!o.is_foc()) $o.val(get_pipe(o.text, +o.pos));
     
     // workaround because focusout can occur multiple times
-    if (!o.is_foc() && o.pos != '|') $o.val(get_pipe(o.text, +o.pos));
+    if (!o.is_foc() && o.text[+o.pos] != '|') $o.val(get_pipe(o.text, +o.pos));
 }
 
 function is_ext_ascii(t)
