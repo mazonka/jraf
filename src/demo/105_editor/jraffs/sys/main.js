@@ -139,7 +139,7 @@ function fok_o($o)
 
     // if (!o.is_foc()) $o.val(get_pipe(o.text, +o.pos));
     
-    // workaraund because focusout can occured multiple times
+    // workaround because focusout can occur multiple times
     if (!o.is_foc() && o.pos != '|') $o.val(get_pipe(o.text, +o.pos));
 }
 
