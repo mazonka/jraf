@@ -28,7 +28,7 @@ var g_wid = {
     rpv: { wid: $('<span/>') },
     ntv: { wid: $('<span/>') },
     npv: { wid: $('<span/>') },
-    fcd: function()
+    foc: function()
     {
         var self = this;
         
@@ -39,13 +39,13 @@ var g_wid = {
 
         return null;
     },
-    ufd: function()
+    unf: function()
     {
         var self = this;
 
-        if (self.fcd() == self.l)
+        if (self.foc() == self.l)
             return self.r;
-        else if (self.fcd() == self.r)
+        else if (self.foc() == self.r)
             return self.l;
         
         return null;
@@ -125,65 +125,83 @@ function main_js()
     g_wid.r.wid.focus(fokus);
     
     jr(g_node.dir).md().up();
-
+    
     init();
 }
 
 function fokus()
 {
-    g_wid.fcd().wid.val(g_wid.fcd().text);
+    if (g_wid.foc() !== null) g_wid.foc().wid.val(g_wid.foc().text);
 }
+
+function is_ext_ascii(t)
+{
+    var ascii = /^[ -~\t\n\r]+$/;
+
+    if (!ascii.test(t) && t != '') return false;
+    
+    return true;
+}
+    
 
 function change($o, e)
 {
     var o = ($o.prop('id') == 'l') ? g_wid.l : g_wid.r;
-    var p = o.wid.prop('selectionStart') || 0;
-    var t = o.wid.val() || '';
+    var p = $o[0].selectionStart || 0;
+    var t = $o.val() || '';
     
+    if (!is_ext_ascii(t)) return $o.val(o.text);
     if (t == o.text && p == o.pos) return;
 
     // save data - version, text and cursor position;
     if (t != o.text )
     {
-        // see below
-        // jr(g_node.txt).save(t).up();
         ++o.tver;
         o.text = t;
+        
+        ++o.pver;
+        o.pos = p;
+
+        jr(g_node.txt).save(t).up();
+        jr(g_node.pos).save(p).up();
     }
 
     if (p != o.pos)
     {
-        // see below
-        // jr(g_node.pos).save(p).up();
-        o.pos = p;
         ++o.pver;
+        o.pos = p;
+
+        jr(g_node.pos).save(p).up();
     }
 
-    if (o.wid.prop('id') == 'l')
+    if (o == g_wid.l)
     {
-        g_wid.ltv.wid.html(g_wid.l.tver);
-        g_wid.lpv.wid.html(g_wid.l.pver);
+        g_wid.ltv.wid.html(o.tver);
+        g_wid.lpv.wid.html(o.pver);
     }
     else
     {
-        g_wid.rtv.wid.html(g_wid.r.tver);
-        g_wid.rpv.wid.html(g_wid.r.pver);
+        g_wid.rtv.wid.html(o.tver);
+        g_wid.rpv.wid.html(o.pver);
     }
+    
     /// ask why bind_fun do not work without version changes
-    jr(g_node.txt).save(t).up();
-    jr(g_node.pos).save(p).up();
+    // jr(g_node.txt).save(t).up();
+    // jr(g_node.pos).save(p).up();
 }
 
 function init()
 {
     var fn_txt_init = function(node)
     {
-        g_wid.l.tver = +node.ver;
-        g_wid.r.tver = +node.ver;
+        var v = +node.ver;
+        
+        g_wid.l.tver = v;
+        g_wid.r.tver = v;
 
-        g_wid.ltv.wid.html(node.ver);
-        g_wid.rtv.wid.html(node.ver);
-        g_wid.ntv.wid.html(node.ver);
+        g_wid.ltv.wid.html(v);
+        g_wid.rtv.wid.html(v);
+        g_wid.ntv.wid.html(v);
 
         g_wid.l.text = node.text;
         g_wid.r.text = node.text;
@@ -191,12 +209,14 @@ function init()
 
     var fn_pos_init = function(node)
     {
-        g_wid.l.pver = +node.ver;
-        g_wid.r.pver = +node.ver;
+        var v = +node.ver;
+        
+        g_wid.l.pver = v;
+        g_wid.r.pver = v;
 
-        g_wid.lpv.wid.html(node.ver);
-        g_wid.rpv.wid.html(node.ver);
-        g_wid.npv.wid.html(node.ver);
+        g_wid.lpv.wid.html(node.v);
+        g_wid.rpv.wid.html(node.v);
+        g_wid.npv.wid.html(node.v);
 
         g_wid.l.pos = +node.text;
         g_wid.r.pos = +node.text;
@@ -204,66 +224,62 @@ function init()
 
     var fn_txt_bind = function(node)
     {
-        //change displayed node version
-        if (g_wid.ntv.wid.html() != node.ver) g_wid.ntv.wid.html(node.ver);
+        var v = +node.ver;
 
-        if (g_wid.l.tver != +node.ver)
+        if (g_wid.ntv.wid.html() != v) g_wid.ntv.wid.html(v);
+
+        if (g_wid.l.tver < v)
         {
             g_wid.l.wid.val(node.text);
-            // g_wid.l.wid.val(get_pipe(node.text, g_wid.l.pos));
 
-            g_wid.l.tver = +node.ver;
+            g_wid.l.tver = v;
             g_wid.l.text = node.text;
 
-            g_wid.ltv.wid.html(node.ver);
+            g_wid.ltv.wid.html(v);
         }
 
-        if (g_wid.r.tver != +node.ver)
+        if (g_wid.r.tver < v)
         {
             g_wid.r.wid.val(node.text);
-            // g_wid.r.wid.val(get_pipe(node.text, g_wid.r.pos));
             
-            g_wid.r.tver = +node.ver;
+            g_wid.r.tver = v;
             g_wid.r.text = node.text;
 
-            g_wid.rtv.wid.html(node.ver);
+            g_wid.rtv.wid.html(v);
         }
     };
 
     var fn_pos_bind = function(node)
     {
-            console.log('fn_pos_bind');
-        //change displayed node version
-        if (g_wid.npv.wid.html() != node.ver) g_wid.npv.wid.html(node.ver);
-        
-        if (g_wid.fcd() === null)
+        var v = +node.ver;
+
+        if (g_wid.npv.wid.html() != v) g_wid.npv.wid.html(v);
+
+        if (g_wid.l.pver < v)
         {
-            if (g_wid.l.pver != +node.ver)
-            {
-                // g_wid.l.wid.val(get_pipe(g_wid.l.text, +node.text));
-
-                g_wid.l.pver = +node.ver;
-                g_wid.l.pos = node.text;
-
-                g_wid.lpv.wid.html(node.ver);
-            }
-
-            if (g_wid.r.pver != +node.ver)
-            {
-                // g_wid.r.wid.val(get_pipe(g_wid.r.text, +node.text));
-
-                g_wid.r.pver = +node.ver; 
-                g_wid.r.pos = node.text;
-
-                g_wid.rpv.wid.html(node.ver);
-            }
+            if (g_wid.foc() == g_wid.l)
+                set_caret_pos(g_wid.l.wid, +node.text);
+            else          
+                g_wid.l.wid.val(get_pipe(g_wid.l.text, +node.text));
+            
+            g_wid.l.pver = v;
+            g_wid.l.pos = +node.text;
+            
+            g_wid.lpv.wid.html(v);
         }
-        else
+
+        if (g_wid.r.pver < v)
         {
-            set_caret_pos(g_wid.fcd().wid, +node.text);
+            if (g_wid.foc() == g_wid.r)
+                set_caret_pos(g_wid.r.wid, +node.text);
+            else
+                g_wid.r.wid.val(get_pipe(g_wid.r.text, +node.text));
+            
+            g_wid.r.pver = v; 
+            g_wid.r.pos = +node.text;
+            
+            g_wid.rpv.wid.html(v);
         }
-        
-
     };
 
     jr(g_node.txt).up(fn_txt_init);
@@ -274,8 +290,9 @@ function init()
 
     setInterval(function()
     {
-        jr(g_node.txt).up();
-        jr(g_node.pos).up();
+        // jr(g_node.txt).up();
+        // jr(g_node.pos).up();
+        jr(g_node.dir).up();
     }, 1000);
 }
 
