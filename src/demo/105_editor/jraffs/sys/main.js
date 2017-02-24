@@ -119,7 +119,7 @@ function main_js()
     g_wid.l.wid.focusout(function(){ fok_o($(this)); });
     g_wid.r.wid.focus(function(){ fok_i($(this)); });
     g_wid.r.wid.focusout(function(){ fok_o($(this)); });
-    
+
     jr(g_node.dir).md().up();
 
     init();
@@ -134,9 +134,13 @@ function fok_i($o)
 
 function fok_o($o)
 {
+    console.log('focusout');
     var o = ($o.prop('id') == 'l') ? g_wid.l : g_wid.r;
 
-    if (!o.is_foc()) $o.val(get_pipe(o.text, +o.pos));
+    // if (!o.is_foc()) $o.val(get_pipe(o.text, +o.pos));
+    
+    // workaraund because focusout can occured multiple times
+    if (!o.is_foc() && o.pos != '|') $o.val(get_pipe(o.text, +o.pos));
 }
 
 function is_ext_ascii(t)
@@ -144,16 +148,23 @@ function is_ext_ascii(t)
     var ascii = /^[ -~\t\n\r]+$/;
 
     if (!ascii.test(t) && t != '') return false;
-    
+
     return true;
 }
-    
+
 
 function change($o, e)
 {
     var o = ($o.prop('id') == 'l') ? g_wid.l : g_wid.r;
     var p = $o[0].selectionStart || 0;
     var t = $o.val() || '';
+    // var t = (e.type == 'click') ? o.text : $o.val() || '';
+    
+    if (e !== null && e.type == 'click') 
+    {
+        // fok_i($o);
+        return change($o, null);
+    }
     
     if (!is_ext_ascii(t)) return $o.val(o.text);
     if (t == o.text && p == o.pos) return;
@@ -163,7 +174,7 @@ function change($o, e)
     {
         ++o.tver;
         o.text = t;
-        
+
         ++o.pver;
         o.pos = p;
 
@@ -189,7 +200,7 @@ function change($o, e)
         g_wid.rtv.wid.html(o.tver);
         g_wid.rpv.wid.html(o.pver);
     }
-    
+
     /// ask why bind_fun do not work without version changes
     // jr(g_node.txt).save(t).up();
     // jr(g_node.pos).save(p).up();
@@ -200,7 +211,7 @@ function init()
     var fn_txt_init = function(node)
     {
         var v = +node.ver;
-        
+
         g_wid.l.tver = v;
         g_wid.r.tver = v;
 
@@ -215,7 +226,7 @@ function init()
     var fn_pos_init = function(node)
     {
         var v = +node.ver;
-        
+
         g_wid.l.pver = v;
         g_wid.r.pver = v;
 
@@ -246,7 +257,7 @@ function init()
         if (g_wid.r.tver < v)
         {
             g_wid.r.wid.val(node.text);
-            
+
             g_wid.r.tver = v;
             g_wid.r.text = node.text;
 
@@ -264,12 +275,12 @@ function init()
         {
             if (g_wid.l.is_foc())
                 set_caret_pos(g_wid.l.wid, +node.text);
-            else          
+            else
                 g_wid.l.wid.val(get_pipe(g_wid.l.text, +node.text));
-            
+
             g_wid.l.pver = v;
             g_wid.l.pos = +node.text;
-            
+
             g_wid.lpv.wid.html(v);
         }
 
@@ -279,10 +290,10 @@ function init()
                 set_caret_pos(g_wid.r.wid, +node.text);
             else
                 g_wid.r.wid.val(get_pipe(g_wid.r.text, +node.text));
-            
-            g_wid.r.pver = v; 
+
+            g_wid.r.pver = v;
             g_wid.r.pos = +node.text;
-            
+
             g_wid.rpv.wid.html(v);
         }
     };
