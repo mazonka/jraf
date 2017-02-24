@@ -160,12 +160,6 @@ function change($o, e)
     var t = $o.val() || '';
     // var t = (e.type == 'click') ? o.text : $o.val() || '';
     
-    if (e !== null && e.type == 'click') 
-    {
-        // fok_i($o);
-        return change($o, null);
-    }
-    
     if (!is_ext_ascii(t)) return $o.val(o.text);
     if (t == o.text && p == o.pos) return;
 
