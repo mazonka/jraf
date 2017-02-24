@@ -20,36 +20,30 @@ var g_node = {
 };
 
 var g_wid = {
-    l: { wid: $('<textarea/>', {id: 'l'}), text: '', pos: 0, pver: 0, tver: 0 },
-    r: { wid: $('<textarea/>', {id: 'r'}), text: '', pos: 0, pver: 0, tver: 0 },
+    l:
+    {
+        wid: $('<textarea/>', { id: 'l' }),
+        text: '',
+        pos: 0,
+        pver: 0,
+        tver: 0,
+        is_foc: function() { return (this.wid.is(':focus')) ? true : false; }
+    },
+    r:
+    {
+        wid: $('<textarea/>', { id: 'r' }),
+        text: '',
+        pos: 0,
+        pver: 0,
+        tver: 0,
+        is_foc: function() { return (this.wid.is(':focus')) ? true : false; }
+    },
     ltv: { wid: $('<span/>') },
     lpv: { wid: $('<span/>') },
     rtv: { wid: $('<span/>') },
     rpv: { wid: $('<span/>') },
     ntv: { wid: $('<span/>') },
-    npv: { wid: $('<span/>') },
-    foc: function()
-    {
-        var self = this;
-        
-        if (self.l.wid.is(':focus'))
-            return self.l;
-        else if (self.r.wid.is(':focus'))
-            return self.r;
-
-        return null;
-    },
-    unf: function()
-    {
-        var self = this;
-
-        if (self.foc() == self.l)
-            return self.r;
-        else if (self.foc() == self.r)
-            return self.l;
-        
-        return null;
-    }
+    npv: { wid: $('<span/>') }
 };
 
 function get_pipe(t, p)
@@ -117,21 +111,32 @@ function main_js()
 {
     main_html();
 
-    /// keydown not working by HOME/END sometimes...
+    /// 'keydown' not working by HOME/END sometimes...
     g_wid.l.wid.on('input keyup click', function(e){change($(this), e); });
     g_wid.r.wid.on('input keyup click', function(e){change($(this), e); });
 
-    g_wid.l.wid.focus(fokus);
-    g_wid.r.wid.focus(fokus);
+    g_wid.l.wid.focus(function(){ fok_i($(this)); });
+    g_wid.l.wid.focusout(function(){ fok_o($(this)); });
+    g_wid.r.wid.focus(function(){ fok_i($(this)); });
+    g_wid.r.wid.focusout(function(){ fok_o($(this)); });
     
     jr(g_node.dir).md().up();
-    
+
     init();
 }
 
-function fokus()
+function fok_i($o)
 {
-    if (g_wid.foc() !== null) g_wid.foc().wid.val(g_wid.foc().text);
+    var o = ($o.prop('id') == 'l') ? g_wid.l : g_wid.r;
+
+    if (o.is_foc()) $o.val(o.text);
+}
+
+function fok_o($o)
+{
+    var o = ($o.prop('id') == 'l') ? g_wid.l : g_wid.r;
+
+    if (!o.is_foc()) $o.val(get_pipe(o.text, +o.pos));
 }
 
 function is_ext_ascii(t)
@@ -257,7 +262,7 @@ function init()
 
         if (g_wid.l.pver < v)
         {
-            if (g_wid.foc() == g_wid.l)
+            if (g_wid.l.is_foc())
                 set_caret_pos(g_wid.l.wid, +node.text);
             else          
                 g_wid.l.wid.val(get_pipe(g_wid.l.text, +node.text));
@@ -270,7 +275,7 @@ function init()
 
         if (g_wid.r.pver < v)
         {
-            if (g_wid.foc() == g_wid.r)
+            if (g_wid.r.is_foc())
                 set_caret_pos(g_wid.r.wid, +node.text);
             else
                 g_wid.r.wid.val(get_pipe(g_wid.r.text, +node.text));
