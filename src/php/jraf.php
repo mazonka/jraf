@@ -444,7 +444,7 @@ function Jraf_aureq_put($tok, $pth, $method)
     }
     else // method 3
     {
-        if( !Jraf_if_data($f,$siz) ) return jfail('deny data');
+        if( !Jraf_if_data($pth,$siz) ) return jfail('deny data');
         OsPath::file_put_contents($f->s, $text, 0);
     }
 
@@ -455,8 +455,15 @@ function Jraf_aureq_put($tok, $pth, $method)
 
 function Jraf_if_data($fil,$sz)
 {
-    echo "Jraf_if_data NI";
-    exit;
+    $p = Jraf_config('data','',$fil);
+    if( $p === false ) return false;
+
+    $dsz = Jraf_config('['.$p.']','','');
+    if( $dsz === false ) return false;
+
+    if( $sz > $dsz ) return false;
+
+    return true;
 }
 
 function Jraf_read_tok_path($tok, &$pth, $su, $wr)
@@ -560,7 +567,7 @@ function Jraf_user($sess) // => User
     
     $email = $in->file_get();
     
-    $superuser = Jraf_config('admin', $email);
+    $superuser = Jraf_config('admin', $email, '');
 
     $udir = Jraf_users_dir()->plus_s($email);
     if ( !$udir->isdir())
@@ -658,7 +665,7 @@ function Jraf_ismail($email)
 
 function Jraf_sendmail(&$url, $sid, $em) // => void
 {
-    if ( $url == '' ) $url = Jraf_config('server','');
+    if ( $url == '' ) $url = Jraf_config('server','','');
     if ( $url == false ) { echo 'sendmail: empty url'; return; }
 
     $i = strpos($url,'?');
@@ -682,7 +689,7 @@ function Jraf_sendmail(&$url, $sid, $em) // => void
     @mail($mail_to,$mail_subj,$mail_msg);
 }
 
-function Jraf_config($key,$val)
+function Jraf_config($key,$match,$full)
 {
     $fstr = OsPath::file_get_contents('conf.jrd');
     $words = preg_split('/[\s]+/', $fstr);
@@ -695,8 +702,13 @@ function Jraf_config($key,$val)
     for( $i=0; $i<$sz; $i += 2 )
     {
         if( $words[$i] != $key ) continue;
-        if( $val == '' ) return $words[$i+1];
-        else if( $val == $words[$i+1] ) return true;
+        if( $match == '' && $full == '' ) return $words[$i+1];
+        else if( $match == $words[$i+1] ) return true;
+        else
+        {
+            $x = strpos($full,$words[$i+1]);
+            if( $x !== false && $x==0 ) return $words[$i+1];
+        }
     }
 
     return false;
@@ -705,7 +717,6 @@ function Jraf_config($key,$val)
 function Jraf_update_ver($pth)
 {
     if ( Jraf_special($pth, false) ) return;
-
 
     $v = Jraf_getver($pth);
     $v = ''.( $v + 1 );
@@ -841,7 +852,7 @@ function Jraf_new_user($email)
 {
     $udir = Jraf_users_dir()->plus_s($email);
     
-    $quotaKb = Jraf_config('quota','');
+    $quotaKb = Jraf_config('quota','','');
     if( $quotaKb == false ) $quotaKb = '10000';
 
     $uname = hex16($email . hex16($email));

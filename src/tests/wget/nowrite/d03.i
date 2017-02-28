@@ -1,1 +1,1 @@
-command=jw data 0 1 /file_yes Kg=
+command=jw data 0 /file_yes 1 Kg=

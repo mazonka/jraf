@@ -2,9 +2,8 @@
 
 cwd=`sh execdir.sh`
 wr=$cwd/wroot
-echo ""
-ls -1 $wr
-rm -rf $wr
+mkdir -p $wr/tmp/d
+touch $wr/tmp/d/file_yes
 
 
 
