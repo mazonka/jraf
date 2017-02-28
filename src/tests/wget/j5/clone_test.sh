@@ -11,7 +11,7 @@ exit
 fi
 
 cp $1.i $2.i
-cp $1.o $2.o
+cp $1.out $2.out
 cp $1.sh $2.sh
 
 svn add $2.*
