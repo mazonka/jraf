@@ -1,13 +1,6 @@
 // JRAF Team (C) 2017
 'use strict';
 
-var g_ver_nd;
-
-var g_ver_textarea_txt;
-var g_ver_textarea_pos;
-var g_ver_textarea;
-var g_ver_node_dir;
-
 var g_data = {
     text: '',
     pos: 0
@@ -25,8 +18,8 @@ var g_wid = {
         wid: $('<textarea/>', { id: 'l' }),
         text: '',
         pos: 0,
-        pver: 0,
-        tver: 0,
+        history_text: [],
+        history_pos: [],
         is_foc: function() { return (this.wid.is(':focus')) ? true : false; }
     },
     r:
@@ -34,8 +27,8 @@ var g_wid = {
         wid: $('<textarea/>', { id: 'r' }),
         text: '',
         pos: 0,
-        pver: 0,
-        tver: 0,
+        history_text: [],
+        history_pos: [],
         is_foc: function() { return (this.wid.is(':focus')) ? true : false; }
     },
     ltv: { wid: $('<span/>') },
@@ -48,13 +41,13 @@ var g_wid = {
 
 function get_pipe(t, p)
 {
+    return t;
+/*
     var d = new Date();
     var s = d.getSeconds();
 
     return t.substr(0,p) + '|' + t.substr(p)
-    // return (s % 2 == 0)
-        // ? t.substr(0,p) + '|' + t.substr(p)
-        // : t.substr(0,p) + ' ' + t.substr(p);
+*/
 }
 
 function set_caret_pos($o, i) {
@@ -115,11 +108,6 @@ function main_js()
     g_wid.l.wid.on('input keyup click', function(e){change($(this), e); });
     g_wid.r.wid.on('input keyup click', function(e){change($(this), e); });
 
-    g_wid.l.wid.focus(function(){ fok_i($(this)); });
-    g_wid.l.wid.focusout(function(){ fok_o($(this)); });
-    g_wid.r.wid.focus(function(){ fok_i($(this)); });
-    g_wid.r.wid.focusout(function(){ fok_o($(this)); });
-
     jr(g_node.dir).md().up();
 
     init();
@@ -138,7 +126,7 @@ function fok_o($o)
     var o = ($o.prop('id') == 'l') ? g_wid.l : g_wid.r;
 
     // if (!o.is_foc()) $o.val(get_pipe(o.text, +o.pos));
-    
+
     // workaround because focusout can occur multiple times
     if (!o.is_foc() && o.text[+o.pos] != '|') $o.val(get_pipe(o.text, +o.pos));
 }
@@ -151,53 +139,58 @@ function is_ext_ascii(t)
 
     return true;
 }
-
-
 function change($o, e)
 {
+    console.log(': event: manual changes : ' + e.type);
     var o = ($o.prop('id') == 'l') ? g_wid.l : g_wid.r;
     var p = $o[0].selectionStart || 0;
     var t = $o.val() || '';
+    var fn_dir_up = function(){jr(g_node.dir).up(); };
     // var t = (e.type == 'click') ? o.text : $o.val() || '';
-    
+
     if (!is_ext_ascii(t)) return $o.val(o.text);
     if (t == o.text && p == o.pos) return;
 
-    // save data - version, text and cursor position;
+    if (e.keyCode == 33
+        || e.keyCode == 34
+        || e.keyCode == 35
+        || e.keyCode == 36
+        || e.keyCode == 37
+        || e.keyCode == 38
+        || e.keyCode == 39
+        || e.keyCode == 40)
+    {
+        if (p != o.pos)
+        {
+            console.log( 'KEYUP EVENT');
+            o.history_pos.push(p);
+            jr(g_node.pos).save(p).up(fn_dir_up);
+            return false;
+
+        }
+    }
+    else
+    {
+        console.log('AAAA')
+        console.log(e.keyCode);
+
+    }
+
     if (t != o.text )
     {
-        ++o.tver;
-        o.text = t;
+        o.history_text.push(t);
 
-        ++o.pver;
-        o.pos = p;
-
-        jr(g_node.txt).save(t).up();
-        jr(g_node.pos).save(p).up();
+        jr(g_node.txt).save(t).up(fn_dir_up);
     }
 
     if (p != o.pos)
     {
-        ++o.pver;
-        o.pos = p;
-
-        jr(g_node.pos).save(p).up();
+        o.history_pos.push(p);
+        jr(g_node.pos).save(p).up(fn_dir_up);
     }
 
-    if (o == g_wid.l)
-    {
-        g_wid.ltv.wid.html(o.tver);
-        g_wid.lpv.wid.html(o.pver);
-    }
-    else
-    {
-        g_wid.rtv.wid.html(o.tver);
-        g_wid.rpv.wid.html(o.pver);
-    }
-
-    /// ask why bind_fun do not work without version changes
-    // jr(g_node.txt).save(t).up();
-    // jr(g_node.pos).save(p).up();
+    console.log(o.history_text);
+    console.log(o.history_pos);
 }
 
 function init()
@@ -205,9 +198,6 @@ function init()
     var fn_txt_init = function(node)
     {
         var v = +node.ver;
-
-        g_wid.l.tver = v;
-        g_wid.r.tver = v;
 
         g_wid.ltv.wid.html(v);
         g_wid.rtv.wid.html(v);
@@ -221,9 +211,6 @@ function init()
     {
         var v = +node.ver;
 
-        g_wid.l.pver = v;
-        g_wid.r.pver = v;
-
         g_wid.lpv.wid.html(node.v);
         g_wid.rpv.wid.html(node.v);
         g_wid.npv.wid.html(node.v);
@@ -235,61 +222,109 @@ function init()
     var fn_txt_bind = function(node)
     {
         var v = +node.ver;
+        var t = node.text;
+        var found;
 
-        if (g_wid.ntv.wid.html() != v) g_wid.ntv.wid.html(v);
 
-        if (g_wid.l.tver < v)
+        g_wid.l.text = t;
+        g_wid.r.text = t;
+        
+        g_wid.ntv.wid.html(v);
+        g_wid.ltv.wid.html(v);
+        g_wid.rtv.wid.html(v);
+
+        found = false;
+        for (let i=0; i<g_wid.l.history_text.length; i++)
         {
-            g_wid.l.wid.val(node.text);
+            if (t == g_wid.l.history_text[i])
+            {
+                found = true;
+                g_wid.l.history_text.splice(i, 1);
 
-            g_wid.l.tver = v;
-            g_wid.l.text = node.text;
-
-            g_wid.ltv.wid.html(v);
+                break;
+            }
         }
 
-        if (g_wid.r.tver < v)
+        if (!found)
         {
-            g_wid.r.wid.val(node.text);
-
-            g_wid.r.tver = v;
-            g_wid.r.text = node.text;
-
-            g_wid.rtv.wid.html(v);
+            g_wid.l.history_text = [];
+            g_wid.l.wid.val(t);
         }
+
+        found = false;
+        for (let i=0; i<g_wid.r.history_text.length; i++)
+        {
+            if (t == g_wid.r.history_text[i])
+            {
+                g_wid.r.history_text.splice(i, 1);
+                found = true;
+
+                break;
+            }
+        }
+
+        if (!found)
+        {
+            g_wid.r.history_text = [];
+            g_wid.r.wid.val(t);
+        }
+
+
     };
 
     var fn_pos_bind = function(node)
     {
         var v = +node.ver;
+        var p = node.text;
+        var found;
 
-        if (g_wid.npv.wid.html() != v) g_wid.npv.wid.html(v);
+        g_wid.l.pos = p;
+        g_wid.r.pos = p;
 
-        if (g_wid.l.pver < v)
+        g_wid.npv.wid.html(v);
+        g_wid.lpv.wid.html(v);
+        g_wid.rpv.wid.html(v);
+
+
+        found = false;
+        for (let i=0; i<g_wid.l.history_pos.length; i++)
         {
-            if (g_wid.l.is_foc())
-                set_caret_pos(g_wid.l.wid, +node.text);
-            else
-                g_wid.l.wid.val(get_pipe(g_wid.l.text, +node.text));
+            if (p == g_wid.l.history_pos[i])
+            {
+                g_wid.l.history_pos.splice(i, 1);
+                found = true;
 
-            g_wid.l.pver = v;
-            g_wid.l.pos = +node.text;
-
-            g_wid.lpv.wid.html(v);
+                break;
+            }
         }
 
-        if (g_wid.r.pver < v)
+        if (!found)
         {
-            if (g_wid.r.is_foc())
-                set_caret_pos(g_wid.r.wid, +node.text);
-            else
-                g_wid.r.wid.val(get_pipe(g_wid.r.text, +node.text));
+            if (g_wid.l.is_foc()) set_caret_pos(g_wid.l.wid, p);
 
-            g_wid.r.pver = v;
-            g_wid.r.pos = +node.text;
-
-            g_wid.rpv.wid.html(v);
+            g_wid.l.history_pos = [];
         }
+
+        found = false;
+        for (let i=0; i<g_wid.r.history_pos.length; i++)
+        {
+            if (p == g_wid.r.history_pos[i])
+            {
+                g_wid.r.history_pos.splice(i, 1);
+                found = true;
+
+                break;
+            }
+        }
+
+        if (!found)
+        {
+            if (g_wid.r.is_foc()) set_caret_pos(g_wid.r.wid, p);
+
+            g_wid.r.history_pos = [];
+
+        }
+
     };
 
     jr(g_node.txt).up(fn_txt_init);
