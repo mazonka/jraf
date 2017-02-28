@@ -4,6 +4,8 @@
 
 error_reporting(-1);
 
+$write_deny = false;
+
 // jraf globals
 $root_dir = 'jraffs';
 $be_version = '10420';
@@ -187,7 +189,7 @@ function echo_jraf_req($tokarr, $jw){ echo jraf_request($tokarr, $jw); }
 
 function jraf_request($tokarr, $jw)
 {
-    global $be_version;
+    global $be_version, $write_deny;
 
     $tok = new Token($tokarr);
     $result = new Cmdr('',1);
@@ -213,7 +215,8 @@ function jraf_request($tokarr, $jw)
 
         else if ( in_array($cmd, array('login', 'logout')) && $jw )
         {
-            if( !LockWrite_lock() ) $result -> add( jfail('busy') );
+            if( $write_deny ) $result -> add( jfail('deny') );
+            else if( !LockWrite_lock() ) $result -> add( jfail('busy') );
             else
             {
                 $result -> add( Jraf_login($tok, $cmd == 'login') );
@@ -223,7 +226,8 @@ function jraf_request($tokarr, $jw)
 
         else if ( in_array($cmd, array('md', 'rm', 'put', 'save', 'mv')) && $jw )
         {
-            if( !LockWrite_lock() ) $result -> add( jfail('busy') );
+            if( $write_deny ) $result -> add( jfail('deny') );
+            else if( !LockWrite_lock() ) $result -> add( jfail('busy') );
             else
             {
                 $result -> add( Jraf_aurequest($tok, $cmd) );
@@ -1056,12 +1060,12 @@ class OsPath
         return array ( $dirs, $fils );
     }
 
-	function howold()
-	{
+    function howold()
+    {
         global $CWD;
         clearstatcache();
         return time()-@filemtime($CWD.$this->s);
-	}
+    }
 }
 
 $LockWrite_locked = false;
