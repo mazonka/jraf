@@ -492,7 +492,7 @@ void cfg::PublicNetCmd::set(string s, bool v)
     else if ( s == "reseed" )   reseed = v;
 
     else
-        throw gl::ex("");
+        throw gl::ex("bad option ["+s+"]");
 }
 
 cfg::PublicNetCmd::PublicNetCmd()
