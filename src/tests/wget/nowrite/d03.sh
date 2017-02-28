@@ -2,7 +2,7 @@
 
 cwd=`sh execdir.sh`
 wr=$cwd/wroot
-#rm -rf $wr
+rm -rf $wr
 
 
 
