@@ -4,5 +4,5 @@ server		http://127.0.0.1:16000/
 quota		10000
 data		/tmp/d/
 data		/tmp/d2/
-[/tmp/d/]	50
+[/tmp/d/]	15
 

@@ -460,8 +460,7 @@ function Jraf_if_data($fil,$sz)
 
     $dsz = Jraf_config('['.$p.']','','');
     if( $dsz === false ) return false;
-
-    if( $sz > $dsz ) return false;
+    if( intval($sz) > intval($dsz) ) return false;
 
     return true;
 }
