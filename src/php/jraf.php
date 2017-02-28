@@ -235,6 +235,17 @@ function jraf_request($tokarr, $jw)
             }
         }
 
+        else if ( $cmd == 'data' && $jw )
+        {
+            // no test for write_deny coz we allow data
+            if( !LockWrite_lock() ) $result -> add( jfail('busy') );
+            else
+            {
+                $result -> add( Jraf_aurequest($tok, $cmd) );
+                LockWrite_unlock();
+            }
+        }
+
         else if ( $cmd == 'read' || $cmd == 'get' )
         {
             if ( !$tok->next() ) return jerr('session id')->s;
@@ -356,8 +367,9 @@ function Jraf_aurequest($tok, $cmd)
 
     else if ( $cmd == 'md') return Jraf_aureq_md($pth);
     else if ( $cmd == 'rm') return Jraf_aureq_rm($pth);
-    else if ( $cmd == 'put' ) return Jraf_aureq_put($tok, $pth, true);
-    else if ( $cmd == 'save' ) return Jraf_aureq_put($tok, $pth, false);
+    else if ( $cmd == 'put' ) return Jraf_aureq_put($tok, $pth, 1);
+    else if ( $cmd == 'save' ) return Jraf_aureq_put($tok, $pth, 2);
+    else if ( $cmd == 'data' ) return Jraf_aureq_put($tok, $pth, 3);
     else if ( $cmd == 'mv' )
     {
         $pto = '';
@@ -388,10 +400,10 @@ function Jraf_aureq_rm($pth)
     return jok2($pth);
 }
 
-function Jraf_aureq_put($tok, $pth, $append)
+function Jraf_aureq_put($tok, $pth, $method)
 {
     $pos = -1;
-    if ( $append )
+    if ( $method==1 )
     {
         if ( !$tok->next() ) return jerr('position');
         $pos = intval($tok->sub());
@@ -411,22 +423,40 @@ function Jraf_aureq_put($tok, $pth, $append)
 
     $f = Jraf_root($pth);
 
-    if ( !$f->isfile() ) { OsPath::file_put_contents($f->s,'',0); }
+    if ( !$f->isfile() )
+    {
+        if ( $method==3 ) return jfail('deny file');
+        OsPath::file_put_contents($f->s,'',0);
+    }
+
     if ( !$f->isfile() ) return jfail('cannot create ' . $pth);
 
     $fsz = $f->file_size();
 
-    if ( $append )
+    if ( $method==1 )
     {
         if ( $fsz != $pos ) return jfail(strval($fsz));
         OsPath::file_put_contents($f->s, $text, 1);
     }
-    else
-    OsPath::file_put_contents($f->s, $text, 0);
+    else if ( $method==2 )
+    {
+        OsPath::file_put_contents($f->s, $text, 0);
+    }
+    else // method 3
+    {
+        if( !Jraf_if_data($f,$siz) ) return jfail('deny data');
+        OsPath::file_put_contents($f->s, $text, 0);
+    }
 
     Jraf_update_ver($pth);
 
     return jok2($f->file_size());
+}
+
+function Jraf_if_data($fil,$sz)
+{
+    echo "Jraf_if_data NI";
+    exit;
 }
 
 function Jraf_read_tok_path($tok, &$pth, $su, $wr)
