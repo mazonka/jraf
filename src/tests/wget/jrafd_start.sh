@@ -18,7 +18,8 @@ cd $xpwd
 rm -rf wroot
 opt1="jrdb=wget.db jraf_root=wroot tcp_port=16001 skcseed=1"
 opt2="s=$cwd/date.inp let=reseed"
-comm="./jrafd -cqx dwkr=1 quit=1 $opt1 $opt2"
+#opt3="ban=write"
+comm="./jrafd -cqx dwkr=1 quit=1 $opt1 $opt2 $opt3"
 echo $comm
 
 if cmd /c ls 2> /dev/null 1> /dev/null
