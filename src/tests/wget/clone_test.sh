@@ -12,8 +12,10 @@ fi
 
 cp $1.i $2.i
 cp $1.out $2.out
-cp $1.sh $2.sh
+test -f $1.sh && cp $1.sh $2.sh
+test -f $1_.sh && cp $1_.sh $2_.sh
 
 svn add $2.*
+test -f $2_.sh && svn add $2_.sh
 
 
