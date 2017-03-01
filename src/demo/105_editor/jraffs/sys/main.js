@@ -162,24 +162,15 @@ function change($o, e)
     {
         if (p != o.pos)
         {
-            console.log( 'KEYUP EVENT');
             o.history_pos.push(p);
             jr(g_node.pos).save(p).up(fn_dir_up);
             return false;
-
         }
-    }
-    else
-    {
-        console.log('AAAA')
-        console.log(e.keyCode);
-
     }
 
     if (t != o.text )
     {
         o.history_text.push(t);
-
         jr(g_node.txt).save(t).up(fn_dir_up);
     }
 
@@ -188,9 +179,6 @@ function change($o, e)
         o.history_pos.push(p);
         jr(g_node.pos).save(p).up(fn_dir_up);
     }
-
-    console.log(o.history_text);
-    console.log(o.history_pos);
 }
 
 function init()
