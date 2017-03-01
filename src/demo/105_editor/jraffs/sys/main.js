@@ -45,13 +45,10 @@ var g_wid = {
 
 function get_pipe(t, p)
 {
-    return t;
-/*
     var d = new Date();
     var s = d.getSeconds();
 
     return t.substr(0,p) + '|' + t.substr(p)
-*/
 }
 
 function set_caret_pos($o, i) {
@@ -109,30 +106,12 @@ function main_js()
     main_html();
 
     /// 'keydown' not working by HOME/END sometimes...
-    g_wid.l.wid.on('input keyup click', function(e){change($(this), e); });
-    g_wid.r.wid.on('input keyup click', function(e){change($(this), e); });
+    g_wid.l.wid.on('input keyup click mousemoveon', function(e){change($(this), e); });
+    g_wid.r.wid.on('input keyup click mousemoveon', function(e){change($(this), e); });
 
     jr(g_node.dir).md().up();
 
     init();
-}
-
-function fok_i($o)
-{
-    var o = ($o.prop('id') == 'l') ? g_wid.l : g_wid.r;
-
-    if (o.is_foc()) $o.val(o.text);
-}
-
-function fok_o($o)
-{
-    console.log('focusout');
-    var o = ($o.prop('id') == 'l') ? g_wid.l : g_wid.r;
-
-    // if (!o.is_foc()) $o.val(get_pipe(o.text, +o.pos));
-
-    // workaround because focusout can occur multiple times
-    if (!o.is_foc() && o.text[+o.pos] != '|') $o.val(get_pipe(o.text, +o.pos));
 }
 
 function is_ext_ascii(t)
@@ -147,7 +126,7 @@ function is_ext_ascii(t)
 function change($o, e)
 {
     var o = ($o.prop('id') == 'l') ? g_wid.l : g_wid.r;
-    var p = $o[0].selectionStart || 0;
+    var p =  +($o[0].selectionStart) || 0;
     var t = $o.val() || '';
     var fn_dir_up = function(){jr(g_node.dir).up(); };
 
@@ -156,20 +135,18 @@ function change($o, e)
 
     if (t != o.text )
     {
-        if (!o.history_text.includes(t))
+        if (o.history_text[o.history_text.length-1] != t)
         {
             o.history_text.push(t);
-            console.log(o.history_text);
             jr(g_node.txt).save(t).up(fn_dir_up);
         }
     }
 
     if (p != o.pos)
     {
-        if (!o.history_pos.includes(p))
+        if (o.history_pos[o.history_pos.length-1] != p)
         {
             o.history_pos.push(p);
-            console.log(o.history_pos);
             jr(g_node.pos).save(p).up(fn_dir_up);
         }
     }
@@ -182,14 +159,15 @@ function init()
         var v = +node.ver;
         var t = node.text;
 
+        g_wid.ntv.wid.html(v);
+
         g_wid.ltv.wid.html(v);
         g_wid.rtv.wid.html(v);
-        g_wid.ntv.wid.html(v);
 
         g_wid.l.text = t;
         g_wid.l.text_ver = v;
         g_wid.l.wid.val(t);
-        
+
         g_wid.r.text = t;
         g_wid.r.text_ver = v;
         g_wid.r.wid.val(t);
@@ -200,9 +178,10 @@ function init()
         var v = +node.ver;
         var t = +node.text;
 
+        g_wid.npv.wid.html(v);
+
         g_wid.lpv.wid.html(v);
         g_wid.rpv.wid.html(v);
-        g_wid.npv.wid.html(v);
 
         g_wid.l.pos = t;
         g_wid.l.pos_ver = v;
@@ -225,10 +204,10 @@ function init()
 
             g_wid.ltv.wid.html(v);
 
-            let i = g_wid.l.history_text.indexOf();
+            let i = g_wid.l.history_text.indexOf(t);
 
-            if (g_wid.l.history_text.indexOf() > -1)
-                g_wid.l.history_text.splice(i, 1);
+            if (i > -1)
+                g_wid.l.history_text.splice(0, i+1);
             else
             {
                 g_wid.l.wid.val(t);
@@ -243,10 +222,10 @@ function init()
 
             g_wid.rtv.wid.html(v);
 
-            let i = g_wid.r.history_text.indexOf();
+            let i = g_wid.r.history_text.indexOf(t);
 
-            if (g_wid.r.history_text.indexOf() > -1)
-                g_wid.r.history_text.splice(i, 1);
+            if (i > -1)
+                g_wid.r.history_text.splice(0, i+1);
             else
             {
                 g_wid.r.wid.val(t);
@@ -258,7 +237,7 @@ function init()
     var fn_pos_bind = function(node)
     {
         var v = +node.ver;
-        var p = node.text;
+        var p = +node.text;
 
         g_wid.npv.wid.html(v);
 
@@ -269,17 +248,16 @@ function init()
 
             g_wid.lpv.wid.html(v);
 
-            let i = g_wid.l.history_pos.indexOf();
+            let i = g_wid.l.history_pos.indexOf(p);
 
-            if (g_wid.l.history_pos.indexOf() > -1)
-                g_wid.l.history_pos.splice(i, 1);
+            if (i > -1)
+                g_wid.l.history_pos.splice(0, i+1);
             else
             {
                 if (g_wid.l.is_foc()) set_caret_pos(g_wid.l.wid, p);
-
+                
                 g_wid.l.history_pos = [];
             }
-
         }
 
         if (v > g_wid.r.pos_ver)
@@ -289,14 +267,13 @@ function init()
 
             g_wid.rpv.wid.html(v);
 
-            let i = g_wid.r.history_pos.indexOf();
+            let i = g_wid.r.history_pos.indexOf(p);
 
-            if (g_wid.r.history_pos.indexOf() > -1)
-                g_wid.r.history_pos.splice(i, 1);
+            if (i > -1)
+                g_wid.r.history_pos.splice(0, i+1);
             else
             {
                 if (g_wid.r.is_foc()) set_caret_pos(g_wid.r.wid, p);
-
                 g_wid.r.history_pos = [];
             }
         }
