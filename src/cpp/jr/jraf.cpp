@@ -371,7 +371,8 @@ Jraf::Cmdr Jraf::aureq_put(gl::Token & tok, string pth, int method)
     if ( method == 1 )
     {
         if ( !tok.next() ) return err("position");
-        pos = gl::toi(tok.sub());
+        string p = tok.sub();
+        if ( p != "*" ) pos = gl::toi(p);
     }
 
     if ( !tok.next() ) return err("size");
@@ -402,7 +403,7 @@ Jraf::Cmdr Jraf::aureq_put(gl::Token & tok, string pth, int method)
 
     if ( method == 1 )
     {
-        if ( fsz != pos ) return fail(gl::tos(fsz));
+        if ( pos >= 0 && fsz != pos ) return fail(gl::tos(fsz));
 
         std::ofstream of(f.str().c_str(), std::ios::app | std::ios::binary );
         of << text;
