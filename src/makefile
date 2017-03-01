@@ -18,9 +18,9 @@ SRC_PHP=php
 SRC_CPP=cpp
 
 # all: jr_mkdir jr_cp conf.jrd php_cp cli_cp done
-all: jr_mkdir jr_cp php_cp jq_cp done
-cpp: jr_mkdir jr_cp cpp_cp jq_cp done
-php: jr_mkdir jr_cp php_cp jq_cp done
+all: jr_mkdir jr_cp php_cp jq_cp b64 done
+cpp: jr_mkdir jr_cp cpp_cp jq_cp b64 done
+php: jr_mkdir jr_cp php_cp jq_cp b64 done
 
 jr_mkdir:
 	@mkdir -p $(TRG_JRAFFS)/sys
@@ -44,6 +44,9 @@ cpp_cp: $(SRC_CPP)/makefile
 
 jq_cp: $(SRC_JQ)
 	@$(MAKE) -sC $(SRC_JQ)
+
+b64: ext/base64.js
+	@cp $< $(TRG_JRAFCL)/lib/
 
 done:
 	@echo [ MAKE DEMO - OK ]
