@@ -418,12 +418,17 @@ function Jraf_aureq_put($tok, $pth, $method)
     {
         if( !$tok->next() ) return jerr('text');
         $text_raw = $tok->sub();
-        while( $tok->next() ) $text_raw = $text_raw .'+'.$tok->sub();
+        $text_raw = preg_replace("/-/","+",$text_raw);
         $text = base64_decode($text_raw);
     }
 
-    if ( strlen($text) != $siz ) return jerr('size mismatch');
-        //.' t=['.$text.'] r=['.$text_raw.']'.$_POST['command'].']');
+    while ( strlen($text) < $siz && $tok->next() )
+    {
+        $text_raw = $text_raw.'+'.$tok->sub();
+        $text = base64_decode($text_raw);
+    }
+
+    if ( strlen($text) != $siz ) return jerr('size mismatch ['.$_POST['command'].'] '.$text);
 
     $f = Jraf_root($pth);
 
@@ -442,13 +447,9 @@ function Jraf_aureq_put($tok, $pth, $method)
         if ( $fsz != $pos ) return jfail(strval($fsz));
         OsPath::file_put_contents($f->s, $text, 1);
     }
-    else if ( $method==2 )
+    else
     {
-        OsPath::file_put_contents($f->s, $text, 0);
-    }
-    else // method 3
-    {
-        if( !Jraf_if_data($pth,$siz) ) return jfail('deny data');
+        if ( $method==3 && !Jraf_ifdata($pth,$siz) ) return jfail('deny data');
         OsPath::file_put_contents($f->s, $text, 0);
     }
 
@@ -457,7 +458,7 @@ function Jraf_aureq_put($tok, $pth, $method)
     return jok2($f->file_size());
 }
 
-function Jraf_if_data($fil,$sz)
+function Jraf_ifdata($fil,$sz)
 {
     $p = Jraf_config('data','',$fil);
     if( $p === false ) return false;
