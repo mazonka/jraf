@@ -413,13 +413,17 @@ function Jraf_aureq_put($tok, $pth, $method)
     $siz = intval($tok->sub());
 
     $text = '';
+    $text_raw = '';
     if ( $siz )
     {
         if( !$tok->next() ) return jerr('text');
-        $text = base64_decode($tok->sub());
+        $text_raw = $tok->sub();
+        while( $tok->next() ) $text_raw = $text_raw .'+'.$tok->sub();
+        $text = base64_decode($text_raw);
     }
 
-    if ( strlen($text) != $siz ) return jerr('size mismatch' . ' ' . $text);
+    if ( strlen($text) != $siz ) return jerr('size mismatch');
+        //.' t=['.$text.'] r=['.$text_raw.']'.$_POST['command'].']');
 
     $f = Jraf_root($pth);
 
