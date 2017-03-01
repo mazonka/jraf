@@ -428,7 +428,7 @@ function Jraf_aureq_put($tok, $pth, $method)
         $text = base64_decode($text_raw);
     }
 
-    if ( strlen($text) != $siz ) return jerr('size mismatch ['.$_POST['command'].'] '.$text);
+    if ( strlen($text) != $siz ) return jerr('size mismatch');
 
     $f = Jraf_root($pth);
 

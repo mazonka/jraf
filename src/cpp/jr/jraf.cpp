@@ -381,7 +381,9 @@ Jraf::Cmdr Jraf::aureq_put(gl::Token & tok, string pth, int method)
     if ( siz )
     {
         if ( !tok.next() ) return err("text");
-        text = ma::b64dec(tok.sub());
+        text = tok.sub();
+        gl::replaceAll(text, "-", "+");
+        text = ma::b64dec(text);
     }
 
     if ( (int)text.size() != siz ) return err("size mismatch");
