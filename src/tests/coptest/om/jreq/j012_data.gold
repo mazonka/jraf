@@ -1,5 +1,5 @@
 --
-md /a ...... JRAF_FAIL deny
+md /a ...... JRAF_ERR bad command [md]
 file no .... JRAF_FAIL deny file
 file yes ... OK 1
 too long ... JRAF_FAIL deny data

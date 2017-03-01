@@ -67,8 +67,11 @@ string Jraf::request(gl::Token tok, string anonce, Access rx)
             result += profile(usr);
         }
 
-        else if ( isaureq(cmd)  && rx != Access::RW ) result += fail("deny");
-        else if ( cmd == "data" && rx == Access::RO ) result += fail("deny");
+        else if ( isaureq(cmd)  && rx != Access::RW )
+            result += err("bad command [" + cmd + "]");
+
+        else if ( cmd == "data" && rx == Access::RO )
+            result += fail("deny");
 
         else if ( isaureq(cmd) || cmd == "data" )
         {

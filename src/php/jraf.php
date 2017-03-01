@@ -226,7 +226,7 @@ function jraf_request($tokarr, $jw)
 
         else if ( in_array($cmd, array('md', 'rm', 'put', 'save', 'mv')) && $jw )
         {
-            if( $write_deny ) $result -> add( jfail('deny') );
+            if( $write_deny ) $result -> add( jerr('bad command [' . $cmd . ']') );
             else if( !LockWrite_lock() ) $result -> add( jfail('busy') );
             else
             {
