@@ -18,6 +18,8 @@ var g_wid = {
         wid: $('<textarea/>', { id: 'l' }),
         text: '',
         pos: 0,
+        t_ver: 0,
+        p_ver: 0,
         history_text: [],
         history_pos: [],
         is_foc: function() { return (this.wid.is(':focus')) ? true : false; }
@@ -27,6 +29,8 @@ var g_wid = {
         wid: $('<textarea/>', { id: 'r' }),
         text: '',
         pos: 0,
+        text_ver: 0,
+        pos_ver: 0,
         history_text: [],
         history_pos: [],
         is_foc: function() { return (this.wid.is(':focus')) ? true : false; }
@@ -139,45 +143,35 @@ function is_ext_ascii(t)
 
     return true;
 }
+
 function change($o, e)
 {
-    console.log(': event: manual changes : ' + e.type);
     var o = ($o.prop('id') == 'l') ? g_wid.l : g_wid.r;
     var p = $o[0].selectionStart || 0;
     var t = $o.val() || '';
     var fn_dir_up = function(){jr(g_node.dir).up(); };
-    // var t = (e.type == 'click') ? o.text : $o.val() || '';
 
     if (!is_ext_ascii(t)) return $o.val(o.text);
     if (t == o.text && p == o.pos) return;
 
-    if (e.keyCode == 33
-        || e.keyCode == 34
-        || e.keyCode == 35
-        || e.keyCode == 36
-        || e.keyCode == 37
-        || e.keyCode == 38
-        || e.keyCode == 39
-        || e.keyCode == 40)
-    {
-        if (p != o.pos)
-        {
-            o.history_pos.push(p);
-            jr(g_node.pos).save(p).up(fn_dir_up);
-            return false;
-        }
-    }
-
     if (t != o.text )
     {
-        o.history_text.push(t);
-        jr(g_node.txt).save(t).up(fn_dir_up);
+        if (!o.history_text.includes(t))
+        {
+            o.history_text.push(t);
+            console.log(o.history_text);
+            jr(g_node.txt).save(t).up(fn_dir_up);
+        }
     }
 
     if (p != o.pos)
     {
-        o.history_pos.push(p);
-        jr(g_node.pos).save(p).up(fn_dir_up);
+        if (!o.history_pos.includes(p))
+        {
+            o.history_pos.push(p);
+            console.log(o.history_pos);
+            jr(g_node.pos).save(p).up(fn_dir_up);
+        }
     }
 }
 
@@ -186,133 +180,126 @@ function init()
     var fn_txt_init = function(node)
     {
         var v = +node.ver;
+        var t = node.text;
 
         g_wid.ltv.wid.html(v);
         g_wid.rtv.wid.html(v);
         g_wid.ntv.wid.html(v);
 
-        g_wid.l.text = node.text;
-        g_wid.r.text = node.text;
+        g_wid.l.text = t;
+        g_wid.l.text_ver = v;
+        g_wid.l.wid.val(t);
+        
+        g_wid.r.text = t;
+        g_wid.r.text_ver = v;
+        g_wid.r.wid.val(t);
     }
 
     var fn_pos_init = function(node)
     {
         var v = +node.ver;
+        var t = +node.text;
 
-        g_wid.lpv.wid.html(node.v);
-        g_wid.rpv.wid.html(node.v);
-        g_wid.npv.wid.html(node.v);
+        g_wid.lpv.wid.html(v);
+        g_wid.rpv.wid.html(v);
+        g_wid.npv.wid.html(v);
 
-        g_wid.l.pos = +node.text;
-        g_wid.r.pos = +node.text;
+        g_wid.l.pos = t;
+        g_wid.l.pos_ver = v;
+
+        g_wid.r.pos = t;
+        g_wid.r.pos_ver = v;
     }
 
     var fn_txt_bind = function(node)
     {
         var v = +node.ver;
         var t = node.text;
-        var found;
 
-
-        g_wid.l.text = t;
-        g_wid.r.text = t;
-        
         g_wid.ntv.wid.html(v);
-        g_wid.ltv.wid.html(v);
-        g_wid.rtv.wid.html(v);
 
-        found = false;
-        for (let i=0; i<g_wid.l.history_text.length; i++)
+        if (v > g_wid.l.text_ver)
         {
-            if (t == g_wid.l.history_text[i])
-            {
-                found = true;
+            g_wid.l.text = t;
+            g_wid.l.text_ver = v;
+
+            g_wid.ltv.wid.html(v);
+
+            let i = g_wid.l.history_text.indexOf();
+
+            if (g_wid.l.history_text.indexOf() > -1)
                 g_wid.l.history_text.splice(i, 1);
-
-                break;
-            }
-        }
-
-        if (!found)
-        {
-            g_wid.l.history_text = [];
-            g_wid.l.wid.val(t);
-        }
-
-        found = false;
-        for (let i=0; i<g_wid.r.history_text.length; i++)
-        {
-            if (t == g_wid.r.history_text[i])
+            else
             {
-                g_wid.r.history_text.splice(i, 1);
-                found = true;
-
-                break;
+                g_wid.l.wid.val(t);
+                g_wid.l.history_text = [];
             }
         }
 
-        if (!found)
+        if (v > g_wid.r.text_ver)
         {
-            g_wid.r.history_text = [];
-            g_wid.r.wid.val(t);
+            g_wid.r.text = t;
+            g_wid.r.text_ver = v;
+
+            g_wid.rtv.wid.html(v);
+
+            let i = g_wid.r.history_text.indexOf();
+
+            if (g_wid.r.history_text.indexOf() > -1)
+                g_wid.r.history_text.splice(i, 1);
+            else
+            {
+                g_wid.r.wid.val(t);
+                g_wid.r.history_text = [];
+            }
         }
-
-
     };
 
     var fn_pos_bind = function(node)
     {
         var v = +node.ver;
         var p = node.text;
-        var found;
-
-        g_wid.l.pos = p;
-        g_wid.r.pos = p;
 
         g_wid.npv.wid.html(v);
-        g_wid.lpv.wid.html(v);
-        g_wid.rpv.wid.html(v);
 
-
-        found = false;
-        for (let i=0; i<g_wid.l.history_pos.length; i++)
+        if (v > g_wid.l.pos_ver)
         {
-            if (p == g_wid.l.history_pos[i])
-            {
+            g_wid.l.pos = p;
+            g_wid.l.pos_ver = v;
+
+            g_wid.lpv.wid.html(v);
+
+            let i = g_wid.l.history_pos.indexOf();
+
+            if (g_wid.l.history_pos.indexOf() > -1)
                 g_wid.l.history_pos.splice(i, 1);
-                found = true;
-
-                break;
-            }
-        }
-
-        if (!found)
-        {
-            if (g_wid.l.is_foc()) set_caret_pos(g_wid.l.wid, p);
-
-            g_wid.l.history_pos = [];
-        }
-
-        found = false;
-        for (let i=0; i<g_wid.r.history_pos.length; i++)
-        {
-            if (p == g_wid.r.history_pos[i])
+            else
             {
-                g_wid.r.history_pos.splice(i, 1);
-                found = true;
+                if (g_wid.l.is_foc()) set_caret_pos(g_wid.l.wid, p);
 
-                break;
+                g_wid.l.history_pos = [];
+            }
+
+        }
+
+        if (v > g_wid.r.pos_ver)
+        {
+            g_wid.r.pos = p;
+            g_wid.r.pos_ver = v;
+
+            g_wid.rpv.wid.html(v);
+
+            let i = g_wid.r.history_pos.indexOf();
+
+            if (g_wid.r.history_pos.indexOf() > -1)
+                g_wid.r.history_pos.splice(i, 1);
+            else
+            {
+                if (g_wid.r.is_foc()) set_caret_pos(g_wid.r.wid, p);
+
+                g_wid.r.history_pos = [];
             }
         }
-
-        if (!found)
-        {
-            if (g_wid.r.is_foc()) set_caret_pos(g_wid.r.wid, p);
-
-            g_wid.r.history_pos = [];
-
-        }
-
     };
 
     jr(g_node.txt).up(fn_txt_init);
