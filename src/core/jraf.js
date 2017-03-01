@@ -399,6 +399,7 @@ function jraf_write_save(pth,body,cbi)
     body = String(body);
     var cb = function(jo){ cbi(jo); };
     var b64 = window.btoa(body);
+    b64 = b64.replace('+','-');
 
     jraf_write_obj('save', pth+' '+body.length+' '+b64, cb);
 }
