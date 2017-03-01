@@ -166,7 +166,8 @@ function jraf_parse_obj(text,nm)
         if( a.length < 4 )
             r.text = '';
         else
-            r.text = window.atob(a[3]);
+            //r.text = window.atob(a[3]);
+            r.text = Base64.decode(a[3]);
         return r;
     }
 

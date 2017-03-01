@@ -398,10 +398,11 @@ function jraf_write_save(pth,body,cbi)
 {
     body = String(body);
     var cb = function(jo){ cbi(jo); };
-    var b64 = window.btoa(body);
+    //var b64 = window.btoa(body);
+    var b64 = Base64.encode(body);
     b64 = b64.replace('+','-');
-
-    jraf_write_obj('save', pth+' '+body.length+' '+b64, cb);
+    var ln = Base64._utf8_encode(body).length;
+    jraf_write_obj('save', pth+' '+ln+' '+b64, cb);
 }
 
 function jraf_write_rm(cwd,name,cbi)
