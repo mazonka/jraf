@@ -11,8 +11,11 @@ namespace jraf
 {
 extern string jr_conf;
 void testConf();
+
 string loadConf(string name);
 bool matchConf(string name, string val);
+string subConf(string name, string val);
+
 void sendmail(string & server, string sid, string mail);
 void cleanOldFiles(os::Path dir, double secs);
 bool isuname(const string & s);

@@ -83,7 +83,7 @@ class Jraf
         Cmdr read_obj(string p, bool getonly, const User & su);
         Cmdr aureq_rm(string pth);
         Cmdr aureq_md(string pth);
-        Cmdr aureq_put(gl::Token & tok, string pth, bool append);
+        Cmdr aureq_put(gl::Token & tok, string pth, int method);
         Cmdr aureq_mv(string pth, string pto);
         Cmdr read_tok_path(gl::Token & tok, string & pth, User & su, bool write);
         bool check_au_path(string pth, User & su, bool write);
@@ -99,13 +99,15 @@ class Jraf
         void update_ver(os::Path pth);
         static string parent_str(os::Path pth);
         void new_user(string email);
+        bool ifdata(const string pth, int sz) const;
 
     public:
         Jraf(string rdir): root_dir(rdir) {}
 
-        string request(gl::Token tok, string nonce, bool ro);
-
         void reseed() { nonce = ""; }
+
+        enum class Access { RW, RD, RO };
+        string request(gl::Token tok, string nonce, Access rx);
 };
 
 

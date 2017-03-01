@@ -45,6 +45,19 @@ bool jraf::matchConf(string name, string val)
     return false;
 }
 
+string jraf::subConf(string name, string val)
+{
+    std::ifstream in(jr_conf.c_str());
+    while (in)
+    {
+        string k, v;
+        in >> k >> v;
+        if ( k == name && val.find(v) == 0 ) return v;
+    }
+
+    return "";
+}
+
 
 void jraf::sendmail(string & url, string sid, string em)
 {

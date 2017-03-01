@@ -52,7 +52,7 @@ struct Worker2
         string jr_login();
         string jr_script(string, string);
         string jr_aucmd();
-        string jr_jraf(bool ro);
+        string jr_jraf(Jraf::Access rx);
         string reseed();
 
         er::Code fetchRecord(int dbIndex, db::Dn * dn,

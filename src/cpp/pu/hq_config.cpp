@@ -490,6 +490,7 @@ void cfg::PublicNetCmd::set(string s, bool v)
     else if ( s == "jr" )   jr = v;
     else if ( s == "jw" )   jw = v;
     else if ( s == "reseed" )   reseed = v;
+    else if ( s == "write" )   write = v;
 
     else
         throw gl::ex("bad option ["+s+"]");
@@ -522,6 +523,7 @@ cfg::PublicNetCmd::PublicNetCmd()
     , jr(true)
     , jw(true)
     , reseed(false)
+    , write(true)
 {}
 
 void Config::setHttpGetProxy(const string & s)

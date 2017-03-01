@@ -1,1 +1,7 @@
-Error: bad option [write]
+--
+md /a ...... JRAF_FAIL deny
+file no .... JRAF_FAIL deny file
+file yes ... OK 1
+too long ... JRAF_FAIL deny data
+no exist ... JRAF_FAIL deny file
+no sz cfg .. JRAF_FAIL deny data

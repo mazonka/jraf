@@ -49,14 +49,16 @@ string Worker2::process(bool * recog)
     //if ( tok.is("au") && (en || pn.ping) )
     //    return jr_aucmd();
 
-    ///if ( tok.is("jraf") && pn.jw ) // FIXME change to jr/jw
-    ///    return jr_jraf(false);
-
     if ( tok.is("jw") && pn.jw )
-        return jr_jraf(false);
+	{
+		if( pn.write ) 
+			return jr_jraf(Jraf::Access::RW);
+
+		return jr_jraf(Jraf::Access::RD);
+	}
 
     if ( tok.is("jr") && pn.jr )
-        return jr_jraf(true);
+        return jr_jraf(Jraf::Access::RO);
 
     if ( tok.is("reseed") && pn.reseed )
         return reseed();

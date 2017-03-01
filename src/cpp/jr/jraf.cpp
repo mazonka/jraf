@@ -18,7 +18,7 @@ inline string zero(string s, string d = "0")
     return s.empty() ? d : s;
 }
 
-string Jraf::request(gl::Token tok, string anonce, bool ro)
+string Jraf::request(gl::Token tok, string anonce, Access rx)
 {
     Cmdr result;
     while (true)
@@ -67,23 +67,29 @@ string Jraf::request(gl::Token tok, string anonce, bool ro)
             result += profile(usr);
         }
 
-        else if ( isaureq(cmd) && !ro )
+        else if ( isaureq(cmd)  && rx != Access::RW ) result += fail("deny");
+        else if ( cmd == "data" && rx == Access::RO ) result += fail("deny");
+
+        else if ( isaureq(cmd) || cmd == "data" )
         {
             hq::LockWrite lock(&access);
             result += aurequest(tok, cmd);
         }
-        else if ( cmd == "login" && !ro )
+
+        else if ( cmd == "login" && rx == Access::RW )
         {
             hq::LockWrite lock(&access);
 
             nonce = ma::skc::hashHex(nonce + anonce).substr(0, 16);
             result += login(tok, true);
         }
-        else if (cmd == "logout" && !ro )
+
+        else if (cmd == "logout" && rx == Access::RW )
         {
             hq::LockWrite lock(&access);
             result += login(tok, false);
         }
+
         else
         {
             result += err("bad command [" + cmd + "]");
@@ -235,8 +241,9 @@ Jraf::Cmdr Jraf::aurequest(gl::Token & tok, const string & cmd)
 
     else if ( cmd == "md" ) return aureq_md(pth);
     else if ( cmd == "rm" ) return aureq_rm(pth);
-    else if ( cmd == "put" ) return aureq_put(tok, pth, true);
-    else if ( cmd == "save" ) return aureq_put(tok, pth, false);
+    else if ( cmd == "put" ) return aureq_put(tok, pth, 1);
+    else if ( cmd == "save" ) return aureq_put(tok, pth, 2);
+    else if ( cmd == "data" ) return aureq_put(tok, pth, 3);
     else if ( cmd == "mv" )
     {
         string pto;
@@ -352,13 +359,13 @@ bool Jraf::check_au_path(string pth, User & su, bool write)
     return ( rpth.substr(0, hsz) == hdir );
 }
 
-Jraf::Cmdr Jraf::aureq_put(gl::Token & tok, string pth, bool append)
+Jraf::Cmdr Jraf::aureq_put(gl::Token & tok, string pth, int method)
 {
     // (put) pos, sz, text
     // (save) sz, text
 
     int pos = -1;
-    if ( append )
+    if ( method == 1 )
     {
         if ( !tok.next() ) return err("position");
         pos = gl::toi(tok.sub());
@@ -378,23 +385,30 @@ Jraf::Cmdr Jraf::aureq_put(gl::Token & tok, string pth, bool append)
 
     os::Path f = root(pth);
 
-    if ( !f.isfile() ) { std::ofstream of(f.str().c_str()); }
+    if ( !f.isfile() )
+    {
+        if ( method == 3 ) return fail("deny file");
+        std::ofstream of(f.str().c_str());
+    }
+
     if ( !f.isfile() ) return fail("cannot create " + pth);
 
     int fsz = f.filesize();
 
-    if ( append )
+    if ( method == 1 )
     {
         if ( fsz != pos ) return fail(gl::tos(fsz));
 
         std::ofstream of(f.str().c_str(), std::ios::app | std::ios::binary );
         of << text;
     }
-    else
+    else // method 3
     {
+        if ( method == 3 && !ifdata(pth, siz) ) return fail("deny data");
         std::ofstream of(f.str().c_str(), std::ios::binary);
         of << text;
     }
+
 
     update_ver(pth);
     return ok(gl::tos(f.filesize()));
@@ -559,5 +573,18 @@ Jraf::Cmdr Jraf::profile(User & su)
     else r += (os::Path(jraf::home) + su.uname).str();
 
     return ok(r);
+}
+
+bool Jraf::ifdata(const string pth, int sz) const
+{
+    string p = jraf::subConf("data", pth);
+    if ( p.empty() ) return false;
+
+    string dsz = jraf::loadConf("[" + p + "]");
+    if ( dsz.empty() ) return false;
+
+    if ( sz > gl::toi(dsz) ) return false;
+
+    return true;
 }
 

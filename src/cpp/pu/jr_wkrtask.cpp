@@ -95,7 +95,7 @@ string Worker2::jr_script(string cmd, string ag)
     return file;
 }
 
-string Worker2::jr_jraf(bool ro)
+string Worker2::jr_jraf(Jraf::Access rx)
 {
     if ( !gl::issql(tok.c_str()) )
     {
@@ -112,7 +112,7 @@ string Worker2::jr_jraf(bool ro)
         nonce = ka.newSalt().substr(0, 16);
     }
 
-    return aa.jraf.request(tok, nonce, ro);
+    return aa.jraf.request(tok, nonce, rx);
 }
 
 string Worker2::reseed()

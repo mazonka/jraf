@@ -66,6 +66,7 @@ struct PublicNetCmd
     bool drop;
     bool jr, jw;
     bool reseed;
+    bool write;
 };
 
 } // cfg

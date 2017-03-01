@@ -8,6 +8,11 @@ cwd=`pwd`
 test -f /usr/bin/cygpath && cwd=`cygpath -m $cwd`
 
 cd $1
+mkdir -p jroot/tmp/d
+mkdir -p jroot/tmp/d2
+touch jroot/tmp/d/file_yes
+touch jroot/tmp/d2/file_yes
+
 ./jrafd -cqln dwkr=0 s=$cwd/$in.inp jraf_root=jroot ban=write
 rm -rf jroot
 
