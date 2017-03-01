@@ -1,0 +1,1 @@
+command=jw md 0 / : save 0 /a 6 WGE-IGFh : ping
