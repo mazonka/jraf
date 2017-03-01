@@ -406,7 +406,8 @@ function Jraf_aureq_put($tok, $pth, $method)
     if ( $method==1 )
     {
         if ( !$tok->next() ) return jerr('position');
-        $pos = intval($tok->sub());
+        $sp = $tok->sub();
+        if( $sp != '*' ) $pos = intval($sp);
     }
 
     if ( !$tok->next() ) return jerr('size');
@@ -444,7 +445,7 @@ function Jraf_aureq_put($tok, $pth, $method)
 
     if ( $method==1 )
     {
-        if ( $fsz != $pos ) return jfail(strval($fsz));
+        if ( $pos >= 0 && $fsz != $pos ) return jfail(strval($fsz));
         OsPath::file_put_contents($f->s, $text, 1);
     }
     else
