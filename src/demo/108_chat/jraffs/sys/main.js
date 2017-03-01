@@ -11,40 +11,38 @@ function change_direct() // use this function to test direct copying
 	g_main.div.html(text);
 }
 
-function change()
+function change(e)
 {
-	var text = g_main.inp.val();
+	if (e.keyCode != 13 ) return;
+	var inp = g_main.inp;
+	var text = g_main.nam.val()+'> '+inp.val();
 	jr('/demo/108/data').save(text).up();
-}
-
-function init()
-{
-	var cb = function(node)
-	{
-		g_main.inp.val(node.text);
-	};
-
-	jr('/demo/108/data').up(cb);
+	inp.val('');
 }
 
 function main_js()
 {
     $g_div_main.html('<h3>Demo 108: chat</h3>');
 
-    var $inp = $('<input/>');
-    $g_div_main.append($inp);
+    var $nam = $('<input/>');
+	$nam.val('X');
+    $g_div_main.append($nam);
 
-	$inp.on('change textInput input',change);
-
-    var $div = $('<div/>');
+    var $div = $('<div/>').css('font-family', 'monospace');
     $g_div_main.append($div);
 
+    var $inp = $('<input/>');
+    $g_div_main.append($inp);
+	$inp.on('keydown',change);
+
+	g_main.nam = $nam;
 	g_main.inp = $inp;
 	g_main.div = $div;
 
 	var rep = function(x){ return x.replace(/0/g,'x'); }
 
 	jr('/demo/108').md().x('data').bind_html($div,rep);
-	init();
+
+	jr('/demo/108/data').up();
 }
 
