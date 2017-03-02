@@ -9,7 +9,8 @@ var $g_div_main;
 //var ajax_test = 2;
 
 function jraf_ajax(cmd, callback, extra) {
-    $.post('/','command=' + cmd)
+
+    $.post(window.location.pathname,'command=' + cmd)
 
     .done(function (data) {
         //if( ++ajax_test%5 ) return callback(null,extra);
