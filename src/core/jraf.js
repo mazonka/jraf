@@ -394,7 +394,7 @@ function jraf_write_md(cwd,name,cbi)
     jraf_write_obj('md', path, cb);
 }
 
-function jraf_write_save(pth,body,cbi)
+function jraf_write_file(pth,body,cbi,pos)
 {
     body = String(body);
     var cb = function(jo){ cbi(jo); };
@@ -402,7 +402,11 @@ function jraf_write_save(pth,body,cbi)
     var b64 = Base64.encode(body);
     b64 = b64.replace('+','-');
     var ln = Base64._utf8_encode(body).length;
-    jraf_write_obj('save', pth+' '+ln+' '+b64, cb);
+
+    if( !pos )
+        jraf_write_obj('save', pth+' '+ln+' '+b64, cb);
+    else
+        jraf_write_obj('put', pth+' '+pos+' '+ln+' '+b64, cb);
 }
 
 function jraf_write_rm(cwd,name,cbi)
@@ -479,15 +483,28 @@ function jr_api_node(n)
 
     vn.md = function()
     {
-        var cb = function(x){ if( x.err && x.err != '' ) o(x.err); };
+        var vnode = this;
+        var cb = function(x)
+        {
+            if( x.err && x.err != '' ) o(x.err);
+            vnode.up();
+        };
         jraf_write_md(g_jraf_root,this.node.str(),cb)
         return this;
     };
 
-    vn.save = function(body)
+    vn.save = function(body){ this.write_file(body,null); }
+    vn.add = function(body){ this.write_file(body,'*'); }
+
+    vn.write_file = function(body,offset)
     {
-        var cb = function(x){ if( x.err && x.err != '' ) o(x.err); };
-        jraf_write_save(this.node.str(),body,cb)
+        var vnode = this;
+        var cb = function(x)
+        {
+            if( x.err && x.err != '' ) o(x.err);
+            vnode.up();
+        };
+        jraf_write_file(this.node.str(),body,cb,offset)
         return this;
     };
 
