@@ -285,11 +285,16 @@ function init()
     jr(g_node.txt).bind_fun(fn_txt_bind);
     jr(g_node.pos).bind_fun(fn_pos_bind);
 
-    setInterval(function()
-    {
-        // jr(g_node.txt).up();
-        // jr(g_node.pos).up();
-        jr(g_node.dir).up();
-    }, 1000);
+    
+    jr(g_node.dir).up();
+    
+    refresh_chain();
 }
 
+function refresh_cback(cb){ jr(g_node.dir).up() }
+
+function refresh_chain()
+{
+	var cb = function(){ setTimeout(refresh_chain, 10000); };
+	refresh_cback(cb);
+}
