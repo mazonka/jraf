@@ -489,8 +489,8 @@ function jr_api_node(n)
         return this;
     };
 
-    vn.save = function(body){ this.write_file(body,null); }
-    vn.add = function(body){ this.write_file(body,'*'); }
+    vn.save = function(body){ return this.write_file(body,null); }
+    vn.add = function(body){ return this.write_file(body,'*'); }
 
     vn.write_file = function(body,offset)
     {
