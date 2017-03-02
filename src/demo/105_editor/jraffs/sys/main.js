@@ -130,7 +130,6 @@ function change($o, e)
     var t = $o.val() || '';
     var fn_dir_up = function(){jr(g_node.dir).up(); };
 
-    if (!is_ext_ascii(t)) return $o.val(o.text);
     if (t == o.text && p == o.pos) return;
 
     if (t != o.text )
