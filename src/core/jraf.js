@@ -116,8 +116,6 @@ function jraf_node(prnt, ini)
 
     node.callwid = function()
     {
-        ///console.log('callwid');
-        ///console.log(this);
         if( this.watch == 2 ) this.wid(this);
         for( let i in this.kids )
         {
@@ -145,7 +143,6 @@ function jraf_relative(cur_node, path)
     }
 
     var a = path.split('/');
-    ///console.log(a);
     if( a.length < 1 ) return cur_node;
 
     var i=0;
@@ -279,7 +276,6 @@ function jraf_update_DD(jo,nd,cbi)
         n.ver = j.ver;
         n.sz = j.sz;
         n.name = i;
-        ///n.parent = nd;
 
         nd.kids[i] = n;
     }
