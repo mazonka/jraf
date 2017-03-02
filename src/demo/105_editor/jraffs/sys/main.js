@@ -284,14 +284,11 @@ function init()
 
     jr(g_node.txt).bind_fun(fn_txt_bind);
     jr(g_node.pos).bind_fun(fn_pos_bind);
-
-    
-    jr(g_node.dir).up();
     
     refresh_chain();
 }
 
-function refresh_cback(cb){ jr(g_node.dir).up() }
+function refresh_cback(cb){ jr(g_node.dir).up(cb) }
 
 function refresh_chain()
 {
