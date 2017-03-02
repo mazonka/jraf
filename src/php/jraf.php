@@ -893,24 +893,21 @@ function Jraf_cleanOldFiles($dir, $secs)
     }
 }
 
+function Sstar($s){ return ($s == '') ? '*' : $s; }
+
 function Jraf_profile($su)
 {
     Jraf_set_user_uname($su);
     Jraf_set_user_quota($su);
     
-    $star = function($s)
-    {
-        return ($s == '') ? '*' : $s; 
-    };
-    
     $r = $su->su ? 'a' : 'u';
     $r .= ' ';
-    $r .= $star($su->email) . ' ';
-    $r .= $star($su->quotaKb) . ' ';
-    $r .= $star($su->last) . ' ';
-    $r .= $star($su->cntr) . ' ';
+    $r .= Sstar($su->email) . ' ';
+    $r .= Sstar($su->quotaKb) . ' ';
+    $r .= Sstar($su->last) . ' ';
+    $r .= Sstar($su->cntr) . ' ';
     
-    if ( $su->uname == '' ) $r .= $star($su->uname);
+    if ( $su->uname == '' ) $r .= Sstar($su->uname);
     else 
     {
         global $home_dir;
