@@ -128,7 +128,6 @@ function change($o, e)
     var o = ($o.prop('id') == 'l') ? g_wid.l : g_wid.r;
     var p =  +($o[0].selectionStart) || 0;
     var t = $o.val() || '';
-    var fn_dir_up = function(){jr(g_node.dir).up(); };
 
     if (t == o.text && p == o.pos) return;
 
@@ -137,7 +136,7 @@ function change($o, e)
         if (o.history_text[o.history_text.length-1] != t)
         {
             o.history_text.push(t);
-            jr(g_node.txt).save(t).up(fn_dir_up);
+            jr(g_node.txt).save(t);
         }
     }
 
@@ -146,7 +145,7 @@ function change($o, e)
         if (o.history_pos[o.history_pos.length-1] != p)
         {
             o.history_pos.push(p);
-            jr(g_node.pos).save(p).up(fn_dir_up);
+            jr(g_node.pos).save(p);
         }
     }
 }
