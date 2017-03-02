@@ -427,6 +427,12 @@ function jraf_write_obj(cmd, pth, cb, extra)
 
 function jraf_parse_wrt(data)
 {
+    if( !data )
+    {
+        console.log('Backend reply: NULL');
+        return { err: 'NULL' };
+    }
+
     data = data.trim();
     var a = data.split(' ');
     var r = { err: '' };
