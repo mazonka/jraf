@@ -9,9 +9,12 @@ function change_direct() // use this function to test direct copying
     g_main.pre.html(text);
 }
 
-function refresh()
+function refresh_cback(cb){ jr('/demo/108/data').up(cb); }
+
+function refresh_chain()
 {
-        jr('/demo/108/data').up();
+	var cb = function(){ setTimeout(refresh_chain,1000); }
+	refresh_cback(cb);
 }
 
 function change(e)
@@ -19,7 +22,7 @@ function change(e)
     if (e.keyCode != 13 ) return;
     var inp = g_main.inp;
     var text = inp.val();
-    if( text == '' ) return refresh();
+    if( text == '' ) return refresh_cback(null);
     
     text = g_main.nam.val()+'> '+text+'\n';
     jr('/demo/108/data').add(text);
@@ -64,6 +67,7 @@ function main_js()
 
     jr('/demo/108/data').up();
 
-    setInterval(refresh,1000);
+    ///setInterval(refresh,1000);
+	refresh_chain();
 }
 
