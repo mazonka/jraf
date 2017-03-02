@@ -2,6 +2,6 @@ Features: Users can create a pages with their own interfaces
 Features: Users can read data of other users
 Security: write mode available into the users home directory only
 Easy to start: store data without using a database
-Easy to start: minimum requirements for use
+Easy to start: minimum requirements for use: just browser
 Easy to start: two backends implemented PHP and C++
 Binding: quick response to changes in the server's file system
