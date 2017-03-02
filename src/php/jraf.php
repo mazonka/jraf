@@ -45,6 +45,8 @@ $LOCKF_DN = 'jphp.dn';
 // end of FileSystem section
 
 
+header('HTTP/1.0 200 OK');
+
 if( empty($_POST) )
 {
     $auid = '0';
