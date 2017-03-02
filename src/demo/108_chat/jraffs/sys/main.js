@@ -13,7 +13,7 @@ function refresh_cback(cb){ jr('/demo/108/data').up(cb); }
 
 function refresh_chain()
 {
-	var cb = function(){ setTimeout(refresh_chain,1000); }
+	var cb = function(){ setTimeout(refresh_chain,10000); }
 	refresh_cback(cb);
 }
 
