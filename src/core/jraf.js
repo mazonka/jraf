@@ -510,6 +510,7 @@ function jr_api_node(n)
         return this;
     };
 
+    // Warning: cb will called for all updating kids
     vn.up = function(cb)
     {
         var cbi = function(j,n)
