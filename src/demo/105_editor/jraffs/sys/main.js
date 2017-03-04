@@ -286,10 +286,16 @@ function init()
     refresh_chain();
 }
 
-function refresh_cback(cb){ jr(g_node.dir).up(cb) }
+function refresh_cback(vn,cb){ vn.up(cb) }
 
 function refresh_chain()
 {
-	var cb = function(){ setTimeout(refresh_chain, 10000); };
-	refresh_cback(cb);
+	var vn = jr(g_node.dir);
+	var cb = function(n)
+	{ 
+		if( n != vn.node ) return;
+		setTimeout(refresh_chain, 1000);
+    };
+
+	refresh_cback(vn,cb);
 }
