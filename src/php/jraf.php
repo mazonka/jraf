@@ -107,6 +107,10 @@ function jprocess($cmd) // void
     $toks = explode(' ',$cmd);
     if( empty($toks) ){ echo('REQ_MSG_HEAD'); return; }
     if( count($toks) < 1 ){ echo('REQ_MSG_HEAD'); return; }
+
+    if( $toks[0] == 'r' ){ array_shift($toks); array_shift($toks); }
+    if( empty($toks) ){ echo('REQ_MSG_HEAD'); return; }
+    if( count($toks) < 1 ){ echo('REQ_MSG_HEAD'); return; }
     
     if( $toks[0] == 'jr' || $toks[0] == 'jw' )
     { 
