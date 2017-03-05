@@ -497,6 +497,7 @@ function jr_api_node(n)
 
     vn.save = function(body){ return this.write_file(body,null); }
     vn.add = function(body){ return this.write_file(body,'*'); }
+    vn.put = function(body,pos){ return this.write_file(body,pos); }
 
     vn.write_file = function(body,offset)
     {
