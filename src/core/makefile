@@ -21,6 +21,7 @@ cp_js: *.js
 	@cp -puv jraf.js $(TRG_JRAFFS)/sys/
 	@cp -puv jrboot.js $(TRG_JRAFCL)/
 	@cp -puv index.html $(TRG_JRAFCL)/
+	@cp -puv index_u.html $(BIN)/index.html
 	@cp -puv jraf.jrd $(BIN)/
 	@cp -puv conf.jrd $(BIN)/
 ##	@cp -puv write.js $(TRG_JRAFFS)/sys/
