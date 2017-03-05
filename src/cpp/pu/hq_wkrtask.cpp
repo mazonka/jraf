@@ -146,12 +146,27 @@ string Worker2::process(bool * recog)
     else if ( ( tok.c_str()[0] == '/' )  && (en || pn.file) )
         return file(true, false);
 
+    else if ( ( tok.c_str()[0] == '?' )  )
+	{
+		string q = tok.c_str().substr(1);
+		if( q.empty() ) return jr_script("", "0");
+		if( q[0] != '#' )
+		{
+			tok = gl::Token(&q);
+	        return process(recog);
+		}
+
+		return jr_script("", q.substr(1));
+	}
+
+	/*///
     {
         string ts = tok.c_str();
         string::size_type i = ts.find('?');
         if ( i != string::npos )
             return jr_script(ts.substr(0, i), ts.substr(i + 1));
     }
+	*/
 
     return file(true, false);
 
