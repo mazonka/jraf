@@ -63,6 +63,12 @@ string Worker2::process(bool * recog)
     if ( tok.is("reseed") && pn.reseed )
         return reseed();
 
+    if ( tok.is("r") )
+	{
+		if ( !tok.next() ) return er::Code(er::REQ_EMPTY_MSG);
+		return process(recog);
+	}
+
     /*    else if ( ( tok.is("info") || tok.is("i") ) && (en || pn.info) )
             return info();
 

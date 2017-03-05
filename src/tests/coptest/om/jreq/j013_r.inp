@@ -1,0 +1,6 @@
+
+print [ -- ]
+print { [ r 123 jr ping ... ] tcp self [ r 123 jr ping ] }
+
+quit
+
