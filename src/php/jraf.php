@@ -47,25 +47,30 @@ $LOCKF_DN = 'jphp.dn';
 
 header('HTTP/1.0 200 OK');
 
+#echo $_SERVER['QUERY_STRING']; exit;
+
+$command='';
 if( empty($_POST) )
 {
-    $auid = '0';
-    if( !empty($_GET) )
-    {
-        foreach( $_GET as $pn => $pv )
-        {
-            $auid = $pn;
-            break;
-        }
-    }
+    if( empty($_GET) ){ loadPhd('0'); exit; }
 
-    loadPhd($auid);
-    exit;
+    $qs = $_SERVER['QUERY_STRING'];
+
+    if( substr($qs,0,1) == '#' ){ loadPhd(substr($qs,1)); exit; }
+
+    $command = urldecode($qs);
 }
 
 if(isset($_POST['command']) )
 {
-    $cmd = $_POST['command'];
+    $command = $_POST['command'];
+}
+
+if( $command != '' )
+{
+    $cmd = $command;
+
+    if( isset($_GET['command']) ) $cmd = $_GET['command'];
 
     $test = false;
     if( isset($_GET['test']) && $_GET['test']=='test' ) $test = true;
