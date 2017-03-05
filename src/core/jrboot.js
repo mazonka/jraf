@@ -6,13 +6,36 @@ var g_sys_files = {};
 var g_session;
 var $g_div_main;
 
+
+var g_ajax_wlp = window.location.pathname;
+var g_ajax_cntr = 0;
 //var ajax_test = 2;
 
-var ajax_cntr = 0;
+function jraf_ajax(cmd, callback, extra)
+{
+	jraf_ajax_get(cmd, callback, extra);
+	//jraf_ajax_post(cmd, callback, extra);
+}
 
-function jraf_ajax(cmd, callback, extra) {
+function jraf_ajax_get(cmd, callback, extra)
+{
+    $.get(g_ajax_wlp,'r ' + (++g_ajax_cntr) + ' ' + encodeURI(cmd))
 
-    $.post(window.location.pathname,'command=r ' + (++ajax_cntr) + ' ' + cmd)
+    .done(function (data) {
+        //if( ++ajax_test%5 ) return callback(null,extra);
+        callback(data,extra);
+    })
+
+    .fail(function () {
+        callback(null,extra);
+    })
+
+    .always(function () {});
+}
+
+function jraf_ajax_post(cmd, callback, extra)
+{
+    $.post(g_ajax_wlp,'command=r ' + (++g_ajax_cntr) + ' ' + cmd)
 
     .done(function (data) {
         //if( ++ajax_test%5 ) return callback(null,extra);
