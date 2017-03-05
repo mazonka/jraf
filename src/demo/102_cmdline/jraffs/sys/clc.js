@@ -477,7 +477,7 @@ function cli_save(pth,body)
 		cli_output('save: ' + s);
     };
 
-    jraf_write_save(pth,body,cb);
+    jraf_write_file(pth,body,cb);
 
 	return 'use \'up\' to refresh value';
 }
