@@ -53,8 +53,8 @@ function jraf_boot(id)
 {
     g_session = id;
 
-    console.log('Jraf boot: hello');
-    console.log('Jraf sid:' + g_session);
+    console.log('Jraf boot:' + g_session);
+
     document.write('<div id="div_main" style="text-align: left;"></div>');
     $g_div_main = $('#div_main');
 
