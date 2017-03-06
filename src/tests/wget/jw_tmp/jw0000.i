@@ -1,1 +1,0 @@
-command=jw md 0 /.jraf.sys/users : login admin@server.com * : logout f82d3bb17612458c

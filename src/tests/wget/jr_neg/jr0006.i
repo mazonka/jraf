@@ -1,1 +1,0 @@
-command=jr rm f82d3bb17612458c /a

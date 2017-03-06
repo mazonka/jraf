@@ -1,1 +1,0 @@
-command=jr login admin@server *
