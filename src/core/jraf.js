@@ -529,12 +529,14 @@ function jr_api_node(n)
         return jr_api_node(jraf_virtual_node(this.node,path));
     }
 
-	vn.bind_list_html = function(jqo_prnt,jqo_kid,show)
+	vn.bind_list_html = function(jqo,template,show)
 	{
 		var cb = function(n)
 		{
 			o('---1');
-			o(n.kids);
+			o(jqo);
+			jqo.children().each(function(i,x){ o($(this).html()); });
+			for( let i in n.kids ){ o(n.kids[i].name); }
 		};
 
 		this.bind_fun(cb);
