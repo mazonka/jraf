@@ -263,12 +263,12 @@ function cli_build_commands()
     cli_build_cmd_unbind();
     cli_build_cmd_md();
     cli_build_cmd_mk();
-    //cli_build_cmd_js(); // run js file
+    cli_build_cmd_js(); // run js file
     cli_build_cmd_cj(); // run cj file
     cli_build_cmd_rm();
     cli_build_cmd_edit();
     cli_build_cmd_save();
-    //cli_build_cmd_loadmod(); // load js module into DOM head
+    cli_build_cmd_load(); // load js module into DOM head
 }
 
 function cli_arr_extract_history()
@@ -343,5 +343,5 @@ function cli_backspace()
 function cli_output(s)
 {
     $g_output[0].value += s + '\n';
-	cli_output_toend();
+    cli_output_toend();
 }

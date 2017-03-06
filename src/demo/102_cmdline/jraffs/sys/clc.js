@@ -148,13 +148,13 @@ function cli_build_cmd_bind()
     {
         let n = g_cwd;
         if( c.length > 1 ) n = jraf_relative(g_cwd,c[1]);
-		var r = '';
+        var r = '';
         if( n == null ) 
-		{	
-			if( c.length < 1 ) return 'node does not exist\n'
-			return 'node does not exist - binding virtual\n'
-			+ jraf_bind_virtual_path(g_cwd,c[1],cli_view_update);
-		}
+        {    
+            if( c.length < 1 ) return 'node does not exist\n'
+            return 'node does not exist - binding virtual\n'
+            + jraf_bind_virtual_path(g_cwd,c[1],cli_view_update);
+        }
         return n.bind(cli_view_update);
     };
     g_cli_commands.bind = { help : help, run : run };
@@ -194,7 +194,7 @@ function cli_build_cmd_mk()
     var run = function(c)
     {
         if( c.length != 2 ) return 'need one argument';
-		jraf_virtual_node(g_cwd,c[1])
+        jraf_virtual_node(g_cwd,c[1])
         return '';
     };
     g_cli_commands.mk = { help : help, run : run };
@@ -222,7 +222,7 @@ function cli_build_cmd_edit()
         if( n == null ) return 'node does not exist';
         if( n.sz < 0 ) return 'node is not file';
         if( n.full == 0 ) return 'node is incomplete';
-		$g_edit[0].value = n.text;
+        $g_edit[0].value = n.text;
         return '';
     };
     g_cli_commands.edit = { help : help, run : run };
@@ -234,14 +234,14 @@ function cli_build_cmd_save()
     var run = function(c)
     {
         let n = g_cwd;
-		var pth = g_cwd.str()+'/';
+        var pth = g_cwd.str()+'/';
         if( c.length > 1 )
-		{
-			let nm = c[1];
-			if( nm[0] == '/' ) pth = nm;
-			else pth += nm;
-		}
-		return cli_save(pth,$g_edit[0].value);
+        {
+            let nm = c[1];
+            if( nm[0] == '/' ) pth = nm;
+            else pth += nm;
+        }
+        return cli_save(pth,$g_edit[0].value);
     };
     g_cli_commands.save = { help : help, run : run };
 }
@@ -254,9 +254,35 @@ function cli_build_cmd_cj()
         let n = g_cwd;
         if( c.length > 1 ) n = jraf_relative(g_cwd,c[1]);
         if( n == null ) return 'node does not exist';
-		return cli_run_cj(n);
+        return cli_run_cj(n);
     };
     g_cli_commands.cj = { help : help, run : run };
+}
+
+function cli_build_cmd_js()
+{
+    var help = 'js [node]: run JavaScript\n';
+    var run = function(c)
+    {
+        let n = g_cwd;
+        if( c.length > 1 ) n = jraf_relative(g_cwd,c[1]);
+        if( n == null ) return 'node does not exist';
+        return cli_run_js(n);
+    };
+    g_cli_commands.js = { help : help, run : run };
+}
+
+function cli_build_cmd_load()
+{
+    var help = 'load [node]: load JavaScript module into the system\n';
+    var run = function(c)
+    {
+        let n = g_cwd;
+        if( c.length > 1 ) n = jraf_relative(g_cwd,c[1]);
+        if( n == null ) return 'node does not exist';
+        return cli_run_load(n);
+    };
+    g_cli_commands.load = { help : help, run : run };
 }
 
 //function cli_build_cmd_ ()
@@ -345,7 +371,6 @@ function cli_list_kids(node)
 //  =  =  =  =  =  =  =  =  =  =  =  =  =  =  =  =  =  =
 // up
 
-/*///
 function cli_update_node(node)
 {
     var ver = node.ver;
@@ -363,41 +388,7 @@ function cli_update_node(node)
             s = jo.err;
 
         ///$g_output[0].value += 'up ['+nd.str()+'] ' + s + '\n';
-		cli_output('up ['+nd.str()+'] ' + s);
-    };
-
-    var name = node.name;
-    var path;
-    if( node.parent == null )
-    {
-        path = '/';
-        name = '';
-    }
-    else
-        path = node.parent.str()+'/';
-
-    jraf_update_obj(path,name,cb,node);
-}
-*/
-
-function cli_update_node(node)
-{
-    var ver = node.ver;
-    var cb = function(jo,nd)
-    {
-        //console.log(jo);
-        //console.log(nd);
-        let s = '';
-        if( jo.err == '' )
-        {
-            if( ver == nd.ver ) s = ''+nd.ver;
-            else s = '' + ver + ' -> '+nd.ver;
-        }
-        else
-            s = jo.err;
-
-        ///$g_output[0].value += 'up ['+nd.str()+'] ' + s + '\n';
-		cli_output('up ['+nd.str()+'] ' + s);
+        cli_output('up ['+nd.str()+'] ' + s);
     };
 
     jraf_update_node(node,cb);
@@ -417,7 +408,7 @@ function cli_write_md(cwd,name)
         else s = jo.err;
 
         ///$g_output[0].value += 'mkdir: ' + s + '\n';
-		cli_output('mkdir: ' + s);
+        cli_output('mkdir: ' + s);
     };
 
     jraf_write_md(cwd,name,cb);
@@ -437,7 +428,7 @@ function cli_write_rm(cwd,name)
         else s = jo.err;
 
         ///$g_output[0].value += 'rm: ' + s + '\n';
-		cli_output('rm: ' + s);
+        cli_output('rm: ' + s);
     };
 
     jraf_write_rm(cwd,name,cb);
@@ -448,18 +439,18 @@ function cli_write_rm(cwd,name)
 
 function cli_run_cj(node)
 {
-	if( node.sz < 0 ) return "error: not file";
+    if( node.sz < 0 ) return "error: not file";
 
     var c = node.text.split('\n');
     c = c.filter( function(x){ return x.length>0; } );
 
-	var r = '';
-	for( let i in c )
-		r += cli_execute_command(c[i].trim()) + '\n';
+    var r = '';
+    for( let i in c )
+        r += cli_execute_command(c[i].trim()) + '\n';
 
-	return r;
-
+    return r;
 }
+
 //  =  =  =  =  =  =  =  =  =  =  =  =  =  =  =  =  =  =
 // save
 
@@ -474,13 +465,79 @@ function cli_save(pth,body)
         else s = jo.err;
 
         ///$g_output[0].value += 'save: ' + s + '\n';
-		cli_output('save: ' + s);
+        cli_output('save: ' + s);
     };
 
     jraf_write_file(pth,body,cb);
 
-	return 'use \'up\' to refresh value';
+    return 'use \'up\' to refresh value';
 }
+
+//  =  =  =  =  =  =  =  =  =  =  =  =  =  =  =  =  =  =
+// js
+
+function cli_run_js(node)
+{
+    var gev = eval;
+    var r = '';
+
+    try { r = gev(node.text); }
+    catch (e) 
+    {
+        var m = function(n,x){ return 'js ERROR ['+n+': '+x+']'; }
+        if (e instanceof Error) return m(e.name,e.message);
+           return m(e.toString());
+    }
+
+    if( r ) return r.toString();
+    return '';
+}
+
+
+//  =  =  =  =  =  =  =  =  =  =  =  =  =  =  =  =  =  =
+// load
+
+var wonerr_message = '';
+function wonerr(msg, url, lineNo, columnNo, error)
+{
+    var string = msg.toLowerCase();
+    var substring = "script error";
+
+    if (string.indexOf(substring) > -1)
+        alert('Script Error: See Browser Console for Detail ['+msg+']');
+    else 
+        wonerr_message = 'load ERROR [' + msg +'] line '+ lineNo;;
+
+    return true;
+}
+
+function cli_run_load(node)
+{
+    var old_wonerr = window.onerror;
+    window.onerror = wonerr;
+    window.wonerr_message = '';
+
+    try
+    {
+        var sc = document.createElement('script');
+        sc.innerHTML = node.text;
+        if( 'append' in document.head ) document.head.append(sc);
+        else document.head.appendChild(sc);
+    }
+    catch (e) 
+    {
+        if (e instanceof SyntaxError) 
+            wonerr(e.message,'',e.lineNumber,e.columnNumber,e);
+
+           return 'load ERROR ['+e.toString()+']';
+    }
+
+    window.onerror = old_wonerr;
+
+    if( window.wonerr_message == '' ) return node.name+' loaded';
+    return window.wonerr_message;
+}
+
 //  =  =  =  =  =  =  =  =  =  =  =  =  =  =  =  =  =  =
 //
 
