@@ -1,4 +1,4 @@
-OK /.jraf.sys/users : OK http://127.0.0.1:16000/jraf? : OK http://127.0.0.1:16000/jraf? : OK : OK : JRAF_FAIL system path
+OK /.jraf.sys/users : OK http://127.0.0.1:16000/? : OK http://127.0.0.1:16000/? : OK : OK : JRAF_FAIL system path
 ==
 login
 users
