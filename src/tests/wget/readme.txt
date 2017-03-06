@@ -1,6 +1,6 @@
 1. check that execdir.sh works
 2. if you run PHP tests, start wget_cmds.sh
-3. if you run jrafd tests, start main.sh
+3. if you run jrafd tests, start jrafd_all.sh
 
 4. How to run nowrite tests
    replace list with nowrite
