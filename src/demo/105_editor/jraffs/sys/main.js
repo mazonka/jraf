@@ -15,32 +15,62 @@ var g_node = {
 var g_wid = {
     l:
     {
-        wid: $('<textarea/>', { id: 'l' }),
+        wid: $('<textarea/>',
+        {
+            id: 'l'
+        }),
         text: '',
         pos: 0,
         t_ver: 0,
         p_ver: 0,
         history_text: [],
         history_pos: [],
-        is_foc: function() { return (this.wid.is(':focus')) ? true : false; }
+        is_foc: function()
+        {
+            return (this.wid.is(':focus')) ? true : false;
+        }
     },
     r:
     {
-        wid: $('<textarea/>', { id: 'r' }),
+        wid: $('<textarea/>',
+        {
+            id: 'r'
+        }),
         text: '',
         pos: 0,
         text_ver: 0,
         pos_ver: 0,
         history_text: [],
         history_pos: [],
-        is_foc: function() { return (this.wid.is(':focus')) ? true : false; }
+        is_foc: function()
+        {
+            return (this.wid.is(':focus')) ? true : false;
+        }
     },
-    ltv: { wid: $('<span/>') },
-    lpv: { wid: $('<span/>') },
-    rtv: { wid: $('<span/>') },
-    rpv: { wid: $('<span/>') },
-    ntv: { wid: $('<span/>') },
-    npv: { wid: $('<span/>') }
+    ltv:
+    {
+        wid: $('<span/>')
+    },
+    lpv:
+    {
+        wid: $('<span/>')
+    },
+    rtv:
+    {
+        wid: $('<span/>')
+    },
+    rpv:
+    {
+        wid: $('<span/>')
+    },
+    ntv:
+    {
+        wid: $('<span/>')
+    },
+    npv:
+    {
+        wid: $('<span/>')
+    }
 };
 
 function get_pipe(t, p)
@@ -48,11 +78,12 @@ function get_pipe(t, p)
     var d = new Date();
     var s = d.getSeconds();
 
-    return t.substr(0,p) + '|' + t.substr(p)
+    return t.substr(0, p) + '|' + t.substr(p)
 }
 
-function set_caret_pos($o, i) {
-    $o[0].setSelectionRange(+i,+i);
+function set_caret_pos($o, i)
+{
+    $o[0].setSelectionRange(+i, +i);
 }
 
 function main_html()
@@ -63,22 +94,34 @@ function main_html()
             .css('margin', 'auto')
             .css('width', '80%')
             .append($('<tr/>')
-                .append($('<td/>', {colspan: '2'})
+                .append($('<td/>',
+                    {
+                        colspan: '2'
+                    })
                     .css('text-align', 'center')
                     .append(g_wid.ntv.wid)
-                    .append($('<span/>',{ text: ':' }))
+                    .append($('<span/>',
+                    {
+                        text: ':'
+                    }))
                     .append(g_wid.npv.wid)))
             .append($('<tr/>')
                 .append($('<td/>')
                     .append(g_wid.ltv.wid
-                        .css('margin-left','1em'))
-                    .append($('<span/>', {text: ':'}))
+                        .css('margin-left', '1em'))
+                    .append($('<span/>',
+                    {
+                        text: ':'
+                    }))
                     .append(g_wid.lpv.wid)
                     .css('text-align', 'left'))
                 .append($('<td/>')
                     .append(g_wid.rtv.wid
-                        .css('margin-left','1em'))
-                    .append($('<span/>', {text: ':'}))
+                        .css('margin-left', '1em'))
+                    .append($('<span/>',
+                    {
+                        text: ':'
+                    }))
                     .append(g_wid.rpv.wid)
                     .css('text-align', 'left')))
             .append($('<tr/>')
@@ -106,10 +149,18 @@ function main_js()
     main_html();
 
     /// 'keydown' not working by HOME/END sometimes...
-    g_wid.l.wid.on('input keyup click mousemoveon', function(e){change($(this), e); });
-    g_wid.r.wid.on('input keyup click mousemoveon', function(e){change($(this), e); });
+    g_wid.l.wid.on('input keyup click', function(e)
+    {
+        change($(this), e);
+    });
+    g_wid.r.wid.on('input keyup click', function(e)
+    {
+        change($(this), e);
+    });
 
-    jr(g_node.dir).md().up();
+    jr(g_node.dir)
+        .md()
+        .up();
 
     init();
 }
@@ -126,26 +177,28 @@ function is_ext_ascii(t)
 function change($o, e)
 {
     var o = ($o.prop('id') == 'l') ? g_wid.l : g_wid.r;
-    var p =  +($o[0].selectionStart) || 0;
+    var p = +($o[0].selectionStart) || 0;
     var t = $o.val() || '';
 
     if (t == o.text && p == o.pos) return;
 
-    if (t != o.text )
+    if (t != o.text)
     {
-        if (o.history_text[o.history_text.length-1] != t)
+        if (o.history_text[o.history_text.length - 1] != t)
         {
             o.history_text.push(t);
-            jr(g_node.txt).save(t);
+            jr(g_node.txt)
+                .save(t);
         }
     }
 
     if (p != o.pos)
     {
-        if (o.history_pos[o.history_pos.length-1] != p)
+        if (o.history_pos[o.history_pos.length - 1] != p)
         {
             o.history_pos.push(p);
-            jr(g_node.pos).save(p);
+            jr(g_node.pos)
+                .save(p);
         }
     }
 }
@@ -205,7 +258,7 @@ function init()
             let i = g_wid.l.history_text.indexOf(t);
 
             if (i > -1)
-                g_wid.l.history_text.splice(0, i+1);
+                g_wid.l.history_text.splice(0, i + 1);
             else
             {
                 g_wid.l.wid.val(t);
@@ -223,7 +276,7 @@ function init()
             let i = g_wid.r.history_text.indexOf(t);
 
             if (i > -1)
-                g_wid.r.history_text.splice(0, i+1);
+                g_wid.r.history_text.splice(0, i + 1);
             else
             {
                 g_wid.r.wid.val(t);
@@ -249,11 +302,11 @@ function init()
             let i = g_wid.l.history_pos.indexOf(p);
 
             if (i > -1)
-                g_wid.l.history_pos.splice(0, i+1);
+                g_wid.l.history_pos.splice(0, i + 1);
             else
             {
                 if (g_wid.l.is_foc()) set_caret_pos(g_wid.l.wid, p);
-                
+
                 g_wid.l.history_pos = [];
             }
         }
@@ -268,7 +321,7 @@ function init()
             let i = g_wid.r.history_pos.indexOf(p);
 
             if (i > -1)
-                g_wid.r.history_pos.splice(0, i+1);
+                g_wid.r.history_pos.splice(0, i + 1);
             else
             {
                 if (g_wid.r.is_foc()) set_caret_pos(g_wid.r.wid, p);
@@ -277,25 +330,32 @@ function init()
         }
     };
 
-    jr(g_node.txt).up(fn_txt_init);
-    jr(g_node.pos).up(fn_pos_init);
+    jr(g_node.txt)
+        .up(fn_txt_init);
+    jr(g_node.pos)
+        .up(fn_pos_init);
 
-    jr(g_node.txt).bind_fun(fn_txt_bind);
-    jr(g_node.pos).bind_fun(fn_pos_bind);
-    
+    jr(g_node.txt)
+        .bind_fun(fn_txt_bind);
+    jr(g_node.pos)
+        .bind_fun(fn_pos_bind);
+
     refresh_chain();
 }
 
-function refresh_cback(vn,cb){ vn.up(cb) }
+function refresh_cback(vn, cb)
+{
+    vn.up(cb)
+}
 
 function refresh_chain()
 {
-	var vn = jr(g_node.dir);
-	var cb = function(n)
-	{ 
-		if( n != vn.node ) return;
-		setTimeout(refresh_chain, 1000);
+    var vn = jr(g_node.dir);
+    var cb = function(n)
+    {
+        if (n != vn.node) return;
+        setTimeout(refresh_chain, 1000);
     };
 
-	refresh_cback(vn,cb);
+    refresh_cback(vn, cb);
 }
