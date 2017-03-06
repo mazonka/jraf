@@ -1,0 +1,1 @@
+command=jr logout f82d3bb17612458c

@@ -1,0 +1,1 @@
+command=jw md 0 /d0 : save 0 /d0/f0 1 Kg== : put 0 /d0/f0 1 1 Kg== : read 0 /d0 : read 0 /d0/f0 : mv 0 /d0/f0 /d0/f1 : read 0 /d0 : rm 0 /d0/f1 : read 0 /d0
