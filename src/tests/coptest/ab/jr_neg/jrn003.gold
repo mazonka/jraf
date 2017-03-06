@@ -1,7 +1,7 @@
 jw md 0 /.jraf.sys/users -> OK /.jraf.sys/users
 
-[N/I] jrmail: Sending to [admin@server.com] au [http://127.0.0.1:16000/jraf?4b9a87f859f956e8]
-jw login admin@server.com * -> OK http://127.0.0.1:16000/jraf?
+[N/I] jrmail: Sending to [admin@server.com] au [http://127.0.0.1:16000/?#4b9a87f859f956e8]
+jw login admin@server.com * -> OK http://127.0.0.1:16000/?
 
 jr md 4b9a87f859f956e8 /a -> JRAF_ERR bad command [md]
 
