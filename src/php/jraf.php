@@ -56,7 +56,7 @@ if( empty($_POST) )
 
     $qs = $_SERVER['QUERY_STRING'];
 
-    if( substr($qs,0,1) == '#' ){ loadPhd(substr($qs,1)); exit; }
+    if( substr($qs,0,1) == '$' ){ loadPhd(substr($qs,1)); exit; }
 
     $command = urldecode($qs);
 }
@@ -695,7 +695,7 @@ function Jraf_sendmail(&$url, $sid, $em) // => void
     else
     $url = substr($url, 0, $i + 1);
 
-    $furl = $url . '#' . $sid;
+    $furl = $url . '$' . $sid;
 
     // sending email
     $mail_to = $em;
