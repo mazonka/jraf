@@ -529,6 +529,17 @@ function jr_api_node(n)
         return jr_api_node(jraf_virtual_node(this.node,path));
     }
 
+	vn.bind_list_html = function(jqo_prnt,jqo_kid,show)
+	{
+		var cb = function(n)
+		{
+			o('---1');
+			o(n.kids);
+		};
+
+		this.bind_fun(cb);
+	}
+
     return vn;
 }
 
