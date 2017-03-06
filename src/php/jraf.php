@@ -85,7 +85,7 @@ if( $command != '' )
         $skc_seed = '1';
         skc_init();
 
-        $thisload = 'jraf?';
+        $thisload = '?';
         $dateset = '20170123123456';
         
         jprocess($cmd);
@@ -695,7 +695,7 @@ function Jraf_sendmail(&$url, $sid, $em) // => void
     else
     $url = substr($url, 0, $i + 1);
 
-    $furl = $url . $sid;
+    $furl = $url . '#' . $sid;
 
     // sending email
     $mail_to = $em;
