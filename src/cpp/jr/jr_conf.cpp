@@ -76,7 +76,7 @@ void jraf::sendmail(string & url, string sid, string em)
     else
         url = url.substr(0, i + 1); 
 
-    string furl = url + '#' + gl::tos(sid);
+    string furl = url + '$' + gl::tos(sid);
 
     string cmd = jraf::loadConf("jrmail");
     if ( cmd.empty() ) cmd = "jrmail";

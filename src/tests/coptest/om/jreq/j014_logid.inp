@@ -9,8 +9,8 @@ cmd = [ jw login a@b.c * ]
 print { cmd "->" tcp self cmd }
 print [ ]
 
-cmd = [ ?#0419742eed414745 ]
-print { cmd "->" tcp self cmd }
+cmd = [ ?$0419742eed414745 ]
+print { tcp self cmd }
 print [ ]
 
 cmd = [ jw logout 0419742eed414745 ]

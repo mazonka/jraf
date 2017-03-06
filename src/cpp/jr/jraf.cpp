@@ -566,7 +566,6 @@ Jraf::Cmdr Jraf::profile(User & su)
 
     string r = su.su ? "a" : "u";
 
-    // auto star = [](string s, string d = "*") -> string { return s.empty() ? d : s; };
     auto star = [](string s) -> string { return s.empty() ? "*" : s; };
 
     r += " ";

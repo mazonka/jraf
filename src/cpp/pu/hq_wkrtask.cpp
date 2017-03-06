@@ -150,7 +150,7 @@ string Worker2::process(bool * recog)
 	{
 		string q = tok.c_str().substr(1);
 		if( q.empty() ) return jr_script("", "0");
-		if( q[0] != '#' )
+		if( q[0] != '$' )
 		{
 			tok = gl::Token(&q);
 	        return process(recog);
