@@ -473,10 +473,10 @@ function jr_api_node(n)
     var vn = {};
     vn.node = n;
 
-    vn.bind_html = function(jqo,fun)
+    vn.bind_html = function(jqo,tr)
     {
         if( 'boundto' in jqo ) jqo.boundto.unbind();
-        var cb = function(n){ jqo.html(fun?fun(n.text):n.text); }
+        var cb = function(n){ jqo.html(tr?tr(n.text):n.text); }
         jraf_bind_virtual_leaf(this.node,cb);
         jqo.boundto = this.node;
         
@@ -501,8 +501,8 @@ function jr_api_node(n)
         var cb = function(x)
         {
             if( x.err && x.err != '' ) o(x.err);
-            vnode.up();
-			if( ca ) ca();
+            vnode.up(ca);
+            ///if( ca ) ca();
         };
         jraf_write_md(g_jraf_root,this.node.str(),cb)
         return this;
@@ -518,8 +518,8 @@ function jr_api_node(n)
         var cb = function(x)
         {
             if( x.err && x.err != '' ) o(x.err);
-            vnode.up();
-			if( ca ) ca();
+            vnode.up(ca);
+            ///if( ca ) ca();
         };
         jraf_write_file(this.node.str(),body,cb,offset)
         return this;
@@ -567,10 +567,10 @@ function jr_api_node(n)
     vn.bind_list_jqo = function(jqo,fun)
     {
         if( 'boundto' in jqo )
-		{
-			jqo.boundto.unbind();
-			jr_api_manage_list(fun,jqo.jraf_skids,{},jqo);
-		}
+        {
+            jqo.boundto.unbind();
+            jr_api_manage_list(fun,jqo.jraf_skids,{},jqo);
+        }
 
         jqo.boundto = this.node;
         if( !jqo.jraf_skids ) jqo.jraf_skids = {};
@@ -586,10 +586,10 @@ function jr_api_node(n)
         return this;
     }
 
-	vn.rm = function(cb)
-	{
-		jraf_write_obj('rm', this.node.str(), cb);
-	}
+    vn.rm = function(cb)
+    {
+        jraf_write_obj('rm', this.node.str(), cb);
+    }
 
     return vn;
 }

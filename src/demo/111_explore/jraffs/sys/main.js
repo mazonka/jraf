@@ -44,20 +44,27 @@ function main_js()
     $g_div_main.html('<h3>Demo 111: File explorer</h3>');
 
 	$g_divctl = $('<div/>');
-	$g_divctl.append(mkelem('(Dir) ',function(){ newdir(); }));
-	$g_divctl.append(mkelem('(File) ',function(){ newfile(); }));
-	$g_divctl.append(mkelem(' ( .. )',function(){ goup(); }));
+	var $spc = $('<span> &emsp;&emsp;&emsp; </span>');
+
+	$g_divctl.append($spc);
+	$g_divctl.append(mkelem('( .. ) ',function(){ goup(); }));
+	$g_divctl.append($spc.clone());
+
+	$g_divctl.append(mkelem('(New Dir) ',function(){ newdir(); }));
+	$g_divctl.append(mkelem('(New File) ',function(){ newfile(); }));
+	$g_divctl.append(mkelem(' (Refresh)',function(){ rootup(); }));
 	$g_div_main.append($g_divctl);
 
 	$g_divlst = $('<div/>');
 	$g_div_main.append($g_divlst);
 
-	$g_divtxt = $('<div contenteditable="true"/>');
+	$g_divtxt = $('<pre contenteditable="true"/>');
 	$g_divtxt.html('');
 	$g_divtxt.css('border','1px solid black');
-	$g_divtxt.css('width','fit-content');
 	$g_divtxt.css('min-width','100px');
-	//$g_divtxt.css('min-height','15px');
+	$g_divtxt.css('min-height','15px');
+	$g_divtxt.css('width','fit-content');
+	$g_divtxt.css('display','inline-block');
 
 	$g_div_main.append($g_divtxt);
 
@@ -82,7 +89,8 @@ function entry(nk,sk,jqo)
 	}
 	else
 	{
-		var tr = function(x){ return '<pre>'+x.replace(/</g,'&lt;')+'</pre>'; }
+		var tr = function(x){ return ''+x.replace(/</g,'&lt;')+''; }
+		//var tr = function(x){ return '<pre>'+x.replace(/</g,'&lt;')+'</pre>'; }
 		jr(pth).bind_html($g_divtxt,tr);
 	}
 }
@@ -101,7 +109,7 @@ function rootup(){ jr('/').up(); }
 
 function newfile()
 {
-	var name = prompt("Enter file name: ");
+	var name = prompt('Enter file name: ','');
 	if( !name ) return;
 	var pth = cwd[cwd.length-1]+'/'+name;
 	jr(pth).save($g_divtxt.html(),rootup);
@@ -110,7 +118,7 @@ function newfile()
 
 function newdir()
 {
-	var name = prompt("Enter dir name: ");
+	var name = prompt('Enter dir name: ','');
 	if( !name ) return;
 	var pth = cwd[cwd.length-1]+'/'+name;
 	jr(pth).md(rootup);
