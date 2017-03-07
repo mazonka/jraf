@@ -489,6 +489,12 @@ function jr_api_node(n)
         return this;
     };
 
+    vn.unbind_fun = function()
+    {
+        this.node.unbind();
+        return this;
+    };
+
     vn.md = function()
     {
         var vnode = this;
@@ -535,58 +541,59 @@ function jr_api_node(n)
         return jr_api_node(jraf_virtual_node(this.node,path));
     }
 
-	// FIXME remove this
-	vn.bind_list_html = function(jqo,template,show)
-	{
-		var cb = function(n)
-		{
-			o('---1');
-			o(jqo);
-			jqo.children().each(function(i,x){ o($(this).html()); });
-			for( let i in n.kids ){ o(n.kids[i].name); }
-		};
+    vn.bind_list = function(fun)
+    {
+        if( !this.skids ) this.skids = {};
 
-		this.bind_fun(cb);
-	}
+        var thisvn = this;
+        var cb = function(n)
+        {
+            //o(n);
+            //o(thisvn);
+            var nkids = n.kids;
+            var skids = thisvn.skids;
+            jr_api_manage_list(thisvn,fun,skids,nkids);
+        };
 
-	vn.bind_list = function(fun)
-	{
-		var thisvn = this;
-		if( !thisvn.okids ) thisvn.okids = {};
-		var cb = function(n)
-		{
-			//o(n);
-			//o(thisvn);
-			var nkids = n.kids;
-			var okids = thisvn.okids;
-			jr_api_manage_list(thisvn,fun,okids,nkids);
-		};
+        this.bind_fun(cb);
+        return this;
+    }
 
-		this.bind_fun(cb);
-	}
+    vn.unbind_list = function(fun)
+    {
+        jr_api_manage_list(this,fun,this.skids,{});
+        this.unbind_fun();
+        return this;
+    }
 
     return vn;
 }
 
-function jr_api_manage_list(vn,fun,okids,nkids)
+function jr_api_manage_list(vn,fun,skids,nkids)
 {
-	o('--- removing old');
-	for( let i in okids )
-	{
-		o('--- rem '+i);
-		if( !(i in nkids) || nkids[i].ver < 0 ) fun.remove(i,vn);
-	}
+    for( let i in skids )
+    {
+        if( i in nkids && nkids[i].ver >= 0 ) continue;
+        fun.remove(skids[i]);
+        delete skids[i];
+    }
 
-	o('--- creating new');
-	for( let i in nkids )
-	{
-		if( nkids[i].ver < 0 ) continue;
+    for( let i in nkids )
+    {
+        if( nkids[i].ver < 0 ) continue;
 
-		if( !(i in okids) ) fun.create(i,vn);
-		else if( okids[i] < nkids[i].ver && fun.update ) fun.update(i,vn);
+        if( !(i in skids) )
+        {
+            skids[i] = { ver: nkids[i].ver, i:i  };
+            fun.create(nkids[i],skids[i]);
+        }
+        else if( skids[i].ver < nkids[i].ver && fun.update )
+        {
+            fun.update(nkids[i],skids[i]);
+        }
 
-		okids[i] = nkids[i].ver;
-	}
+        skids[i].ver = nkids[i].ver;
+    }
 }
 
 
