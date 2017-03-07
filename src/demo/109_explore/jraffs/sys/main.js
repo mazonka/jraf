@@ -21,7 +21,22 @@ function main_js()
 
 	var show = function(kid){ return kid.name; }
 
-	o('===2');
-	jr('/').bind_list_html($lst,$('<div/>'),show);
+	///o('===2');
+	///jr('/').bind_list_html($lst,$('<div/>'),show);
+
+	var fun = {
+		create: function(i,vnlst)
+		{
+			o('==c'+i);
+			var $it = $('<div/>');
+			$it.html(i);
+			//$it.html(vnlst.node.kids[i].name);
+			$lst.append($it);
+		},
+		remove: function(i){ o('==r'+i); },
+		update: function(i){ o('==u'+i); }
+	};
+
+	jr('/').bind_list(fun);
 }
 

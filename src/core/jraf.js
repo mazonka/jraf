@@ -51,6 +51,7 @@ function jraf_node(prnt, ini)
         {
             kid.full = 0;
             kid.sz = -1;
+            kid.ver = -1;
             kid.text = '';
         }
     };
@@ -462,6 +463,11 @@ jr('path')               => return apinode
 .bind_list(jq_obj) == binds list node to a jquery object
 */
 
+function jr(path)
+{
+    return jr_api_node(jraf_virtual_node(g_jraf_root,path));
+}
+
 function jr_api_node(n)
 {
     var vn = {};
@@ -529,6 +535,7 @@ function jr_api_node(n)
         return jr_api_node(jraf_virtual_node(this.node,path));
     }
 
+	// FIXME remove this
 	vn.bind_list_html = function(jqo,template,show)
 	{
 		var cb = function(n)
@@ -542,12 +549,44 @@ function jr_api_node(n)
 		this.bind_fun(cb);
 	}
 
+	vn.bind_list = function(fun)
+	{
+		var thisvn = this;
+		if( !thisvn.okids ) thisvn.okids = {};
+		var cb = function(n)
+		{
+			//o(n);
+			//o(thisvn);
+			var nkids = n.kids;
+			var okids = thisvn.okids;
+			jr_api_manage_list(thisvn,fun,okids,nkids);
+		};
+
+		this.bind_fun(cb);
+	}
+
     return vn;
 }
 
-
-function jr(path)
+function jr_api_manage_list(vn,fun,okids,nkids)
 {
-    return jr_api_node(jraf_virtual_node(g_jraf_root,path));
+	o('--- removing old');
+	for( let i in okids )
+	{
+		o('--- rem '+i);
+		if( !(i in nkids) || nkids[i].ver < 0 ) fun.remove(i,vn);
+	}
+
+	o('--- creating new');
+	for( let i in nkids )
+	{
+		if( nkids[i].ver < 0 ) continue;
+
+		if( !(i in okids) ) fun.create(i,vn);
+		else if( okids[i] < nkids[i].ver && fun.update ) fun.update(i,vn);
+
+		okids[i] = nkids[i].ver;
+	}
 }
+
 
