@@ -495,29 +495,31 @@ function jr_api_node(n)
         return this;
     };
 
-    vn.md = function()
+    vn.md = function(ca)
     {
         var vnode = this;
         var cb = function(x)
         {
             if( x.err && x.err != '' ) o(x.err);
             vnode.up();
+			if( ca ) ca();
         };
         jraf_write_md(g_jraf_root,this.node.str(),cb)
         return this;
     };
 
-    vn.save = function(body){ return this.write_file(body,null); }
-    vn.add = function(body){ return this.write_file(body,'*'); }
-    vn.put = function(body,pos){ return this.write_file(body,pos); }
+    vn.save = function(body,cb){ return this.write_file(body,null,cb); }
+    vn.add = function(body,cb){ return this.write_file(body,'*',cb); }
+    vn.put = function(body,pos,cb){ return this.write_file(body,pos,cb); }
 
-    vn.write_file = function(body,offset)
+    vn.write_file = function(body,offset,ca)
     {
         var vnode = this;
         var cb = function(x)
         {
             if( x.err && x.err != '' ) o(x.err);
             vnode.up();
+			if( ca ) ca();
         };
         jraf_write_file(this.node.str(),body,cb,offset)
         return this;
@@ -583,6 +585,11 @@ function jr_api_node(n)
 
         return this;
     }
+
+	vn.rm = function(cb)
+	{
+		jraf_write_obj('rm', this.node.str(), cb);
+	}
 
     return vn;
 }

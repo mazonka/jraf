@@ -21,9 +21,11 @@ var fun = {
 	{
 		var $it = $('<div/>');
 
-		var $text = mkelem(sk.i,function(){ entry(nk,sk,jqo); } );
+		var name = sk.i;
+		if( nk.sz < 0 )  name = '['+name+']';
+		var $text = mkelem(name,function(){ entry(nk,sk,jqo); } );
 
-		var $del = mkelem('[X]',function(){} );
+		var $del = mkelem('(x)',function(){ remove(nk,sk,jqo); } );
 		
 		var $spc = $('<span> &emsp; </span>');
 
@@ -44,18 +46,20 @@ function main_js()
     $g_div_main.html('<h3>Demo 111: File explorer</h3>');
 
 	$g_divctl = $('<div/>');
-	$g_divctl.append(mkelem('[Dir] ',function(){}));
-	$g_divctl.append(mkelem('[File] ',function(){}));
-	$g_divctl.append(mkelem('[UP]',function(){ up(); }));
+	$g_divctl.append(mkelem('(Dir) ',function(){ newdir(); }));
+	$g_divctl.append(mkelem('(File) ',function(){ newfile(); }));
+	$g_divctl.append(mkelem(' ( .. )',function(){ goup(); }));
 	$g_div_main.append($g_divctl);
 
 	$g_divlst = $('<div/>');
 	$g_div_main.append($g_divlst);
 
-	$g_divtxt = $('<div/>');
+	$g_divtxt = $('<div contenteditable="true"/>');
 	$g_divtxt.html('');
 	$g_divtxt.css('border','1px solid black');
 	$g_divtxt.css('width','fit-content');
+	$g_divtxt.css('min-width','100px');
+	//$g_divtxt.css('min-height','15px');
 
 	$g_div_main.append($g_divtxt);
 
@@ -85,12 +89,40 @@ function entry(nk,sk,jqo)
 	}
 }
 
-function up()
+function goup()
 {
+	jr('/').bind_html($g_divtxt);
 	let sz = cwd.length;
 	if( sz < 2 ) return;
 	cwd.pop();
 	jr(cwd[sz-2]).bind_list_jqo($g_divlst,fun);
-	jr('/').bind_html($g_divtxt);
 }
 
+
+function rootup(){ jr('/').up(); }
+
+function newfile()
+{
+	var name = prompt("Enter file name: ");
+	if( !name ) return;
+	var pth = cwd[cwd.length-1]+'/'+name;
+	jr(pth).save($g_divtxt.html(),rootup);
+	o('---1 '+pth);
+	o($g_divtxt.html());
+	o($g_divtxt.text());
+}
+
+function newdir()
+{
+	var name = prompt("Enter dir name: ");
+	if( !name ) return;
+	var pth = cwd[cwd.length-1]+'/'+name;
+	jr(pth).md(rootup);
+	o('---1 '+pth);
+}
+
+function remove(nk,sk,jqo)
+{
+	var pth = cwd[cwd.length-1] + '/' + sk.i;
+	jr(pth).rm(rootup);
+}
