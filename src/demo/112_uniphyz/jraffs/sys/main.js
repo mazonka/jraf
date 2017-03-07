@@ -102,35 +102,21 @@ function jr_profile(sid)
 function get_file_list(g_profile)
 {
     var fs = {};
-    var scan = function (nd)
+    var scan = function (nd, o)
     {
-        var kids = nd.kids;
-        var name = nd.name;
-
-        fs[name] = {};
-        fs[name].name = name;        
-        fs[name].path = nd.str() + '/' + name;
-        fs[name].sz = nd.sz;
-        fs[name].parent = nd.parent;
-        fs[name].kids = {};
-        if (kids)
+        o.name = nd.name;        
+        o.path = nd.str();
+        o.sz = nd.sz;
+        o.kids = {};
+        o.text = nd.text;
+        if (nd.kids)
         {
-            for (let i in kids)
+            for (let i in nd.kids)
             {
-                if (kids.hasOwnProperty(i) )
+                if (nd.kids.hasOwnProperty(i) )
                 {
-                    fs[name].kids[i] = {};
-                    fs[name].kids[i].sz = i.sz;
-                    fs[name].kids[i].parent = fs[name];
-                    fs[name].kids[i].path = nd.str() + '/' + i;
-                    fs[name].kids[i].name = i;
-                    if (kids[i].sz == -1)
-                    {
-                        fs[name].kids[i].kids = {};
-                        jr(fs[name].kids[i].path).up(function(node){ scan(node) });
-                    }
-                    else
-                        jr(fs[name].kids[i].path).up();
+                    o.kids[i] = {};
+                    jr(o.path + '/' + i).up(function(node){ scan(node, o.kids[i]) } );
                 }
             }
         }
@@ -142,7 +128,8 @@ function get_file_list(g_profile)
     {
         var cb = function (node) 
         { 
-            scan(node);
+            fs[node.name] = {};
+            scan(node, fs[node.name]);
             console.dir(fs);
         };
         jr('/home').up(cb);
