@@ -197,3 +197,61 @@ function eng_get_data(data)
 
     return _data;
 }
+
+function eng_load_file(filename, filetype){
+    if (filetype=="js"){ //if filename is a external JavaScript file
+        var fileref=document.createElement('script')
+        fileref.setAttribute("type","text/javascript")
+        fileref.setAttribute("src", filename)
+    }
+    else if (filetype=="css"){ //if filename is an external CSS file
+        var fileref=document.createElement("link")
+        fileref.setAttribute("rel", "stylesheet")
+        fileref.setAttribute("type", "text/css")
+        fileref.setAttribute("href", filename)
+    }
+    if (typeof fileref!="undefined")
+        document.getElementsByTagName("head")[0].appendChild(fileref)
+}
+
+function eng_get_profile(data)
+{
+    var profile = {};
+    var _data = data;
+    
+    if (!Boolean(_data)) return null;
+    if (_data.length != 6) return null;
+
+    profile.adm = (_data.shift() == 'a') ? true : false;
+    profile.eml = _data.shift();
+    profile.qta = _data.shift();
+    profile.lst = eng_get_dt(_data.shift());
+    profile.cnt = _data.shift();
+    profile.unm = _data.shift();
+
+    return profile;
+}
+
+function eng_get_dt(data)
+{
+    var ts = {};
+    data = data || '';
+
+    if (typeof data !== 'string' 
+        || data === '*' 
+        || data.length !== 14
+    )
+    {
+        return '*';
+    }
+
+    ts.yy = data.substring(0, 4);
+    ts.mm = data.substring(4, 6);
+    ts.dd = data.substring(6, 8);
+    ts.h = data.substring(8, 10);
+    ts.m = data.substring(10, 12);
+    ts.s = data.substring(12);
+       
+    return [ts.yy, ts.mm, ts.dd].join('.') + ', ' +
+        [ts.h, ts.m, ts.s].join(':');
+}
