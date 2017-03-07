@@ -22,7 +22,7 @@ var fun = {
 
 function main_js()
 {
-    $g_div_main.html('<h3>Demo 109: File list</h3>');
+    $g_div_main.html('<h3>Demo 109: File list using jan object</h3>');
 
 	var $lst = $('<div/>');
 	g_main.lst = $lst;
@@ -31,15 +31,15 @@ function main_js()
 
 	var show = function(kid){ return kid.name; }
 
-	g_main.napi = jr('/');
-	g_main.napi.bind_list(fun);
+	g_main.jan = jr('/');
+	g_main.jan.bind_list_jan(fun);
 
 	setTimeout(doit,2000);
 }
 
 function doit()
 {
-	g_main.napi.unbind_list(fun);
-	g_main.napi = jr('/sys');
-	g_main.napi.bind_list(fun);
+	g_main.jan.unbind_list_jan(fun);
+	g_main.jan = jr('/sys');
+	g_main.jan.bind_list_jan(fun);
 }

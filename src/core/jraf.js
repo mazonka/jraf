@@ -451,8 +451,8 @@ function jraf_parse_wrt(data)
 // =  =  =  =  =  =  =  =  =  =  =  =  =  =  =  =  =  =  =  =  =  =  =  =  =
 /* API section
 
-jr('path')               => return apinode
-.bind_html(jq_obj,[fun]) == bind text node to a jquery object
+jr('path')               => return api node (Jan object - Jraf Api Node)
+.bind_html(jq_obj,[fun]) == bind text node to a Jqo(jquery) object
                             fun - optional translation function
 .md()                    == create directory on server
 .save(text)              == save text on server
@@ -541,15 +541,13 @@ function jr_api_node(n)
         return jr_api_node(jraf_virtual_node(this.node,path));
     }
 
-    vn.bind_list = function(fun)
+    vn.bind_list_jan = function(fun)
     {
         if( !this.skids ) this.skids = {};
 
         var thisvn = this;
         var cb = function(n)
         {
-            //o(n);
-            //o(thisvn);
             var nkids = n.kids;
             var skids = thisvn.skids;
             jr_api_manage_list(thisvn,fun,skids,nkids);
@@ -559,7 +557,7 @@ function jr_api_node(n)
         return this;
     }
 
-    vn.unbind_list = function(fun)
+    vn.unbind_list_jan = function(fun)
     {
         jr_api_manage_list(this,fun,this.skids,{});
         this.unbind_fun();
