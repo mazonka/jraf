@@ -82,7 +82,7 @@ function entry(nk,sk,jqo)
 	}
 	else
 	{
-		var tr = function(x){ return '<pre>'+x.replace(/</g,'&lt;');+'</pre>'; }
+		var tr = function(x){ return '<pre>'+x.replace(/</g,'&lt;')+'</pre>'; }
 		jr(pth).bind_html($g_divtxt,tr);
 	}
 }
