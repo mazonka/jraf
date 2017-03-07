@@ -548,9 +548,7 @@ function jr_api_node(n)
         var thisvn = this;
         var cb = function(n)
         {
-            var nkids = n.kids;
-            var skids = thisvn.skids;
-            jr_api_manage_list(thisvn,fun,skids,nkids);
+            jr_api_manage_list(fun,thisvn.skids,n.kids,null);
         };
 
         this.bind_fun(cb);
@@ -559,20 +557,42 @@ function jr_api_node(n)
 
     vn.unbind_list_jan = function(fun)
     {
-        jr_api_manage_list(this,fun,this.skids,{});
+        jr_api_manage_list(fun,this.skids,{},null);
         this.unbind_fun();
+        return this;
+    }
+
+    vn.bind_list_jqo = function(jqo,fun)
+    {
+        if( 'boundto' in jqo )
+		{
+			jqo.boundto.unbind();
+			jr_api_manage_list(fun,jqo.jraf_skids,{},jqo);
+		}
+
+        jqo.boundto = this.node;
+        if( !jqo.jraf_skids ) jqo.jraf_skids = {};
+
+        var cb = function(n)
+        {
+            var skids = jqo.jraf_skids;
+            jr_api_manage_list(fun,skids,n.kids,jqo);
+        };
+
+        this.bind_fun(cb);
+
         return this;
     }
 
     return vn;
 }
 
-function jr_api_manage_list(vn,fun,skids,nkids)
+function jr_api_manage_list(fun,skids,nkids,jqo)
 {
     for( let i in skids )
     {
         if( i in nkids && nkids[i].ver >= 0 ) continue;
-        fun.remove(skids[i]);
+        fun.remove(skids[i],jqo);
         delete skids[i];
     }
 
@@ -583,11 +603,11 @@ function jr_api_manage_list(vn,fun,skids,nkids)
         if( !(i in skids) )
         {
             skids[i] = { ver: nkids[i].ver, i:i  };
-            fun.create(nkids[i],skids[i]);
+            fun.create(nkids[i],skids[i],jqo);
         }
         else if( skids[i].ver < nkids[i].ver && fun.update )
         {
-            fun.update(nkids[i],skids[i]);
+            fun.update(nkids[i],skids[i],jqo);
         }
 
         skids[i].ver = nkids[i].ver;
