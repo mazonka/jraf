@@ -187,7 +187,7 @@ function jraf_update_callback(jo,ex)
     if( jo.sz == nd.sz && jo.ver == nd.ver && nd.full == 1 
         && ( !g_keep_loading || nd.sz>=0 ) )
     {
-        ex.cbi(jo,nd);
+        if( ex.cbi ) ex.cbi(jo,nd);
         return;
     }
 
@@ -208,7 +208,7 @@ function jraf_update_callback(jo,ex)
     }
     if( nd.watch == 2 ) nd.wid(nd);
 
-    ex.cbi(jo,nd);
+    if( ex.cbi ) ex.cbi(jo,nd);
 }
 
 function jraf_update_obj(path,name,cbi,node)
@@ -312,7 +312,8 @@ function jraf_update_DD(jo,nd,cbi)
             if( n.watch == 0 && !kp ) continue; // keep old
         }
 
-        jraf_update_obj(nd.str()+'/',i,cbi,n);
+        //jraf_update_obj(nd.str()+'/',i,cbi,n);
+        jraf_update_obj(nd.str()+'/',i,null,n); // no propagate cb down
     }
 }
 
