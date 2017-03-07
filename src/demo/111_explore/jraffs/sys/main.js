@@ -19,6 +19,7 @@ function mkelem(txt,cb)
 var fun = {
 	create: function(nk,sk,jqo)
 	{
+		o('--- create '+sk.i);
 		var $it = $('<div/>');
 
 		var name = sk.i;
@@ -34,11 +35,8 @@ var fun = {
 		jqo.append($it);
 		sk.jqo = $it;
 	},
-	remove: function(sk,jqo)
-	{
-		sk.jqo.remove();
-	},
-	update: function(nk,sk,jqo){ o('--- update '+sk.i); }
+
+	remove: function(sk,jqo){ sk.jqo.remove(); }
 };
 
 function main_js()
@@ -108,8 +106,6 @@ function newfile()
 	var pth = cwd[cwd.length-1]+'/'+name;
 	jr(pth).save($g_divtxt.html(),rootup);
 	o('---1 '+pth);
-	o($g_divtxt.html());
-	o($g_divtxt.text());
 }
 
 function newdir()
