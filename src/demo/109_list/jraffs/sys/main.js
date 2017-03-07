@@ -22,7 +22,7 @@ var fun = {
 
 function main_js()
 {
-    $g_div_main.html('<h3>Demo 109: File explorer</h3>');
+    $g_div_main.html('<h3>Demo 109: File list</h3>');
 
 	var $lst = $('<div/>');
 	g_main.lst = $lst;
