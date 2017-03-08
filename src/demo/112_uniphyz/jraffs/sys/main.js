@@ -8,7 +8,8 @@ var g_wid = {
     label: { opn: {} },
     inp: { eml: {} },
     span: { log: {}, opn: {} },
-    div: { lst: {}, fs: {}, txt: {} }
+    div: { lst: {}, fs: {}, txt: {} },
+    pre: { txt: {} }
 };
 var cwd = ['/home'];
 var g_orphan;
@@ -27,14 +28,14 @@ g_wid.div.fs.wid = $('<div/>')
     .css('min-height','15px')
     .css('width','50%')
     .css('margin','4px');
-g_wid.div.txt.wid = $('<div/>')
+g_wid.pre.txt.wid = $('<pre/>')
     .css('border', '1px solid #000000')
     .css('min-width','100px')
     .css('min-height','15px')
     .css('width','50%')
     .css('margin','4px');
     
-g_wid.div.lst.wid = $('<div/>')
+g_wid.div.lst.wid = $('<div/>');
 
 
 
@@ -90,11 +91,11 @@ function jw_md_users()
         var resp = eng_get_resp(data);
         
         if (resp === null)
-        return console.log('/.jraf.sys/users creation error!');
+            return console.log('/.jraf.sys/users creation error!');
         else if (resp === false)
-        console.log('/.jraf.sys/users exists!');
+            console.log('/.jraf.sys/users exists!');
         else
-        console.log('/.jraf.sys/users created!');
+            console.log('/.jraf.sys/users created!');
         
         jr_profile(g_session);
     };
@@ -119,6 +120,12 @@ function jr_profile(sid)
         }
         
         wid_main();
+        
+        var jr_home_up = function() { jr('/home').up(refresh) };
+        var refresh = function() { setTimeout(jr_home_up, 5000); };
+        
+        jr_home_up();
+        
     };
     
     jraf_ajax(['jr profile',sid].join(' '), cb);
@@ -170,7 +177,7 @@ function entry(nk,sk,jqo)
     else
     {
         var tr = function(x){ return ''+x.replace(/</g,'&lt;')+''; }
-        jr(pth).bind_html(g_wid.div.txt.wid,tr);
+        jr(pth).bind_html(g_wid.pre.txt.wid,tr);
     }
 }
 
@@ -194,7 +201,7 @@ var fun = {
 };
 
 function rootup(){ jr('/').up(); }
-function unbfile(){ g_orphan.bind_html(g_wid.div.txt.wid); }
+function unbfile(){ g_orphan.bind_html(g_wid.pre.txt.wid); }
 
 function wid_main()
 {
@@ -210,7 +217,7 @@ function wid_main()
         .append(g_wid.div.lst.wid)
     
     $g_div_main.append(g_wid.div.fs.wid);
-    $g_div_main.append(g_wid.div.txt.wid);
+    $g_div_main.append(g_wid.pre.txt.wid);
     
     if (g_session == '0')
     {
