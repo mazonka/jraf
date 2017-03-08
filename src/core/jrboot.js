@@ -99,6 +99,7 @@ function jraf_boot(id)
             //$('head').append(sc);
         }
 
+        for( var i in jo.kids ) if( i.substr(0,1)=='.' ) delete jo.kids[i];
         for( var i in jo.kids ) g_sys_files[i.replace('.','_')] = 1;
         console.log('sys objects: '+ Object.keys(g_sys_files).length);
 
