@@ -7,6 +7,8 @@ var $g_divlst;
 var $g_divtxt;
 var cwd = [ '/' ];
 
+var orphan = jr_api_node(jraf_node(null));
+
 function mkelem(txt,cb)
 {
   var t = $('<span/>');
@@ -20,7 +22,7 @@ function mkelem(txt,cb)
 var fun = {
   create: function(nk,sk,jqo)
   {
-    o('--- create '+sk.i);
+    //o('--- create '+sk.i);
     var $it = $('<div/>');
 
     var name = sk.i;
@@ -82,8 +84,6 @@ function main_js()
 
 function entry(nk,sk,jqo)
 {
-  //$g_divtxt.html('');
-
   let sz = cwd.length;
   var pth = cwd[sz-1];
   if(pth!='/') pth += '/';
@@ -94,20 +94,19 @@ function entry(nk,sk,jqo)
     let sz = cwd.length;
     cwd[sz] = pth;
     jr(pth).bind_list_jqo($g_divlst,fun);
-    jr('/').bind_html($g_divtxt);
+    unbfile();
     $g_divpth.html(pth);
   }
   else
   {
     var tr = function(x){ return ''+x.replace(/</g,'&lt;')+''; }
-    //var tr = function(x){ return '<pre>'+x.replace(/</g,'&lt;')+'</pre>'; }
     jr(pth).bind_html($g_divtxt,tr);
   }
 }
 
 function goup()
 {
-  jr('/').bind_html($g_divtxt);
+  unbfile();
   let sz = cwd.length;
   if( sz < 2 ) return;
   cwd.pop();
@@ -118,6 +117,7 @@ function goup()
 
 
 function rootup(){ jr('/').up(); }
+function unbfile(){ orphan.bind_html($g_divtxt); }
 
 function newfile()
 {
@@ -125,7 +125,6 @@ function newfile()
   if( !name ) return;
   var pth = cwd[cwd.length-1]+'/'+name;
   jr(pth).save($g_divtxt.html(),rootup);
-  o('---1 '+pth);
 }
 
 function newdir()
@@ -134,11 +133,11 @@ function newdir()
   if( !name ) return;
   var pth = cwd[cwd.length-1]+'/'+name;
   jr(pth).md(rootup);
-  o('---1 '+pth);
 }
 
 function remove(nk,sk,jqo)
 {
+  unbfile();
   var pth = cwd[cwd.length-1] + '/' + sk.i;
   jr(pth).rm(rootup);
 }

@@ -206,6 +206,7 @@ function jraf_update_callback(jo,ex)
         if( jo.sz<0 ) jraf_update_FD(jo,nd,ex.cbi);
         else jraf_update_FF(jo,nd);
     }
+    
     if( nd.watch == 2 ) nd.wid(nd);
 
     if( ex.cbi ) ex.cbi(jo,nd);
@@ -477,8 +478,8 @@ function jr_api_node(n)
     vn.bind_html = function(jqo,tr)
     {
         if( 'boundto' in jqo ) jqo.boundto.unbind();
-        var cb = function(n){ jqo.html(tr?tr(n.text):n.text); }
-        jraf_bind_virtual_leaf(this.node,cb);
+        var cb4 = function(n){ jqo.html(tr?tr(n.text):n.text); }
+        jraf_bind_virtual_leaf(this.node,cb4);
         jqo.boundto = this.node;
         
         return this;
@@ -503,7 +504,6 @@ function jr_api_node(n)
         {
             if( x.err && x.err != '' ) o(x.err);
             vnode.up(ca);
-            ///if( ca ) ca();
         };
         jraf_write_md(g_jraf_root,this.node.str(),cb)
         return this;
@@ -520,13 +520,11 @@ function jr_api_node(n)
         {
             if( x.err && x.err != '' ) o(x.err);
             vnode.up(ca);
-            ///if( ca ) ca();
         };
         jraf_write_file(this.node.str(),body,cb,offset)
         return this;
     };
 
-    // Warning: cb will called for all updating kids
     vn.up = function(cb)
     {
         var cbi = function(j,n)
@@ -576,13 +574,13 @@ function jr_api_node(n)
         jqo.boundto = this.node;
         if( !jqo.jraf_skids ) jqo.jraf_skids = {};
 
-        var cb = function(n)
+        var cb5 = function(n)
         {
             var skids = jqo.jraf_skids;
             jr_api_manage_list(fun,skids,n.kids,jqo);
         };
 
-        this.bind_fun(cb);
+        this.bind_fun(cb5);
 
         return this;
     }
