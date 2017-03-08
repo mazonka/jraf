@@ -1,6 +1,9 @@
 // Jraf team (C) 2017
 'use strict';
 
+var cwd = ['/home'];
+var g_orphan;
+
 var g_profile = {};
 var g_wid = {
     button: { ent: {}, ext: {}},
@@ -9,35 +12,29 @@ var g_wid = {
     inp: { eml: {} },
     span: { log: {}, opn: {} },
     div: { lst: {}, fs: {}, txt: {} },
-    pre: { txt: {} }
+    pre: { txt: {} },
+    hr: {}
 };
-var cwd = ['/home'];
-var g_orphan;
+
+
 g_wid.h3.wid = $('<h3>UNIPHYZ</h3>').css('text-align', 'center');
 g_wid.button.ent.wid = $('<button/>', { text: '>', click: login });
 g_wid.button.ext.wid = $('<button/>', { text: 'X', click: logout });
 g_wid.label.opn.wid = $('<label/>', { text: '^' })
-    .append($('<input type=file onchange="opn(this.files)"/>').hide());
+    .append($('<input type=file onchange="open_file(this.files)"/>').hide());
 
 g_wid.inp.eml.wid = $('<input/>', {});
 g_wid.span.opn.wid = $('<span/>');
 g_wid.span.log.wid = $('<span/>');
 g_wid.div.fs.wid = $('<div/>')
-    .css('border', '1px solid #000000')
-    .css('min-width','100px')
-    .css('min-height','15px')
-    .css('width','50%')
     .css('margin','4px');
+g_wid.hr.wid = $('<hr/>')
+    .css('width', '30%')
+    .css('margin-left', '4px');
 g_wid.pre.txt.wid = $('<pre/>')
-    .css('border', '1px solid #000000')
-    .css('min-width','100px')
-    .css('min-height','15px')
-    .css('width','50%')
     .css('margin','4px');
     
 g_wid.div.lst.wid = $('<div/>');
-
-
 
 function login()
 {
@@ -66,14 +63,14 @@ function logout()
     jraf_ajax(['jw logout', g_session].join(' '), cb);
 }
 
-function opn(f)
+function open_file(f)
 {
     var cb = function(data)
     {
         console.log('File name: ' + data.name);
         console.log('File text: ' + data.text);
         jr(g_profile.unm+'/'+data.name).save(data.text);
-        jr('/home').up();
+        jr(cwd[0]).up();
     };
     
     eng_open_file(f[0], cb);
@@ -112,7 +109,7 @@ function jr_profile(sid)
         g_profile = eng_get_profile(eng_get_data(data)[0]);
         
         if (g_profile.unm == '*')
-            jr('/home').bind_list_jqo(g_wid.div.lst.wid, fun);
+            jr(cwd[0]).bind_list_jqo(g_wid.div.lst.wid, fun);
         else
         {
             cwd.push(g_profile.unm);
@@ -217,6 +214,7 @@ function wid_main()
         .append(g_wid.div.lst.wid)
     
     $g_div_main.append(g_wid.div.fs.wid);
+    $g_div_main.append(g_wid.hr.wid);
     $g_div_main.append(g_wid.pre.txt.wid);
     
     if (g_session == '0')
