@@ -8,9 +8,10 @@ var g_wid = {
     label: { opn: {} },
     inp: { eml: {} },
     span: { log: {}, opn: {} },
-    div: { lsu: {}, lso: {}, }
+    div: { lst: {}, fs: {}, txt: {} }
 };
-
+var cwd = ['/home'];
+var g_orphan;
 g_wid.h3.wid = $('<h3>UNIPHYZ</h3>').css('text-align', 'center');
 g_wid.button.ent.wid = $('<button/>', { text: '>', click: login });
 g_wid.button.ext.wid = $('<button/>', { text: 'X', click: logout });
@@ -20,8 +21,22 @@ g_wid.label.opn.wid = $('<label/>', { text: '^' })
 g_wid.inp.eml.wid = $('<input/>', {});
 g_wid.span.opn.wid = $('<span/>');
 g_wid.span.log.wid = $('<span/>');
-g_wid.div.lsu.wid = $('<div/>');
-g_wid.div.lso.wid = $('<div/>');
+g_wid.div.fs.wid = $('<div/>')
+    .css('border', '1px solid #000000')
+    .css('min-width','100px')
+    .css('min-height','15px')
+    .css('width','50%')
+    .css('margin','4px');
+g_wid.div.txt.wid = $('<div/>')
+    .css('border', '1px solid #000000')
+    .css('min-width','100px')
+    .css('min-height','15px')
+    .css('width','50%')
+    .css('margin','4px');
+    
+g_wid.div.lst.wid = $('<div/>')
+
+
 
 function login()
 {
@@ -29,7 +44,7 @@ function login()
     {
         console.log(data);
     };
-
+    
     jraf_ajax(['jw login',g_wid.inp.eml.wid.val(),'*'].join(' '), cb);
 }
 
@@ -41,12 +56,12 @@ function logout()
         {
             var loc = window.location;
             var p = '?$0';
-
+            
             window.location = loc.protocol + '//' + loc.host + loc.pathname + p;
         }
-
+        
     };
-
+    
     jraf_ajax(['jw logout', g_session].join(' '), cb);
 }
 
@@ -56,9 +71,10 @@ function opn(f)
     {
         console.log('File name: ' + data.name);
         console.log('File text: ' + data.text);
-        //jr(data.name).save(data.text);
+        jr(g_profile.unm+'/'+data.name).save(data.text);
+        jr('/home').up();
     };
-
+    
     eng_open_file(f[0], cb);
 }
 
@@ -72,17 +88,17 @@ function jw_md_users()
     var cb = function (data)
     {
         var resp = eng_get_resp(data);
-
+        
         if (resp === null)
-            return console.log('/.jraf.sys/users creation error!');
+        return console.log('/.jraf.sys/users creation error!');
         else if (resp === false)
-            console.log('/.jraf.sys/users exists!');
+        console.log('/.jraf.sys/users exists!');
         else
-            console.log('/.jraf.sys/users created!');
-
+        console.log('/.jraf.sys/users created!');
+        
         jr_profile(g_session);
     };
-
+    
     jraf_ajax('jw md 0 /.jraf.sys/users', cb);
 }
 
@@ -91,71 +107,116 @@ function jr_profile(sid)
     var cb = function (data)
     {
         if (!eng_get_resp(data)) return console.log('Profile getting failed!');
-
+        
         g_profile = eng_get_profile(eng_get_data(data)[0]);
-        get_file_list(g_profile);
+        
+        if (g_profile.unm == '*')
+            jr('/home').bind_list_jqo(g_wid.div.lst.wid, fun);
+        else
+        {
+            cwd.push(g_profile.unm);
+            jr(cwd[cwd.length-1]).bind_list_jqo(g_wid.div.lst.wid, fun);
+        }
+        
+        wid_main();
     };
-
+    
     jraf_ajax(['jr profile',sid].join(' '), cb);
 }
 
-function get_file_list(g_profile)
+function mkelem(txt, cb)
 {
-    var fs = {};
-    var scan = function (nd, o)
-    {
-        o.name = nd.name;        
-        o.path = nd.str();
-        o.sz = nd.sz;
-        o.kids = {};
-        o.text = nd.text;
-        if (nd.kids)
-        {
-            for (let i in nd.kids)
-            {
-                if (nd.kids.hasOwnProperty(i) )
-                {
-                    o.kids[i] = {};
-                    jr(o.path + '/' + i).up(function(node){ scan(node, o.kids[i]) } );
-                }
-            }
-        }
-    };
+    var t = $('<span/>');
     
-    console.log(g_profile.unm);
-    
-    if (g_profile.unm == '*')
+    t.html(txt);
+    t.on('click', cb);
+    t.css('cursor', 'pointer');
+    t.hover(function()
     {
-        var cb = function (node) 
-        { 
-            fs[node.name] = {};
-            scan(node, fs[node.name]);
-            console.dir(fs);
-        };
-        jr('/home').up(cb);
+        t.css('color', 'blue');
+    }, function()
+    {
+        t.css('color', 'black');
+    });
+    
+    return t;
+}
+
+function goup(lst)
+{
+    unbfile();
+    let sz = cwd.length;
+    if( sz < 2 ) return;
+    cwd.pop();
+    var pth = cwd[sz-2];
+    jr(pth).bind_list_jqo(g_wid.div.lst.wid,fun);
+}
+
+function entry(nk,sk,jqo)
+{
+    let sz = cwd.length;
+    var pth = cwd[sz-1];
+    if(pth!='/') pth += '/';
+    pth += sk.i;
+    
+    if( nk.sz < 0 ) // directory
+    {
+        let sz = cwd.length;
+        cwd[sz] = pth;
+        jr(pth).bind_list_jqo(g_wid.div.lst.wid,fun);
+        unbfile();
+        // $g_divpth.html(pth);
     }
     else
     {
-        //jr(g_profile.unm).up(function(node){console.log(node.kids)});
-        //jr(g_profile.unm).up(function(node){console.log(node.kids)});
+        var tr = function(x){ return ''+x.replace(/</g,'&lt;')+''; }
+        jr(pth).bind_html(g_wid.div.txt.wid,tr);
     }
-
 }
 
-function wid_main(pf,ukids,okids)
+var fun = {
+    create: function(nk,sk,jqo)
+    {
+        //o('--- create '+sk.i);
+        var $it = $('<div/>');
+        
+        var name = sk.i;
+        if( nk.sz < 0 )  name = '['+name+']';
+        var $text = mkelem(name,function(){ entry(nk,sk,jqo); } );
+        
+        $it.append($text);
+        
+        jqo.append($it);
+        sk.jqo = $it;
+    },
+    
+    remove: function(sk,jqo){ sk.jqo.remove(); }
+};
+
+function rootup(){ jr('/').up(); }
+function unbfile(){ g_orphan.bind_html(g_wid.div.txt.wid); }
+
+function wid_main()
 {
+    g_orphan = jr_api_node(jraf_node(null));
+    
     $g_div_main.html('')
         .append(g_wid.h3.wid)
         .append(g_wid.span.opn.wid)
         .append(g_wid.span.log.wid)
-        .append(g_wid.div.lsu.wid)
-        .append(g_wid.div.lso.wid)
-
+    
+    g_wid.div.fs.wid
+        .append(mkelem('[..]',function(){ goup(); }))
+        .append(g_wid.div.lst.wid)
+    
+    $g_div_main.append(g_wid.div.fs.wid);
+    $g_div_main.append(g_wid.div.txt.wid);
+    
     if (g_session == '0')
     {
         g_wid.span.opn.wid.remove();
-        g_wid.div.lsu.wid.remove();
-        g_wid.span.log.wid.html('')
+        g_wid.span.log.wid
+            .html('')
             .append(g_wid.inp.eml.wid)
             .append(g_wid.button.ent.wid);
     }
@@ -163,9 +224,9 @@ function wid_main(pf,ukids,okids)
     {
         g_wid.span.log.wid.html('')
             .append(g_wid.button.ext.wid);
-
+        
         g_wid.span.opn.wid.html(g_wid.label.opn.wid);
-
+        
         g_wid.span.opn.wid;
         g_wid.label.opn.wid
             .css('display', 'inline-block')
@@ -176,12 +237,67 @@ function wid_main(pf,ukids,okids)
             .css('margin-left', '16')
             .css('margin-right', '16')
             .css('min-width', '38px');
-
-        g_wid.div.lsu.wid.html($('<span>User files:<span/>'));
+        
+        // g_wid.div.lsu.wid.html($('<span>User files:<span/>'));
     }
-    g_wid.div.lso.wid.html($('<span>All files:<span/>'));
+    // g_wid.div.lst.wid.html($('<span>All files:<span/>'));
     $('button')
         .css('width', '40px')
         .css('margin-left', '0')
         .css('margin-right', '0');
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*
+function get_file_list(g_profile)
+{
+var fs = {};
+var scan = function (nd, o)
+{
+o.name = nd.name;        
+o.path = nd.str();
+o.sz = nd.sz;
+o.kids = {};
+o.text = nd.text;
+if (nd.kids)
+{
+for (let i in nd.kids)
+{
+if (nd.kids.hasOwnProperty(i))
+jr(o.path + '/' + i).up(function(node)
+{ 
+scan(node, o.kids[i] = {}) 
+});
+}
+}
+};
+}
+*/
