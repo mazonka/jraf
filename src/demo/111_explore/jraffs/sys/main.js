@@ -7,7 +7,7 @@ var $g_divlst;
 var $g_divtxt;
 var cwd = [ '/' ];
 
-var orphan = jr_api_node(jraf_node(null));
+var g_orphan;
 
 function mkelem(txt,cb)
 {
@@ -44,6 +44,8 @@ var fun = {
 
 function main_js()
 {
+  g_orphan = jr_api_node(jraf_node(null));
+
   $g_div_main.html('<h3>Demo 111: File explorer</h3>');
 
   $g_divpth = $('<div/>');
@@ -76,8 +78,6 @@ function main_js()
   $g_divtxt.css('display','inline-block');
 
   $g_div_main.append($g_divtxt);
-
-  var show = function(kid){ return kid.name; }
 
   jr(cwd[0]).bind_list_jqo($g_divlst,fun);
 }
@@ -117,7 +117,7 @@ function goup()
 
 
 function rootup(){ jr('/').up(); }
-function unbfile(){ orphan.bind_html($g_divtxt); }
+function unbfile(){ g_orphan.bind_html($g_divtxt); }
 
 function newfile()
 {
