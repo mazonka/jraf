@@ -13,11 +13,11 @@ function main_js()
 {
     g_wid.l = mko('l');
     g_wid.r = mko('r');
-    
+
     main_html();
- 
+
     for (let i in g_wid)
-    {    
+    {
         if (g_wid.hasOwnProperty(i))
         {
             let p = g_wid[i];
@@ -27,11 +27,11 @@ function main_js()
             {
                 change(p.textarea);
                 timer_id = setTimeout(chfix, 750);
-                
+
             }, 750);
-            
+
             p.textarea.on('input keyup click', function()
-            { 
+            {
                 asterisk(p.textarea);
             });
         }
@@ -57,7 +57,7 @@ function mko(x)
         mod: {t: 0, p: 0},
         is_foc: function(){return (this.textarea.is(':focus'))?true:false;},
         span: $('<span>&nbsp;<span>')
-    }    
+    }
 }
 
 function main_html()
@@ -66,7 +66,7 @@ function main_html()
     var $table = $('<table/>');
     var $tr0 = $('<tr/>');
     var $tr1 = $('<tr/>');
-    
+
     for (let i in g_wid)
     {
         if (g_wid.hasOwnProperty(i))
@@ -74,13 +74,13 @@ function main_html()
             $tr0.append($('<td/>')
                 .append(g_wid[i].span)
                 .css('text-align', 'left'));
-                
+
             $tr1.append($('<td/>')
                 .append(g_wid[i].textarea
                     .css('white-space', 'pre')
                     .css('resize', 'none')
                     .css('width', '99%')
-                    .css('height', '8em'))) 
+                    .css('height', '8em')));
         }
     }
 
@@ -89,11 +89,11 @@ function main_html()
         .append($tr1)
         .css('margin', 'auto')
         .css('width', '80%');
-        
+
     $div
         .append('<h3>Demo 105: Multiuser editor widget</h3>')
         .append($table);
-        
+
     $g_div_main.html($div);
     $g_div_main.css('text-align', 'center');
 }
@@ -113,18 +113,17 @@ function asterisk($o)
 
 function change($o)
 {
-    console.log($o.prop('id'));
     var o = ($o.prop('id') == 'l') ? g_wid.l : g_wid.r;
     var p = +($o[0].selectionStart);
     var t = $o.val() || '';
-    
+
     if (!o.is_foc()) p = -1;
     if (t == o.txt && (p == o.pos || p == -1)) return;
-    
+
     console.log('change:' + $o.prop('id'));
 
     let cb = function(){jr(g_node.dir).up()};
-    
+
     if (t != o.txt)
     {
         if (o.txt_h[o.txt_h.length - 1] != t)
@@ -148,10 +147,10 @@ function init()
 {
     var fn_txt_init = function(node)
     {
-        for (let i in g_wid) 
+        for (let i in g_wid)
         {
             if (g_wid.hasOwnProperty(i))
-            {    
+            {
                 g_wid[i].txt = node.text;
                 g_wid[i].txt_v = +node.ver;
                 g_wid[i].textarea.val(node.text);
@@ -220,7 +219,7 @@ function init()
                         g_wid[i].pos_h.splice(0, h + 1);
                     else
                     {
-                        if (g_wid[i].is_foc()) 
+                        if (g_wid[i].is_foc())
                             set_caret_pos(g_wid[i].textarea, p);
 
                         g_wid[i].pos_h = [];
