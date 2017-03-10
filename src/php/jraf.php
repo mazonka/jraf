@@ -701,7 +701,7 @@ function Jraf_sendmail(&$url, $sid, $em) // => void
     $mail_to = $em;
     $mail_subj = 'login';
     $mail_msg = $furl;
-
+    OsPath::file_put_contents('login.log', $furl."\n", 1);
     @mail($mail_to,$mail_subj,$mail_msg);
 }
 
