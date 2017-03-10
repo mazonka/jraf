@@ -167,7 +167,7 @@ function entry(nk,sk,jqo)
     {
         let sz = cwd.length;
         cwd[sz] = pth;
-        jr(pth).bind_list_jqo(g_wid.div.lst.wid,fun);
+        jr(pth).bind_list_jqo(g_wid.div.lst.wid,fun).up();
         unbfile();
         // $g_divpth.html(pth);
     }
@@ -176,6 +176,7 @@ function entry(nk,sk,jqo)
         var tr = function(x){ return ''+x.replace(/</g,'&lt;')+''; }
         jr(pth).bind_html(g_wid.pre.txt.wid,tr);
     }
+    
 }
 
 var fun = {
