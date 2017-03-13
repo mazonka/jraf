@@ -3,18 +3,16 @@
 
 var g_node = {
     dir: '/demo/105',
-    txt: '/demo/105/txt.txt',
-    pos: '/demo/105/pos.txt'
+    txt: '/demo/105/editor2.txt'
 };
 
 var g_wid = {
     textarea: $('<textarea/>'),
+    span: $('<span>&nbsp;<span>'),
     txt: '',
-    txt_v: 0,
-    txt_h: [],
-    mod: {t: 0},
-    is_foc: function(){return (this.textarea.is(':focus'))?true:false;},
-    span: $('<span>&nbsp;<span>')
+    ver: 0,
+    his: [],
+    mod: 0
 };
 
 function main_js()
@@ -62,7 +60,7 @@ function main_html()
         .css('width', '80%');
 
     $div
-        .append('<h3>Demo 105: Multiuser editor widget</h3>')
+        .append('<h3>Multiuser editor widget</h3>')
         .append($table);
 
     $g_div_main.html($div);
@@ -73,10 +71,9 @@ function asterisk()
 {
     var t = g_wid.textarea.val() || '';
 
-    if (t == g_wid.txt) 
-        return;
-    else
-        g_wid.mod.t = 1;
+    if (t == g_wid.txt) return;
+    
+    g_wid.mod = 1;
 
     g_wid.span.html('*');
 }
@@ -91,9 +88,9 @@ function change()
 
     if (t != g_wid.txt)
     {
-        if (g_wid.txt_h[g_wid.txt_h.length - 1] != t)
+        if (g_wid.his[g_wid.his.length - 1] != t)
         {
-            g_wid.txt_h.push(t);
+            g_wid.his.push(t);
             jr(g_node.txt).save(t,cb);
         }
     }
@@ -104,7 +101,7 @@ function init()
     var fn_txt_init = function(node)
     {
         g_wid.txt = node.text;
-        g_wid.txt_v = +node.ver;
+        g_wid.ver = +node.ver;
         g_wid.textarea.val(node.text);
     }
 
@@ -113,21 +110,21 @@ function init()
         var v = +node.ver;
         var t = node.text;
 
-        if (v > g_wid.txt_v)
+        if (v > g_wid.ver)
         {
             g_wid.txt = t;
-            g_wid.txt_v = v;
+            g_wid.ver = v;
 
-            let h = g_wid.txt_h.indexOf(t);
+            let h = g_wid.his.indexOf(t);
             if (h > -1)
-                g_wid.txt_h.splice(0, h + 1);
+                g_wid.his.splice(0, h + 1);
             else
             {
                 g_wid.textarea.val(t);
-                g_wid.txt_h = [];
+                g_wid.his = [];
             }
 
-            g_wid.mod.t = 0;
+            g_wid.mod = 0;
             check_mod(g_wid.span, g_wid.mod);
         }
     };
@@ -140,7 +137,7 @@ function init()
 
 function check_mod($o, mod)
 {
-    if (mod.t == 0) $o.html('&nbsp;');
+    if (mod == 0) $o.html('&nbsp;');
 }
 
 function refresh_cback(vn, cb)
