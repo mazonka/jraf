@@ -151,8 +151,9 @@ function jraf_boot(id)
 
             if( --counter==0 )
             {
-                if( g_startx.name in window ) sys_loaded();
-                else out('Cannot start '+g_startx.name,ex);
+                if( g_startx && !( g_startx.name in window ) )
+                    out('Cannot start '+g_startx.name,ex);
+                else sys_loaded();
             }
         }
 
