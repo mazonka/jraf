@@ -4,6 +4,7 @@
 
 var g_sys_files = {};
 var g_session;
+var g_startx;
 var $g_div_main;
 
 
@@ -13,8 +14,8 @@ var g_ajax_cntr = 0;
 
 function jraf_ajax(cmd, callback, extra)
 {
-	jraf_ajax_get(cmd, callback, extra);
-	//jraf_ajax_post(cmd, callback, extra);
+    jraf_ajax_get(cmd, callback, extra);
+    //jraf_ajax_post(cmd, callback, extra);
 }
 
 function jraf_ajax_get(cmd, callback, extra)
@@ -49,11 +50,59 @@ function jraf_ajax_post(cmd, callback, extra)
     .always(function () {});
 }
 
+
+var inject_script_error_message = '';
+function jr_wonerr(msg, url, lineNo, columnNo, error)
+{
+    inject_script_error_message = 'script load ERROR [' + msg +'] line '+ lineNo;;
+    return true;
+}
+
+function inject_script(text)
+{
+    var old_wonerr = window.onerror;
+    window.onerror = jr_wonerr;
+    window.jr_wonerr_message = '';
+
+    try
+    {
+        var sc = document.createElement('script');
+        sc.innerHTML = text;
+        if( 'append' in document.head ) document.head.append(sc);
+        else document.head.appendChild(sc);
+    }
+    catch (e) 
+    {
+        if (e instanceof SyntaxError) 
+            jr_wonerr(e.message,'',e.lineNumber,e.columnNumber,e);
+        return;
+    }
+
+    window.onerror = old_wonerr;
+}
+
+
+function inject_script_old(text)
+{
+    var sc = document.createElement('script');
+    sc.innerHTML = text;
+    if( 'append' in document.head ) document.head.append(sc);
+    else document.head.appendChild(sc);
+}
+
 function jraf_boot(id)
 {
-    g_session = id;
+    var vid = id.split(/\/(.+)/);
+    g_session = vid[0];
+    if( vid[1] )
+    {
+        g_startx = {};
+        g_startx.file = vid[1];
+        g_startx.name = g_startx.file.split(/\//).slice(-1)[0].replace('.','_');
+        g_startx.booting = true;
+    }
 
-    console.log('Jraf boot:' + g_session);
+    console.log('Jraf boot: ' + g_session+ ( g_startx ? ' on '+g_startx.name : '' ) );
 
     document.write('<div id="div_main" style="text-align: left;"></div>');
     $g_div_main = $('#div_main');
@@ -82,21 +131,29 @@ function jraf_boot(id)
             return;
         }
 
+        var counter = 0;
         var cb = function(data,ex)
         {
             if( data.err != '' )
             {
-                out(data.err,'Backend error '+ex);
+                out(data.err,'ERROR loading '+ex);
                 return;
             }
 
             out('ok',ex);
-            var sc = document.createElement('script');
-            sc.innerHTML = data.text;
-            //console.log(sc.innerHTML);
-            if( 'append' in document.head ) document.head.append(sc);
-            else document.head.appendChild(sc);
-            //$('head').append(sc);
+            inject_script(data.text);
+            if( inject_script_error_message != '' ) 
+            {
+                out(inject_script_error_message,ex);
+                inject_script_error_message = '';
+                return;
+            }
+
+            if( --counter==0 )
+            {
+                if( g_startx.name in window ) sys_loaded();
+                else out('Cannot start '+g_startx.name,ex);
+            }
         }
 
         for( var i in jo.kids ) if( i.substr(0,1)=='.' ) delete jo.kids[i];
@@ -105,10 +162,17 @@ function jraf_boot(id)
 
         for( var i in jo.kids )
         {
+            ++counter;
             jraf_read_obj('/sys/',i, cb, i+' : ');
         }
 
-        sys_loaded();
+        if(g_startx)
+        {
+            ++counter;
+            jraf_read_obj('/', g_startx.file, cb, g_startx.file + ' : ');
+        }
+
+        ///sys_loaded();
     }
 
     jraf_read_obj('/', 'sys', sysjs);
@@ -144,10 +208,8 @@ function sys_loaded()
 
     console.log('sys loaded');
 
-    for( let i in g_sys_files )
-    {
-        window[i]();
-    }
+    for( let i in g_sys_files ) window[i]();
+    if(g_startx) window[g_startx.name]();
 
     console.log('sys started');
 }
@@ -158,7 +220,7 @@ function jraf_read_obj(path, ob, cb, extra)
     {
         if( data != null )
         {
-            console.log('load '+path+ob+" - OK");
+            console.log('req '+path+ob+' '+data.substr(0,2) );
             return ext.cb(jraf_parse_obj(data,ext.ob),ext.ex);
         }
 

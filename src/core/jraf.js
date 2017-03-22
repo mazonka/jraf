@@ -553,15 +553,21 @@ function jr_api_node(n)
         return this;
     };
 
-    vn.up = function(cb)
+    vn.up = function(x)
     {
-        var cbi = function(j,n)
+        var upo;
+        if( typeof x == 'function' )
         {
-            if(cb) cb(n); 
-            if( j.err && j.err != '' ) o(j.err); 
-        };
+            var cbi = function(j,n)
+            {
+                if(x) x(n); 
+                if( j.err && j.err != '' ) o(j.err); 
+            };
 
-        var upo = { keep_loading: false, final: cbi };
+            upo = { keep_loading: false, final: cbi };
+        }
+        else
+            upo = x;
 
         jraf_update_node(this.node,upo);
         return this;
