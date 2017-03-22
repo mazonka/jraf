@@ -661,26 +661,79 @@ function jr_api_manage_list(fun,skids,nkids,jqo)
 
 function jr_mount(pth,cbtop)
 {
-	var mo = {};
+    var mo = {};
 
-	var jan = jr(pth);
-	mo.node = jan.node;
-	mo.o = {};
+    var jan = jr(pth);
+    mo.node = jan.node;
+    mo.o = {};
 
-	mo.up = () => {}; // update
-	mo.merge = () => {};
-	mo.um = function(){  this.up(()=>{ this.merge(); }); };
-	mo.st = () => {}; // status
-	mo.save = () => {}; // checkin
-	mo.unmount = ()=>{};
+    // mo methods
+    mo.up = (cb) => {}; // update
+    mo.merge = () => {};
+    mo.um = function(cb){  this.up(()=>{ this.merge(); cb && cb(); }); };
+    mo.us = function(cb){  this.up(()=>{ this.merge(); this.save(cb); }); };
+    mo.st = () => {}; // status
+    mo.save = (cb) => {}; // checkin
+    mo.unmount = ()=>{};
 
-	var upo = 
-	{
-		keep_loading : true,
-		final : () => { cbtop(mo); },
-		every : (jo,nd) => { o('every '+nd.str()); }
-	};
+    var bound = function(ob)
+    {
+        o('bound');
+        o(ob);
+    };
 
-	jan.up(upo);
+    var build = function(jo,nd)
+    {
+        o('build '+nd.str());
+        //o(nd);
+        //var name = nd.name;
+        //var x;
+        //if( nd.sz < 0 ) x = {};
+        //else x = nd.text;
+
+        var a = [];
+
+        var n = nd;
+        while(true)
+        {
+            if( n === mo.node ) 
+            {
+                n.bind( () => { bound(mo.o); } );
+                break;
+            }
+            if( n.parent == null ) break; // impossible
+            a.push(n);
+            n = n.parent;
+        }
+
+        var m = mo.o;
+        while( a.length )
+        {
+            n = a.pop();
+            o('n='+n.name);
+
+            //let x = (n.sz<0? {} : n.text);
+            //m[n.name] = x;
+            if( n.sz<0 )
+            {
+                if( !m[n.name] ) m[n.name] = {};
+            }
+            else
+                m[n.name] = n.text;
+
+            n.bind( () => { bound(m); } );
+
+            m = m[n.name];
+        }
+    }; // build
+
+    var upo = 
+    {
+        keep_loading : true,
+        final : () => { cbtop(mo); },
+        every : build
+    };
+
+    jan.up(upo);
 }
 
