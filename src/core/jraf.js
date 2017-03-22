@@ -479,7 +479,7 @@ function jraf_parse_wrt(data)
 
 
 // =  =  =  =  =  =  =  =  =  =  =  =  =  =  =  =  =  =  =  =  =  =  =  =  =
-/* API section
+/* Jan API section
 
 jr('path')               => return api node (Jan object - Jraf Api Node)
 .bind_html(jq_obj,[fun]) == bind text node to a Jqo(jquery) object
@@ -488,9 +488,7 @@ jr('path')               => return api node (Jan object - Jraf Api Node)
 .save(text)              == save text on server
 .up()                    == update node
 .x(path)                 == return new apinode relative
-
-.bind_fun(fun)     == binds node to a function
-.bind_list(jq_obj) == binds list node to a jquery object
+...
 */
 
 function jr(path)
@@ -656,4 +654,33 @@ function jr_api_manage_list(fun,skids,nkids,jqo)
     }
 }
 
+
+// =  =  =  =  =  =  =  =  =  =  =  =  =  =  =  =  =  =  =  =  =  =  =  =  =
+/* Mount API section
+*/
+
+function jr_mount(pth,cbtop)
+{
+	var mo = {};
+
+	var jan = jr(pth);
+	mo.node = jan.node;
+	mo.o = {};
+
+	mo.up = () => {}; // update
+	mo.merge = () => {};
+	mo.um = function(){  this.up(()=>{ this.merge(); }); };
+	mo.st = () => {}; // status
+	mo.save = () => {}; // checkin
+	mo.unmount = ()=>{};
+
+	var upo = 
+	{
+		keep_loading : true,
+		final : () => { cbtop(mo); },
+		every : (jo,nd) => { o('every '+nd.str()); }
+	};
+
+	jan.up(upo);
+}
 
