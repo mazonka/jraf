@@ -84,8 +84,7 @@ function cli_build_cmd_up()
         let cwd = g_cwd;
         if( c.length > 1 ) cwd = jraf_relative(g_cwd,c[1]);
         if( cwd == null ) return 'node does not exist';
-        g_keep_loading = false;
-        cli_update_node(cwd);
+        cli_update_node(cwd,false);
         return '';
     };
     g_cli_commands.up = { help : up_help, run : up_run };
@@ -93,17 +92,13 @@ function cli_build_cmd_up()
 
 function cli_build_cmd_rup()
 {
-    var help = 'rup (start|stop): update current node recursively\n';
+    var help = 'rup [node]: update node recursively\n';
     var run = function(c)
     {
-        let c1 = c[1];
-        if( c.length < 2 ) c1='start'; // return 'use start or stop';
-        if( c1 == 'stop' ) g_keep_loading = false;
-        else if( c1 == 'start' )
-        {
-            g_keep_loading = true;
-            cli_update_node(g_cwd);
-        }
+        let cwd = g_cwd;
+        if( c.length > 1 ) cwd = jraf_relative(g_cwd,c[1]);
+        if( cwd == null ) return 'node does not exist';
+        cli_update_node(cwd,true);
         return '';
     };
     g_cli_commands.rup = { help : help, run : run };
@@ -371,10 +366,10 @@ function cli_list_kids(node)
 //  =  =  =  =  =  =  =  =  =  =  =  =  =  =  =  =  =  =
 // up
 
-function cli_update_node(node)
+function cli_update_node(node,keepload)
 {
     var ver = node.ver;
-    var cb = function(jo,nd)
+    var evr = function(jo,nd)
     {
         //console.log(jo);
         //console.log(nd);
@@ -391,7 +386,8 @@ function cli_update_node(node)
         cli_output('up ['+nd.str()+'] ' + s);
     };
 
-    jraf_update_node(node,cb);
+    var upo = { keep_loading: keepload, every: evr, final: ()=>{cli_output('done');} };
+    jraf_update_node(node,upo);
 }
 
 //  =  =  =  =  =  =  =  =  =  =  =  =  =  =  =  =  =  =

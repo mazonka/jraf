@@ -4,7 +4,7 @@ function jraf_js(){}
 
 var g_jraf_root = jraf_node(null,null);
 
-var g_keep_loading = false;
+///var g_keep_loading = false;
 
 function jraf_node(prnt, ini)
 {
@@ -177,17 +177,28 @@ function jraf_relative(cur_node, path)
 function jraf_update_callback(jo,ex)
 {
     var nd = ex.node;
+    var upo = ex.upo;
+    delete upo.list_of_nodes[nd.str()];
+
+    var empty = (x) => 
+    {
+        for( let i in x ) return false;
+        return true;
+    };
 
     if( jo.err != '' )
     {
-        ex.cbi(jo,nd);
+        if( upo.error ) upo.error(jo,nd);
+        if( upo.final && empty(upo.list_of_nodes) ) upo.final(jo,nd);
         return;
     }
 
     if( jo.sz == nd.sz && jo.ver == nd.ver && nd.full == 1 
-        && ( !g_keep_loading || nd.sz>=0 ) )
+        && ( !upo.keep_loading || nd.sz>=0 ) )
     {
-        if( ex.cbi ) ex.cbi(jo,nd);
+        ///if( ex.cbi ) ex.cbi(jo,nd);
+        if( upo.every ) upo.every(jo,nd);
+        if( upo.final && empty(upo.list_of_nodes) ) upo.final(jo,nd);
         return;
     }
 
@@ -198,29 +209,42 @@ function jraf_update_callback(jo,ex)
 
     if( nd.sz<0 )
     {
-        if( jo.sz<0 ) jraf_update_DD(jo,nd,ex.cbi);
+        if( jo.sz<0 ) jraf_update_DD(jo,nd,upo);
         else jraf_update_DF(jo,nd);
     }
     else
     {
-        if( jo.sz<0 ) jraf_update_FD(jo,nd,ex.cbi);
+        if( jo.sz<0 ) jraf_update_FD(jo,nd,upo);
         else jraf_update_FF(jo,nd);
     }
     
     if( nd.watch == 2 ) nd.wid(nd);
 
-    if( ex.cbi ) ex.cbi(jo,nd);
+    ///if( ex.cbi ) ex.cbi(jo,nd);
+    if( upo.every ) upo.every(jo,nd);
+    if( upo.final && empty(upo.list_of_nodes) ) upo.final(jo,nd);
+
 }
 
-function jraf_update_obj(path,name,cbi,node)
+function jraf_update_obj(path,name,upo,node)
 {
     var ex = {};
     ex.node = node;
-    ex.cbi = cbi;
+
+    ex.upo = upo || {};
+    ex.upo.keep_loading = ex.upo.keep_loading || false;
+
+    ex.upo.list_of_nodes = ex.upo.list_of_nodes || {};
+    ex.upo.list_of_nodes[node.str()] = true;
+
+    // functions
+    //ex.upo.every()
+    //ex.upo.final()
+
     jraf_read_obj(path,name,jraf_update_callback,ex);
 }
 
-function jraf_update_node(node,cb)
+function jraf_update_node(node,upo)
 {
     var name = node.name;
     var path;
@@ -232,8 +256,27 @@ function jraf_update_node(node,cb)
     else
         path = node.parent.str()+'/';
 
-    jraf_update_obj(path,name,cb,node);
+    jraf_update_obj(path,name,upo,node);
 }
+
+/*///
+function jraf_node_up(node, ext_cb)
+{
+    var name = node.name;
+    var path;
+    if( node.parent == null )
+    {
+        path = '/';
+        name = '';
+    }
+    else
+        path = node.parent.str()+'/';
+
+    ext_cb = ext_cb || function(){};
+
+    jraf_update_obj(path,name,ext_cb,node);    
+}
+*/
 
 function jraf_update_DF(jo,nd)
 {
@@ -247,14 +290,14 @@ function jraf_update_DF(jo,nd)
     nd.text = jo.text;
 }
 
-function jraf_update_FD(jo,nd,cbi)
+function jraf_update_FD(jo,nd,upo)
 {
     jraf_update_DD(jo,nd,cbi);
     nd.sz = -1;
     nd.text = '';
 }
 
-function jraf_update_DD(jo,nd,cbi)
+function jraf_update_DD(jo,nd,upo)
 {
     // first delete disappeared nodes (that are not watched)
     {
@@ -301,7 +344,8 @@ function jraf_update_DD(jo,nd,cbi)
         var n = nd.kids[i];
         var j = jo.kids[i];
 
-        let kp = g_keep_loading;
+        ///let kp = g_keep_loading;
+        let kp = upo.keep_loading;
 
         if( n.ver == j.ver )
         {
@@ -314,7 +358,7 @@ function jraf_update_DD(jo,nd,cbi)
         }
 
         //jraf_update_obj(nd.str()+'/',i,cbi,n);
-        jraf_update_obj(nd.str()+'/',i,null,n); // no propagate cb down
+        jraf_update_obj(nd.str()+'/',i,upo,n); // no propagate cb down
     }
 }
 
@@ -322,23 +366,6 @@ function jraf_update_FF(jo,nd)
 {
     nd.sz = jo.sz;
     nd.text = jo.text;
-}
-
-function jraf_node_up(node, ext_cb)
-{
-    var name = node.name;
-    var path;
-    if( node.parent == null )
-    {
-        path = '/';
-        name = '';
-    }
-    else
-        path = node.parent.str()+'/';
-
-    ext_cb = ext_cb || function(){};
-
-    jraf_update_obj(path,name,ext_cb,node);    
 }
 
 function jraf_virtual_node(wd,c)
@@ -370,8 +397,9 @@ function jraf_bind_virtual_leaf(leaf,cb)
         if( n.parent.full > 0 ) break;
         n = n.parent;
     }
-    jraf_node_up(n);
 
+    ///jraf_node_up(n);
+    jraf_update_node(n);
     return r;
 }
 
@@ -533,7 +561,9 @@ function jr_api_node(n)
             if( j.err && j.err != '' ) o(j.err); 
         };
 
-        jraf_update_node(this.node,cbi);
+        var upo = { keep_loading: false, final: cbi };
+
+        jraf_update_node(this.node,upo);
         return this;
     };
 
