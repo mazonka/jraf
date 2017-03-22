@@ -11,14 +11,9 @@ function main_js()
     $g_div_main.append($div);
 	g_div = $div;
 
-	var f = function()
-	{
-		jr('/demo/107/page1.html').bind_html(g_div);
-		g_keep_loading = true;
-		jr('/demo/107').up();
-	}
-
-	jr('/demo/107').up(f);
+	jr('/demo/107/page1.html').node.text = "Loading ...";
+	jr('/demo/107/page1.html').bind_html(g_div);
+	jr('/demo/107').up({keep_loading:true});
 }
 
 
