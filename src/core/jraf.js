@@ -196,7 +196,6 @@ function jraf_update_callback(jo,ex)
     if( jo.sz == nd.sz && jo.ver == nd.ver && nd.full == 1 
         && ( !upo.keep_loading || nd.sz>=0 ) )
     {
-        ///if( ex.cbi ) ex.cbi(jo,nd);
         if( upo.every ) upo.every(jo,nd);
         if( upo.final && empty(upo.list_of_nodes) ) upo.final(jo,nd);
         return;
@@ -349,6 +348,7 @@ function jraf_update_DD(jo,nd,upo)
 
         if( n.ver == j.ver )
         {
+o('-7- '+n.watch+' '+n.full); o(n);
             if( !kp ) continue;
             if( n.full==1 && n.sz >= 0 ) continue;
         }
@@ -417,7 +417,7 @@ function o(x){ console.log(x); }
 function jraf_write_md(cwd,name,cbi)
 {
     var cb = function(jo){ cbi(jo); };
-    var path = (cwd.str() == '/') ? cwd.str() + name : cwd.str() + '/' +name;
+    var path = (cwd.str() == '/') ? '/' + name : cwd.str() + '/' +name;
     jraf_write_obj('md', path, cb);
 }
 
@@ -669,13 +669,20 @@ function jr_mount(pth,acb)
 
     // mo methods
     mo.up = (upo) => { jraf_update_node(mo.node,upo); }; // update
-    mo.merge = function(){ jr_mount_merge(this.node,mo)    };
+    mo.merge = function(){ jr_mount_merge(this.node,mo); };
+    mo.st = function() 
+    {
+        var ar = [];
+        jr_mount_status(ar,this.node,mo);
+        return ar;
+    };
+
+    mo.save = function(cb){ jr_mount_save(mo,cb); };
+    mo.unmount = ()=>{};
     mo.um = function(cb){  this.up(()=>{ this.merge(); cb && cb(); }); };
     mo.us = function(cb){  this.up(()=>{ this.merge(); this.save(cb); }); };
-    mo.st = () => { return jr_mount_status([]); }; // status
-    mo.save = (cb) => {}; // checkin
-    mo.unmount = ()=>{};
 
+    /*///
     var build = function(jo,nd)
     {
         o('build '+nd.str());
@@ -708,6 +715,7 @@ function jr_mount(pth,acb)
 
         nd.bind( function(){ jr_mount_merge(this,m); } );
     }; // build
+    */
 
     var upo = 
     {
@@ -741,6 +749,7 @@ function jr_mount_merge(nd,mo)
 function jr_mount_bound()
 {
     o('==jr_mount_bound ['+this.name+']');
+    if( this.full == 0 ) o('=INCOMPLETE=');
     jr_mount_merge(this,this.mount);
 }
 
@@ -779,6 +788,86 @@ function jr_mount_merge_FD(nd,mo)
     jr_mount_merge_DD(nd,mo);
 }
 
-function jr_mount_status(arr)
+function jr_mount_status(ar,nd,mo)
 {
+    if( !mo ) mo = {};
+
+    if( nd.sz < 0 )
+    {
+        if( mo.text ) jr_mount_status_FD(ar,nd,mo);
+        else jr_mount_status_DD(ar,nd,mo);
+    }
+    else
+    {
+        if( mo.text ) jr_mount_status_FF(ar,nd,mo);
+        else jr_mount_status_DF(ar,nd,mo);
+    }
+}
+
+function jr_mount_status_DD(ar,nd,mo)
+{
+    if( !mo.o ) mo.o = {};
+
+    var m = mo.o;
+    for( let i in m )
+    {
+        if( !(i in nd.kids ) )
+        {
+            if( 'o' in m[i] ) ar.push({a:'A',i:i,n:nd});
+            if( 'text' in m[i] ) ar.push({a:'F',i:i,n:nd});
+        }
+    }
+
+    for( let i in nd.kids )
+    {
+        if( !(i in m) ) ar.push({a:'D',i:i,n:nd});
+        else jr_mount_status(ar,nd.kids[i],m[i]);
+    }
+}
+
+function jr_mount_status_FF(ar,nd,mo)
+{
+    if( nd.text == mo.text ) return;
+    ar.push({a:'M',i:nd.name,n:nd});
+}
+
+function jr_mount_save(mo,acb)
+{
+o('-enterting jr_mount_save');
+    var ar = [];
+    var errs = [];
+
+    jr_mount_status(ar,mo.node,mo);
+    if( ar.length == 0 ){ acb(errs); return; }
+
+    var counter = ar.length;
+    var cbw = function(jo)
+    {
+        ///o('=cbw='+counter); o(jo);
+        if( jo.err != '' ) errs.push(jo.err);
+        if( --counter == 0 )
+        {
+            if( errs.length > 0 ) return acb(errs);
+            let upo = { keep_loading: false, final: ()=>{ jr_mount_save(mo,acb); } };
+            mo.up(upo);
+        }
+    }
+
+    while( ar.length )
+    {
+        let rec = ar.pop();
+        if( rec.a == 'A' ) jraf_write_md(rec.n,rec.i,cbw);
+        else if( rec.a == 'F' )
+        {
+            let pth = rec.n.str()+'/'+rec.i;
+            ///o(rec.n.mount.o);
+            let body = rec.n.mount.o[rec.i].text;
+            jraf_write_file(pth,body,cbw);
+        }
+        else
+        {
+            o('--- UNDEFINED function '+rec.a);
+            o(rec);
+        }
+    }
 }
