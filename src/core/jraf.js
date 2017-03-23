@@ -659,7 +659,7 @@ function jr_api_manage_list(fun,skids,nkids,jqo)
 /* Mount API section
 */
 
-function jr_mount(pth,cbtop)
+function jr_mount(pth,acb)
 {
     var mo = {};
 
@@ -668,72 +668,117 @@ function jr_mount(pth,cbtop)
     mo.o = {};
 
     // mo methods
-    mo.up = (cb) => {}; // update
-    mo.merge = () => {};
+    mo.up = (upo) => { jraf_update_node(mo.node,upo); }; // update
+    mo.merge = function(){ jr_mount_merge(this.node,mo)    };
     mo.um = function(cb){  this.up(()=>{ this.merge(); cb && cb(); }); };
     mo.us = function(cb){  this.up(()=>{ this.merge(); this.save(cb); }); };
-    mo.st = () => {}; // status
+    mo.st = () => { return jr_mount_status([]); }; // status
     mo.save = (cb) => {}; // checkin
     mo.unmount = ()=>{};
-
-    var bound = function(ob)
-    {
-        o('bound');
-        o(ob);
-    };
 
     var build = function(jo,nd)
     {
         o('build '+nd.str());
-        //o(nd);
-        //var name = nd.name;
-        //var x;
-        //if( nd.sz < 0 ) x = {};
-        //else x = nd.text;
 
         var a = [];
 
         var n = nd;
         while(true)
         {
-            if( n === mo.node ) 
-            {
-                n.bind( () => { bound(mo.o); } );
-                break;
-            }
+            if( n === mo.node ) break;
             if( n.parent == null ) break; // impossible
             a.push(n);
             n = n.parent;
         }
 
-        var m = mo.o;
+        var m = mo;
         while( a.length )
         {
             n = a.pop();
             o('n='+n.name);
 
-            //let x = (n.sz<0? {} : n.text);
-            //m[n.name] = x;
-            if( n.sz<0 )
-            {
-                if( !m[n.name] ) m[n.name] = {};
-            }
-            else
-                m[n.name] = n.text;
+            if( !m.o ) m.o = {};
+            if( !m.o[n.name] ) m.o[n.name] = {};
+            let ind = m.o[n.name];
+            if( n.sz >= 0 ) ind.text = n.text;
+            else if ( !ind.o ) ind.o = {};
 
-            n.bind( () => { bound(m); } );
-
-            m = m[n.name];
+            m = ind;
         }
+
+        nd.bind( function(){ jr_mount_merge(this,m); } );
     }; // build
 
     var upo = 
     {
         keep_loading : true,
-        final : () => { cbtop(mo); },
-        every : build
+        final : () => { mo.merge(); acb(mo); }
     };
 
-    jan.up(upo);
+    //jan.up(upo);
+    mo.up(upo);
 }
 
+function jr_mount_merge(nd,mo)
+{
+    if( !mo ) mo = {};
+    nd.mount = mo;
+    if( nd.watch != 2 ) nd.bind(jr_mount_bound);
+
+    ///o('merge');o(nd);o(mo);
+    if( nd.sz < 0 )
+    {
+        if( mo.text ) jr_mount_merge_FD(nd,mo);
+        else jr_mount_merge_DD(nd,mo);
+    }
+    else
+    {
+        if( mo.text ) jr_mount_merge_FF(nd,mo);
+        else jr_mount_merge_DF(nd,mo);
+    }
+}
+
+function jr_mount_bound()
+{
+    o('==jr_mount_bound ['+this.name+']');
+    jr_mount_merge(this,this.mount);
+}
+
+function jr_mount_merge_DD(nd,mo)
+{
+    if( !mo.o ) mo.o = {};
+
+    var m = mo.o;
+    for( let i in m )
+    {
+        if( !(i in nd.kids ) ) delete m[i];
+    }
+
+    for( let i in nd.kids )
+    {
+        if( !(i in m) ) m[i] = {};
+        ///o('=A= '+i);
+        jr_mount_merge(nd.kids[i],m[i]);
+    }
+}
+
+function jr_mount_merge_DF(nd,mo)
+{
+    if( mo.o ) delete mo.o;
+    mo.text = nd.text;
+}
+
+function jr_mount_merge_FF(nd,mo)
+{
+    mo.text = nd.text;
+}
+
+function jr_mount_merge_FD(nd,mo)
+{
+    delete mo.text;
+    jr_mount_merge_DD(nd,mo);
+}
+
+function jr_mount_status(arr)
+{
+}
