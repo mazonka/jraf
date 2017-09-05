@@ -6,6 +6,9 @@
 
 #include "os_exec.h"
 
+// line ~187 disable warning on type cast "(int)"
+#pragma warning ( disable : 4311 4302 )
+
 string os::THISDIR = "";
 
 typedef std::istringstream istr;
