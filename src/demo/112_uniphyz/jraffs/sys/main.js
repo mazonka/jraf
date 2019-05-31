@@ -45,7 +45,7 @@ function login()
     var s = window.location;
     s = s.protocol + '//' + s.host + s.pathname;
 
-    jraf_ajax(['jw login',g_wid.inp.eml.wid.val(),'s'].join(' '), cb);
+    jraf_ajax(['jw login',g_wid.inp.eml.wid.val(),s].join(' '), cb);
 }
 
 function logout()
