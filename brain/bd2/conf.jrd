@@ -1,0 +1,8 @@
+admin		admin@server.com
+server		http://127.0.0.1:16000/
+#phmail  	./phmail
+quota		10000
+data		/tmp/d/
+data		/tmp/d2/
+[/tmp/d/]	15
+
