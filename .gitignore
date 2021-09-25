@@ -1,8 +1,8 @@
 *.obj
 *.o
 *.exe
-_binw/*
-_binu/*
+_binw
+_binu
 
 g_pull.bat
 g_push.bat
