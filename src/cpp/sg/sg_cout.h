@@ -22,6 +22,16 @@ struct Oref
     Oref(): ref(1) {}
 };
 
+class Cout;
+
+const Cout & operator<<(const Cout & o, const char *);
+const Cout & operator<<(const Cout & o, void *);
+const Cout & operator<<(const Cout & o, const string & s);
+const Cout & operator<<(const Cout & o, char c);
+const Cout & operator<<(const Cout & o, int i);
+const Cout & operator<<(const Cout & o, double x);
+const Cout & operator<<(const Cout & o, size_t i);
+
 class Cout
 {
         Oref * ref;
@@ -59,6 +69,9 @@ class Cout
         friend const Cout & operator<<(const Cout & o, size_t i);
         friend const Cout & operator<<(const Cout & o, const Endl & f);
 };
+
+const Cout & operator<<(const Cout & o, const Cout::Flush & f);
+const Cout & operator<<(const Cout & o, const Cout::Endl & f);
 
 string prmpt(const string & s1, unsigned short s2);
 
