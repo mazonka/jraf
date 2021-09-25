@@ -1,0 +1,6 @@
+*.obj
+*.o
+*.exe
+_binw/*
+_binu/*
+
