@@ -59,7 +59,7 @@ $(SG)/$(TRG)/tcpclient$(EEXT): $(SG)/*.cpp $(SG)/*.h $(OS)/*.cpp $(OS)/*.h $(GL)
 
 
 
-clean:
+clean c:
 	rm -rf _bin* */_bin* */*.obj
 	rm -rf */*/_bin* */*/*.obj
 	rm -rf os/_*.*.cpp

@@ -1,0 +1,22 @@
+<!-- JRAF Team (C) 2016-2017 -->
+<!doctype html>
+
+<html lang="en">
+  <head>
+     <meta charset="utf-8"/>
+     <meta name="description" content="Jraf project"/>
+     <meta name="keywords" content="jraf"/>
+     <meta name="viewport" content="initial-scale=1.0"/>
+     <link rel="stylesheet" href="lib/jquery-ui.min.css"/>
+     <title>Jraf client demo</title>
+     <script src="lib/jquery.js"></script>
+     <script src="lib/jquery-ui.min.js"></script>
+     <script src="lib/base64.js"></script>
+     <script src="jrboot.js"></script>
+  </head>
+  <body>
+     <script>
+       jraf_boot("$$$");
+     </script>
+  </body>
+</html>
