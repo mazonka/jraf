@@ -4,5 +4,8 @@
 _binw
 _binu
 
+u.os_*.cpp
+w.os_*.cpp
+
 g_pull.bat
 g_push.bat
